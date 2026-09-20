@@ -1,0 +1,1 @@
+{"$schema":"https://glama.ai/mcp/schemas/glama.json","maintainers":["jaymarrero2@gmail.com"],"mcp":{"endpoint":"https://eqbuilder.dev/api/mcp","transport":"streamable-http"},"documentation":"https://eqbuilder.dev/llms.txt"}

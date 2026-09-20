@@ -1,18 +1,135 @@
 aid: eqbuilder-dev
 name: Marz Greta-Lock Network
-description: 'Marz Greta-Lock Network is a company surfaced via the API Evangelist harvest backlog (source:
-  a2a-registry) and added to the network as a stub for full-pipeline profiling.'
+description: 'Marz Greta-Lock Network operates eqbuilder.dev, an EQ benchmark for AI agents: a machine-to-machine
+  API that scores AI-generated text for human-likeness against 28 human personality profiles (EQ, formality, directness,
+  hesitation, punctuation, response-delay cadence) with deterministic statistics and no LLM calls, returns a ready-to-paste
+  system-prompt fix with every score, and sells validated benchmarks, deep analysis, rewrites, script-adherence
+  checks, bot-vs-bot duels, role-play rooms and coaching packs per call through x402 v2 (gasless USDC on Base, legacy
+  Solana) or prepaid card credit packs. The surface is published as an OpenAPI 3.1 document (133 operations), a
+  free anonymous remote MCP server (8 tools), an A2A agent card, an OpenAI plugin manifest, an x402 payable-resource
+  catalog, llms.txt and first-party Python and Node SDKs; it also hosts a read-only recommendation matcher over
+  the third-party Storelayer storefront-widget catalog.'
 url: https://raw.githubusercontent.com/api-evangelist/eqbuilder-dev/refs/heads/main/apis.yml
+image: https://eqbuilder.dev/logo.png
 x-type: company
 x-source: harvest:a2a-registry
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-09-19 (local-v3; was a2a-registry harvest stub)
 specificationVersion: '0.20'
 created: '2026-09-19'
 modified: '2026-09-19'
 tags:
 - Company
-apis: []
+- AI Agents
+- Agent Evaluation
+- Benchmarking
+- Text Analysis
+- Emotional Intelligence
+- Conversational AI
+- x402
+- Agent Payments
+- MCP
+- A2A
+- Developer Tools
+apis:
+- name: EQ Scoring Platform API
+  description: 'REST API (OpenAPI 3.1, 133 operations) for scoring AI-generated text against 28 human personality
+    profiles. Free anonymous surface: three lifetime scores per caller (POST /api/score with data_consent), profiles,
+    pricing, stats, leaderboard, certificates, price quotes. Paid surface authorized by x402 payment (PAYMENT-SIGNATURE,
+    USDC on Base by default; legacy X-PAYMENT/Solana): validated benchmark sessions, deep analysis, rewrites, stress
+    tests, progress reports, training-dataset export, script-adherence checks, duels, role-play rooms and coaching
+    packs; prepaid credits via X-BUNDLE-TOKEN (x402 bundle or card packs). Also carries the Storelayer catalog/recommendation/self-install
+    endpoints and an operator/admin surface behind X-Admin-Token.'
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - EQ Scoring
+  - Human-Likeness
+  - AI Text
+  - x402
+  - Duels
+  - Coaching
+  - Storelayer
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-openapi.yml
+  - type: OpenAPI
+    url: https://eqbuilder.dev/openapi.json
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Overlay
+    url: overlays/eqbuilder-dev-openapi-overlay.yaml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+  - type: AgentSkill
+    url: skills/_index.yml
+- name: Marz Greta-Lock Network MCP Server
+  description: Official remote MCP server (streamable HTTP, protocol 2025-06-18) at https://eqbuilder.dev/api/mcp
+    with no authentication. Eight free, read-only tools — score_text (three trial scores), list_profiles, get_pricing,
+    preview_fee, get_network_stats, request_feature, storelayer_recommend, storelayer_widget_menu — and one resource;
+    every tool binds to a REST operation. Paid x402 operations are deliberately REST-only. Registered in the official
+    MCP registry namespace dev.eqbuilder (/.well-known/mcp.json, /.well-known/mcp-registry-auth) and listed on Glama.
+  humanURL: https://eqbuilder.dev/guides/permanent-agent-tool-setup.html
+  baseURL: https://eqbuilder.dev/api/mcp
+  tags:
+  - MCP
+  - AI Agents
+  - EQ Scoring
+  properties:
+  - type: MCPServer
+    url: mcp/eqbuilder-dev-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/eqbuilder-dev-tool-crosswalk.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/guides/permanent-agent-tool-setup.html
+- name: Marz Greta-Lock Network A2A Agent Card
+  description: 'A2A agent card served at /.well-known/agent-card.json (aliases /.well-known/agent.json and /.well-known/agents.json):
+    protocolVersion 1.0, six skills (agent-buy-and-run, storelayer-recommend, storelayer-widget-menu, eq-score,
+    eq-rewrite, script-check), streaming and push notifications false. Graded near-conformant: all hard checks pass
+    but preferredTransport and default modes are absent, and the card url is the website — no A2A message transport
+    is served; the card routes agents to the REST OpenAPI and the MCP endpoint through a non-standard protocols
+    key.'
+  humanURL: https://eqbuilder.dev/
+  baseURL: https://eqbuilder.dev
+  tags:
+  - A2A
+  - AI Agents
+  - Agent Discovery
+  properties:
+  - type: AgentCard
+    url: a2a/eqbuilder-dev-a2a.yml
+  - type: AgentCard
+    url: https://eqbuilder.dev/.well-known/agent-card.json
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -21,3 +138,64 @@ maintainers:
 common:
 - type: Website
   url: https://eqbuilder.dev/
+- type: Documentation
+  url: https://eqbuilder.dev/llms.txt
+- type: APIReference
+  url: https://eqbuilder.dev/api/docs
+- type: GettingStarted
+  url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+- type: Pricing
+  url: https://eqbuilder.dev/api/pricing
+- type: LLMsTxt
+  url: llms/eqbuilder-dev-llms.txt
+- type: LLMsTxt
+  url: https://eqbuilder.dev/llms.txt
+- type: WellKnown
+  url: well-known/eqbuilder-dev-well-known.yml
+- type: AgentCard
+  url: a2a/eqbuilder-dev-a2a.yml
+- type: MCPServer
+  url: mcp/eqbuilder-dev-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/eqbuilder-dev-tool-crosswalk.yml
+- type: Conformance
+  url: conformance/eqbuilder-dev-conformance.yml
+- type: Lifecycle
+  url: lifecycle/eqbuilder-dev-lifecycle.yml
+- type: Authentication
+  url: authentication/eqbuilder-dev-authentication.yml
+- type: Conventions
+  url: conventions/eqbuilder-dev-conventions.yml
+- type: Idempotency
+  url: conventions/eqbuilder-dev-conventions.yml
+- type: ErrorCatalog
+  url: errors/eqbuilder-dev-problem-types.yml
+- type: DataModel
+  url: data-model/eqbuilder-dev-data-model.yml
+- type: Plans
+  url: plans/eqbuilder-dev-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/eqbuilder-dev-rate-limits.yml
+- type: Sandbox
+  url: sandbox/eqbuilder-dev-sandbox.yml
+- type: Overlay
+  url: overlays/eqbuilder-dev-openapi-overlay.yaml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Packages
+  url: packages/eqbuilder-dev-packages.yml
+- type: SDKs
+  url: packages/eqbuilder-dev-packages.yml
+- type: Components
+  url: components/eqbuilder-dev-components.yml
+- type: ChangeLog
+  url: changelog/eqbuilder-dev-changelog.yml
+- type: TrainingDataSummary
+  url: https://eqbuilder.dev/api/corpus/evidence
+- type: DomainSecurity
+  url: security/eqbuilder-dev-domain-security.yml
+x-enrichment:
+  date: '2026-09-19'
+  status: enriched
+  artifacts_added: 38
+  pass: local-v3

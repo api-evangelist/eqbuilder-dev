@@ -1,0 +1,137 @@
+generated: '2026-09-19'
+method: searched
+source: https://eqbuilder.dev/llms.txt (Start here, Permanent tool setup, Paid validation, Prepaid bundles, Card-paid
+  credit packs, Spend & usage statement), https://eqbuilder.dev/api/pricing, the OpenAPI header parameters (PAYMENT-SIGNATURE,
+  X-PAYMENT, X-BUNDLE-TOKEN, Idempotency-Key) and operation descriptions (X-Admin-Token, operator session), live
+  402/400/403 responses 2026-09-19
+summary:
+  types:
+  - none (anonymous free surface)
+  - x402 payment-as-authorization (header)
+  - apiKey-style secret token (header)
+  - ownership proof (query)
+  - apiKey (header) + cookie session (operator/admin only)
+  oauth2: false
+  openid_connect: false
+  api_keys_or_accounts: false
+  public_surface: No account or API key exists anywhere. Profiles, pricing, stats, leaderboard, duel prompts, proof
+    cards, public results, certificates, price quotes (GET on paid paths → 402), the starter kit, every /.well-known
+    document and the whole MCP server answer anonymously (observed live). Three free POST /api/score calls per caller
+    are keyed by the proxy-derived caller identity, not a credential.
+  note: The OpenAPI declares NO securitySchemes; derive-authentication.py therefore produced nothing and this profile
+    was assembled from the header parameters, operation descriptions, llms.txt and live responses. The overlay (overlays/eqbuilder-dev-openapi-overlay.yaml)
+    adds equivalent securitySchemes for consumers.
+schemes:
+- name: x402Payment
+  type: x402
+  in: header
+  parameter: PAYMENT-SIGNATURE
+  protocol: 'x402 v2 (default rail: EIP-3009 USDC TransferWithAuthorization on Base eip155:8453; also Polygon, Arbitrum
+    One, Avalanche C-Chain; Solana mainnet legacy)'
+  description: Payment IS the authorization. An unpaid request to a paid operation returns HTTP 402 with x402Version
+    2 payment requirements (accepts[] with scheme exact, network, maxAmountRequired, payTo, asset, maxTimeoutSeconds
+    120, extra.name/version). The client signs the selected requirement as EIP-712 typed data and retries the exact
+    request once with PAYMENT-SIGNATURE; the facilitator submits the authorization (no ETH needed); success carries
+    a PAYMENT-RESPONSE header/receipt. A malformed payment is rejected before money moves; an unused authorization
+    expires at validBefore. Each transaction signature is accepted exactly once (409 on reuse).
+  applies_to:
+  - POST /api/simulate
+  - POST /api/rewrite
+  - POST /api/stress-test
+  - POST /api/progress
+  - POST /api/training-dataset
+  - POST /api/script-check
+  - POST /api/duel
+  - POST /api/roleplay
+  - POST /api/coaching
+  - POST /api/bundle
+  - POST /api/storelayer/agent/payments/{quote_id}
+  observed:
+  - url: https://eqbuilder.dev/api/simulate
+    method: GET
+    status: 402
+    quote: '"x402Version": 2, "accepts": [{"scheme": "exact", "network": "eip155:8453", "maxAmountRequired": "50000",
+      …}]'
+  docs:
+  - https://eqbuilder.dev/llms.txt
+  - https://eqbuilder.dev/.well-known/x402.json
+  - https://eqbuilder.dev/api/pricing
+  - https://eqbuilder.dev/guides/x402-agent-payments-solana.html
+- name: legacyXPayment
+  type: x402
+  in: header
+  parameter: X-PAYMENT
+  description: Legacy x402 payment header; also a finalized Solana transaction signature (tx_hash in the body) signed
+    by wallet_address paying at least the tier fee in lamports to the treasury listed at /api/pricing. "Legacy SOL
+    and X-PAYMENT clients remain compatible."
+  applies_to: the same paid operations (X-PAYMENT is the declared header parameter on 13 of them)
+  docs:
+  - https://eqbuilder.dev/llms.txt
+- name: bundleToken
+  type: apiKey
+  in: header
+  parameter: X-BUNDLE-TOKEN
+  description: Secret prepaid-credit token minted by POST /api/bundle (x402) or POST /api/card/claim (card pack),
+    shown exactly once. Redeems basic-tier credits with no per-call payment.
+  applies_to:
+  - POST /api/simulate (basic tier)
+  - POST /api/embed/check (via a company-owned host proxy)
+  - GET /api/bundle/balance
+  how_obtained: POST /api/bundle → bundle_token; or GET /api/card/packs → POST /api/card/checkout {wallet_address,
+    pack} → hosted checkout URL + claim_secret → POST /api/card/claim {checkout_id, claim_secret} → bundle_token
+  rotation: null
+  observed:
+  - url: https://eqbuilder.dev/api/bundle/balance
+    status: 400
+    quote: '"error": "Missing X-BUNDLE-TOKEN header."'
+- name: walletStatementProof
+  type: ownership-proof
+  in: query
+  parameter: auth_tx_hash
+  description: Any settled transaction hash the wallet itself paid with proves keyholder ownership for GET /api/wallet/{wallet_address}/statement;
+    unknown or foreign hashes fail closed with 403. Operators may substitute X-Admin-Token.
+  observed:
+  - url: https://eqbuilder.dev/api/wallet/0x0000000000000000000000000000000000000000/statement?auth_tx_hash=abc
+    status: 403
+    quote: '"error": "auth_tx_hash does not belong to this wallet''s settled history."'
+- name: roleplaySessionSecret
+  type: apiKey
+  in: body
+  parameter: session_secret
+  description: Per-participant secret issued when opening or joining a role-play room; sent on POST /api/roleplay/turn
+    and /api/roleplay/status. The joiner gets its own secret, never the opener's.
+  docs:
+  - https://eqbuilder.dev/llms.txt
+- name: adminToken
+  type: apiKey
+  in: header
+  parameter: X-Admin-Token
+  description: Operator/admin bearer-style token for the /api/admin/*, /api/operator/*, ledger export, calibration
+    review, profile vault, fleet plan, funnel and visits endpoints. Not available to API consumers.
+  observed:
+  - url: https://eqbuilder.dev/api/admin/network-config
+    status: 403
+    quote: '"error": "Admin token required (X-Admin-Token header)."'
+- name: operatorSession
+  type: cookie
+  in: cookie
+  parameter: HttpOnly operator session cookie (name not declared)
+  description: 'POST /api/operator/login exchanges the operator key for a server-managed HttpOnly session cookie;
+    GET /api/operator/session reports {"authorized": false} anonymously; POST /api/operator/logout clears it.'
+  observed:
+  - url: https://eqbuilder.dev/api/operator/session
+    status: 200
+    quote: '{"authorized": false}'
+consent_gates_on_the_free_tier:
+  data_consent: must be true on every free POST /api/score (400 data_consent_required otherwise, no round consumed)
+  wishlist_required: one POST /api/wishlist before the third free score (400 wishlist_required otherwise)
+  source: optional campaign attribution; unknown values are rejected before a round is consumed
+docs:
+- https://eqbuilder.dev/llms.txt
+- https://eqbuilder.dev/api/pricing
+- https://eqbuilder.dev/.well-known/x402.json
+- https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+- https://eqbuilder.dev/guides/permanent-agent-tool-setup.html
+notes: '"The platform holds no private keys." The recommended posture (llms.txt) is a dedicated burner wallet funded
+  with USDC on Base that the SDK signs with; the SDKs never auto-replay a paid authorization after a timeout. MCP
+  is anonymous and read-only; RFC 9728 protected-resource metadata is not published (404) and is not needed.'

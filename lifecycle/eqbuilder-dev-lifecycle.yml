@@ -1,0 +1,58 @@
+generated: '2026-09-19'
+method: searched
+source: openapi info.version, https://eqbuilder.dev/.well-known/mcp.json (version), agent card (version), https://eqbuilder.dev/api/pricing
+  (train_endpoint.status retired), live POST /api/train, https://eqbuilder.dev/api/healthz, /api/health-capacity,
+  /api/stats, PyPI + npm release dates
+versioning:
+  scheme: unversioned paths (/api/…); document and product versions only
+  current_version: 1.0.0
+  api_document_version: 1.0.0
+  mcp_server_json_version: 1.0.9
+  agent_card_version: 1.0.0
+  sdk_version: 0.1.5 (pypi + npm, 2026-09-06)
+  base_url: https://eqbuilder.dev/api
+  policy_published: false
+  note: 'No versioning policy, support period or compatibility promise is published. Backward compatibility is practised
+    rather than stated: the legacy X-PAYMENT header, Solana settlement and the /.well-known/agent.json alias are
+    all kept alive next to their replacements.'
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  retired_operations:
+  - operation: process_training_api_train_post
+    path: POST /api/train
+    status: retired
+    observed: HTTP 410 {"detail":{"error":"endpoint_retired", …, "replacement":"/api/simulate"}}
+    replacement: POST /api/simulate
+    source: https://eqbuilder.dev/api/pricing train_endpoint.status "retired"
+    note: 'Still present in the OpenAPI without deprecated: true.'
+  deprecated_operations: []
+  legacy_kept:
+  - X-PAYMENT header and Solana tx_hash settlement ("Legacy SOL and X-PAYMENT clients remain compatible")
+  - /.well-known/agent.json and /.well-known/agents.json aliases of the agent card
+  - /.well-known/ai-plugins.json alias of ai-plugin.json
+  - loyalty_program ("Legacy dynamic-fee program retained for compatible products")
+  note: One endpoint has been retired with a 410 and a machine-readable replacement, which is good practice, but
+    no written deprecation policy, notice period or Sunset header exists.
+status_page:
+  published: false
+  health_endpoints:
+  - url: https://eqbuilder.dev/api/healthz
+    observed: '{"status":"ok"}'
+  - url: https://eqbuilder.dev/api/health-capacity
+    observed: in-process scoring-engine benchmark (throughput_ops_per_sec, avg_latency_ms); "No DB, ledger, wallet,
+      or network activity."
+  - url: https://eqbuilder.dev/api/stats
+    observed: uptime_seconds 244989 plus live ledger aggregates
+  note: Machine health endpoints exist; /status returns the SPA shell — there is no human status page or incident
+    history.
+sla:
+  published: false
+  note: https://eqbuilder.dev/latency-evidence.md publishes measured latency samples and explicitly says they do
+    not establish API latency for other routes; no uptime or support commitment is stated.
+changelog:
+  published: false
+  note: No dated API changelog; /changelog returns the SPA shell. The only dated history is the SDK release train
+    on PyPI/npm (see changelog/eqbuilder-dev-changelog.yml).

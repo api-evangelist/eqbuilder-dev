@@ -1,0 +1,38 @@
+generated: '2026-09-19'
+method: searched
+source: https://eqbuilder.dev/llms.txt ("Get your first FREE score", "Start here", "Paid validation"), https://eqbuilder.dev/api/pricing,
+  https://eqbuilder.dev/.well-known/x402.json, https://eqbuilder.dev/latency-evidence.md
+description: 'No sandbox host, test network or test key exists. The provider''s testing surface is (1) the free
+  trial — three lifetime anonymous POST /api/score calls with data_consent: true — and (2) free price rehearsals:
+  GET on any paid path returns the live 402 quote without charging. All x402 settlement is on MAINNET chains (Base
+  eip155:8453, Polygon, Arbitrum, Avalanche, Solana mainnet-beta) — there is no testnet quote.'
+modes:
+- name: free-trial
+  notes: 'POST /api/score (3 lifetime per caller). Deterministic: the docs publish the exact expected response for
+    the sample input.'
+- name: quote-only
+  notes: GET /api/simulate, /api/rewrite, /api/stress-test, /api/progress, /api/training-dataset, /api/script-check
+    → HTTP 402 x402 requirements with no charge; GET /api/fee/simulate/{wallet_address} previews the fee.
+- name: live
+  notes: Every paid call settles real USDC/SOL; fees are charged on passed and failed validations alike.
+test_values:
+  published_fixture:
+    request: 'POST /api/score {"text": "Totally get it - that error is annoying. Try clearing the cache first, that
+      usually fixes it.", "delay_seconds": 4.2, "profile": "support_customer", "data_consent": true}'
+    expected: 'eq_score_percentage 68.92, passed_validation false, projected_rescore null (llms.txt: "scoring is
+      deterministic, so these numbers are what you will get")'
+    source: https://eqbuilder.dev/llms.txt
+  test_wallets: null
+  test_cards: null
+  time_simulation: null
+  note: No test wallet, test card, magic value or clock simulation is published. The provider's own latency measurements
+    used "disposable prepaid test credits" (latency-evidence.md), which are not offered to consumers.
+observed:
+- url: https://eqbuilder.dev/api/simulate
+  method: GET
+  status: 402
+  quote: '"network": "eip155:8453", "maxAmountRequired": "50000"'
+- url: https://eqbuilder.dev/api/score
+  method: POST (no data_consent)
+  status: 400
+  quote: '"error": "data_consent_required" — no free round consumed'

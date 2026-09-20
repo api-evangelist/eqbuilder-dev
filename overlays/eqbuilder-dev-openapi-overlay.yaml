@@ -1,0 +1,724 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist overlay for the EQ Scoring Platform API
+  version: 1.0.0
+  description: Enhancements API Evangelist applies on top of the published OpenAPI 3.1.0 document (https://eqbuilder.dev/openapi.json,
+    harvested 2026-09-19; 133 operations, no servers, no tags, no securitySchemes). Adds the resolved server, a
+    tag per capability group, security schemes for the payment/token headers the provider documents only as header
+    parameters and prose, and marks the retired /api/train operation deprecated — without touching the original.
+extends: openapi/eqbuilder-dev-openapi.yml
+x-generated: '2026-09-19'
+x-method: generated
+actions:
+- target: $.servers
+  update:
+  - url: https://eqbuilder.dev
+    description: 'Resolved by API Evangelist: the published document declares no servers[]; paths carry their /api
+      prefix and every documented URL resolves against https://eqbuilder.dev'
+- target: $.info
+  update:
+    contact:
+      name: Marz Greta-Lock Network
+      url: https://eqbuilder.dev/integrate
+    x-apievangelist-provenance:
+      fetched: '2026-09-19'
+      url: https://eqbuilder.dev/openapi.json
+      http_status: 200
+      llms_txt: https://eqbuilder.dev/llms.txt
+      agent_card: https://eqbuilder.dev/.well-known/agent-card.json
+      mcp: https://eqbuilder.dev/api/mcp
+- target: $.tags
+  update:
+  - name: Scoring
+  - name: Duels & Arena
+  - name: Role-play & Coaching
+  - name: Credits & Payments
+  - name: Storelayer
+  - name: Discovery
+  - name: Operator & Admin
+  - name: Public Results & Stats
+- target: $.components.securitySchemes
+  update:
+    x402Payment:
+      type: apiKey
+      in: header
+      name: PAYMENT-SIGNATURE
+      description: Canonical x402 v2 payment payload (EIP-3009 USDC authorization). Obtain the requirements from
+        the HTTP 402 body, sign, retry once. Documented in prose + header parameters; not declared by the provider.
+    legacyXPayment:
+      type: apiKey
+      in: header
+      name: X-PAYMENT
+      description: Legacy x402 payment header, still accepted.
+    bundleToken:
+      type: apiKey
+      in: header
+      name: X-BUNDLE-TOKEN
+      description: Secret prepaid-credit token from POST /api/bundle or POST /api/card/claim.
+    adminToken:
+      type: apiKey
+      in: header
+      name: X-Admin-Token
+      description: Operator/admin surface only.
+    operatorSession:
+      type: apiKey
+      in: cookie
+      name: operator_session
+      description: HttpOnly session cookie issued by POST /api/operator/login (cookie name inferred from the operation
+        description, not declared).
+- target: $.paths['/api/train'].post
+  update:
+    deprecated: true
+    x-apievangelist-observed: POST returns HTTP 410 endpoint_retired with replacement /api/simulate (2026-09-19);
+      /api/pricing train_endpoint.status "retired"
+- target: $.paths['/api/mcp'].get
+  update:
+    x-apievangelist-observed: '405 allow: POST — the MCP endpoint is POST-only'
+- target: $.paths['/api/healthz'].get
+  update:
+    tags:
+    - Public Results & Stats
+- target: $.paths['/api/starter-kit'].get
+  update:
+    tags:
+    - Discovery
+- target: $.paths['/api/starter-kit/{filename}'].get
+  update:
+    tags:
+    - Discovery
+- target: $.paths['/api/wishlist'].post
+  update:
+    tags:
+    - Scoring
+- target: $.paths['/api/operator/corpus-insights'].get
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/corpus/evidence'].get
+  update:
+    tags:
+    - Public Results & Stats
+- target: $.paths['/api/outreach/status'].get
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/outreach/status'].post
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/leaderboard'].get
+  update:
+    tags:
+    - Public Results & Stats
+- target: $.paths['/api/results/{result_id}'].get
+  update:
+    tags:
+    - Public Results & Stats
+- target: $.paths['/api/operator/public-results/conversion'].get
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/certificate/{tx_hash}'].get
+  update:
+    tags:
+    - Public Results & Stats
+- target: $.paths['/api/scoreboard'].get
+  update:
+    tags:
+    - Public Results & Stats
+- target: $.paths['/api/stats'].get
+  update:
+    tags:
+    - Public Results & Stats
+- target: $.paths['/api/health-capacity'].get
+  update:
+    tags:
+    - Public Results & Stats
+- target: $.paths['/api/pricing'].get
+  update:
+    tags:
+    - Public Results & Stats
+- target: $.paths['/api/proof-cards'].get
+  update:
+    tags:
+    - Public Results & Stats
+- target: $.paths['/api/proof-cards/{slug}'].get
+  update:
+    tags:
+    - Public Results & Stats
+- target: $.paths['/.well-known/ai-plugin.json'].get
+  update:
+    tags:
+    - Discovery
+- target: $.paths['/api/.well-known/ai-plugin.json'].get
+  update:
+    tags:
+    - Discovery
+- target: $.paths['/api/simulate'].get
+  update:
+    tags:
+    - Scoring
+- target: $.paths['/api/simulate'].post
+  update:
+    tags:
+    - Scoring
+    security:
+    - x402Payment: []
+    - legacyXPayment: []
+    - bundleToken: []
+- target: $.paths['/api/stress-test'].get
+  update:
+    tags:
+    - Scoring
+- target: $.paths['/api/stress-test'].post
+  update:
+    tags:
+    - Scoring
+    security:
+    - legacyXPayment: []
+    - x402Payment: []
+- target: $.paths['/api/progress'].get
+  update:
+    tags:
+    - Scoring
+- target: $.paths['/api/progress'].post
+  update:
+    tags:
+    - Scoring
+    security:
+    - legacyXPayment: []
+    - x402Payment: []
+- target: $.paths['/api/training-dataset'].get
+  update:
+    tags:
+    - Scoring
+- target: $.paths['/api/training-dataset'].post
+  update:
+    tags:
+    - Scoring
+    security:
+    - legacyXPayment: []
+    - x402Payment: []
+- target: $.paths['/api/script-check'].get
+  update:
+    tags:
+    - Scoring
+- target: $.paths['/api/script-check'].post
+  update:
+    tags:
+    - Scoring
+    security:
+    - legacyXPayment: []
+    - x402Payment: []
+- target: $.paths['/.well-known/ai-plugins.json'].get
+  update:
+    tags:
+    - Discovery
+- target: $.paths['/api/.well-known/ai-plugins.json'].get
+  update:
+    tags:
+    - Discovery
+- target: $.paths['/api/.well-known/storelayer.json'].get
+  update:
+    tags:
+    - Storelayer
+- target: $.paths['/.well-known/storelayer.json'].get
+  update:
+    tags:
+    - Storelayer
+- target: $.paths['/api/storelayer/recommend'].get
+  update:
+    tags:
+    - Storelayer
+- target: $.paths['/api/storelayer/jobs'].get
+  update:
+    tags:
+    - Storelayer
+- target: $.paths['/api/storelayer/match'].post
+  update:
+    tags:
+    - Storelayer
+- target: $.paths['/api/storelayer/match/{job_slug}'].get
+  update:
+    tags:
+    - Storelayer
+- target: $.paths['/api/storelayer/conversions'].post
+  update:
+    tags:
+    - Storelayer
+- target: $.paths['/api/storelayer/verified-installs/{workflow_id}'].get
+  update:
+    tags:
+    - Storelayer
+- target: $.paths['/api/storelayer/free-installs/start'].post
+  update:
+    tags:
+    - Storelayer
+- target: $.paths['/api/storelayer/free-installs/{workflow_id}/next-action'].get
+  update:
+    tags:
+    - Storelayer
+- target: $.paths['/api/storelayer/free-installs/{workflow_id}/challenge-published'].post
+  update:
+    tags:
+    - Storelayer
+- target: $.paths['/api/storelayer/free-installs/{workflow_id}/installation'].post
+  update:
+    tags:
+    - Storelayer
+- target: $.paths['/api/storelayer/free-installs/{workflow_id}/code'].get
+  update:
+    tags:
+    - Storelayer
+- target: $.paths['/api/storelayer/free-installs/{workflow_id}/live-verification'].post
+  update:
+    tags:
+    - Storelayer
+- target: $.paths['/api/storelayer/agent/catalog'].get
+  update:
+    tags:
+    - Storelayer
+- target: $.paths['/api/storelayer/agent/quotes'].post
+  update:
+    tags:
+    - Storelayer
+- target: $.paths['/api/storelayer/agent/renewals'].post
+  update:
+    tags:
+    - Storelayer
+- target: $.paths['/api/storelayer/agent/upgrades'].post
+  update:
+    tags:
+    - Storelayer
+- target: $.paths['/api/storelayer/agent/payments/{quote_id}'].post
+  update:
+    tags:
+    - Storelayer
+    security:
+    - legacyXPayment: []
+    - x402Payment: []
+- target: $.paths['/api/storelayer/agent/payments/{quote_id}'].get
+  update:
+    tags:
+    - Storelayer
+- target: $.paths['/api/storelayer/agent/payments/{quote_id}/retry-activation'].post
+  update:
+    tags:
+    - Storelayer
+- target: $.paths['/api/storelayer/attribution/summary'].get
+  update:
+    tags:
+    - Storelayer
+- target: $.paths['/.well-known/agents.json'].get
+  update:
+    tags:
+    - Discovery
+- target: $.paths['/.well-known/agent.json'].get
+  update:
+    tags:
+    - Discovery
+- target: $.paths['/api/.well-known/agent-card.json'].get
+  update:
+    tags:
+    - Discovery
+- target: $.paths['/.well-known/agent-card.json'].get
+  update:
+    tags:
+    - Discovery
+- target: $.paths['/api/.well-known/mcp/server-card.json'].get
+  update:
+    tags:
+    - Discovery
+- target: $.paths['/.well-known/mcp/server-card.json'].get
+  update:
+    tags:
+    - Discovery
+- target: $.paths['/api/.well-known/mcp.json'].get
+  update:
+    tags:
+    - Discovery
+- target: $.paths['/.well-known/mcp.json'].get
+  update:
+    tags:
+    - Discovery
+- target: $.paths['/api/.well-known/glama.json'].get
+  update:
+    tags:
+    - Discovery
+- target: $.paths['/.well-known/glama.json'].get
+  update:
+    tags:
+    - Discovery
+- target: $.paths['/llms.txt'].get
+  update:
+    tags:
+    - Discovery
+- target: $.paths['/api/mcp'].get
+  update:
+    tags:
+    - Discovery
+- target: $.paths['/api/mcp'].post
+  update:
+    tags:
+    - Discovery
+- target: $.paths['/api/llms.txt'].get
+  update:
+    tags:
+    - Discovery
+- target: $.paths['/api/admin/network-config'].get
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/admin/configure-network'].patch
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/.well-known/mcp-registry-auth'].get
+  update:
+    tags:
+    - Discovery
+- target: $.paths['/.well-known/mcp-registry-auth'].get
+  update:
+    tags:
+    - Discovery
+- target: $.paths['/api/embed/check'].post
+  update:
+    tags:
+    - Credits & Payments
+    security:
+    - bundleToken: []
+- target: $.paths['/api/referral/status/{code}'].get
+  update:
+    tags:
+    - Credits & Payments
+- target: $.paths['/api/bundle'].post
+  update:
+    tags:
+    - Credits & Payments
+    security:
+    - legacyXPayment: []
+    - x402Payment: []
+- target: $.paths['/api/bundle/balance'].get
+  update:
+    tags:
+    - Credits & Payments
+    security:
+    - bundleToken: []
+- target: $.paths['/api/card/packs'].get
+  update:
+    tags:
+    - Credits & Payments
+- target: $.paths['/api/card/checkout'].post
+  update:
+    tags:
+    - Credits & Payments
+- target: $.paths['/api/card/claim'].post
+  update:
+    tags:
+    - Credits & Payments
+- target: $.paths['/api/card/refill'].post
+  update:
+    tags:
+    - Credits & Payments
+- target: $.paths['/api/duel/prompts'].get
+  update:
+    tags:
+    - Duels & Arena
+- target: $.paths['/api/duel'].post
+  update:
+    tags:
+    - Duels & Arena
+    security:
+    - legacyXPayment: []
+    - x402Payment: []
+- target: $.paths['/api/duel/challenge/{duel_id}'].get
+  update:
+    tags:
+    - Duels & Arena
+- target: $.paths['/api/duels'].get
+  update:
+    tags:
+    - Duels & Arena
+- target: $.paths['/api/duels/{duel_id}'].get
+  update:
+    tags:
+    - Duels & Arena
+- target: $.paths['/api/profiles/bulk'].post
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/profiles/vault/{profile_name}'].delete
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/profiles/vault'].get
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/profiles'].get
+  update:
+    tags:
+    - Scoring
+- target: $.paths['/api/roleplay'].post
+  update:
+    tags:
+    - Role-play & Coaching
+    security:
+    - legacyXPayment: []
+    - x402Payment: []
+- target: $.paths['/api/roleplay/turn'].post
+  update:
+    tags:
+    - Role-play & Coaching
+- target: $.paths['/api/roleplay/open'].get
+  update:
+    tags:
+    - Role-play & Coaching
+- target: $.paths['/api/roleplay/join'].post
+  update:
+    tags:
+    - Role-play & Coaching
+- target: $.paths['/api/roleplay/status'].post
+  update:
+    tags:
+    - Role-play & Coaching
+- target: $.paths['/api/coaching/packs'].get
+  update:
+    tags:
+    - Role-play & Coaching
+- target: $.paths['/api/coaching'].post
+  update:
+    tags:
+    - Role-play & Coaching
+    security:
+    - legacyXPayment: []
+    - x402Payment: []
+- target: $.paths['/api/coaching/drill'].post
+  update:
+    tags:
+    - Role-play & Coaching
+- target: $.paths['/api/coaching/cert/{enrollment_id}'].get
+  update:
+    tags:
+    - Role-play & Coaching
+- target: $.paths['/api/coaching/checkout'].post
+  update:
+    tags:
+    - Role-play & Coaching
+- target: $.paths['/api/coaching/claim'].post
+  update:
+    tags:
+    - Role-play & Coaching
+- target: $.paths['/api/free-trial/status'].get
+  update:
+    tags:
+    - Credits & Payments
+- target: $.paths['/api/free-score/contact'].post
+  update:
+    tags:
+    - Scoring
+- target: $.paths['/api/score'].post
+  update:
+    tags:
+    - Scoring
+- target: $.paths['/api/train'].post
+  update:
+    tags:
+    - Scoring
+- target: $.paths['/api/ledger/export'].get
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/ledger'].get
+  update:
+    tags:
+    - Public Results & Stats
+- target: $.paths['/api/calibration/uptake'].get
+  update:
+    tags:
+    - Public Results & Stats
+- target: $.paths['/api/calibration/contributions'].get
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/bots'].get
+  update:
+    tags:
+    - Public Results & Stats
+- target: $.paths['/api/admin/bots/{bot_id}/reset'].post
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/admin/bots/{bot_id}'].delete
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/admin/purge-canary'].delete
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/admin/fleet-signals'].get
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/admin/fleet-plan'].post
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/bots/{bot_id}/reset'].post
+  update:
+    tags:
+    - Public Results & Stats
+- target: $.paths['/api/operator/free-trial/whoami'].get
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/operator/free-trial/contacts'].get
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/operator/free-trial/purge-stale'].post
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/operator/free-trial/reset-caller'].post
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/fee/{bot_id}'].get
+  update:
+    tags:
+    - Credits & Payments
+- target: $.paths['/api/fee/simulate/{wallet_address}'].get
+  update:
+    tags:
+    - Credits & Payments
+- target: $.paths['/api/wallet/{wallet_address}/statement'].get
+  update:
+    tags:
+    - Credits & Payments
+- target: $.paths['/api/solana/balance/{wallet_address}'].get
+  update:
+    tags:
+    - Credits & Payments
+- target: $.paths['/api/solana/history/{wallet_address}'].get
+  update:
+    tags:
+    - Credits & Payments
+- target: $.paths['/api/solana/verify'].post
+  update:
+    tags:
+    - Credits & Payments
+- target: $.paths['/api/financial/snapshots'].get
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/operator/session'].get
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/operator/logout'].post
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/operator/login'].post
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/funnel/weekly'].get
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []
+- target: $.paths['/api/rewrite'].get
+  update:
+    tags:
+    - Scoring
+- target: $.paths['/api/rewrite'].post
+  update:
+    tags:
+    - Scoring
+    security:
+    - legacyXPayment: []
+    - x402Payment: []
+- target: $.paths['/api/visits/summary'].get
+  update:
+    tags:
+    - Operator & Admin
+    security:
+    - adminToken: []
+    - operatorSession: []

@@ -1,0 +1,51 @@
+generated: '2026-09-19'
+method: searched
+source: https://eqbuilder.dev/llms.txt ("Official SDKs", "Permanent tool setup", "Quickstart code"), registry.npmjs.org/eqbuilder,
+  pypi.org/pypi/eqbuilder/json, https://eqbuilder.dev/api/starter-kit — versions and dates read live 2026-09-19
+note: 'Both registry packages are first-party: the PyPI author and npm maintainer identity ("EqBuilder") carries
+  the same contact address the agent card and /api/pricing publish, both set homepage https://eqbuilder.dev, and
+  llms.txt names them as the official SDKs. Six versions were cut on the day of first publication (2026-08-16) and
+  one follow-up (0.1.5) on 2026-09-06 on both registries within the same day — a single release train. Neither package
+  declares a source repository, and no GitHub organisation was found (llms.txt mentions "the platform repo under
+  examples/" without linking it).'
+packages:
+- name: eqbuilder
+  language: Python
+  registry: pypi
+  registry_url: https://pypi.org/project/eqbuilder/
+  install: 'pip install "eqbuilder[all]"  # extras: [payments]=x402 via viem-equivalent signing, [langchain], [crewai]'
+  version: 0.1.5
+  published: '2026-09-06'
+  first_published: '2026-08-16'
+  official: true
+  license: MIT
+  repository: null
+  description: 'EqBuilder client: free_score / score / auto_score, wishlist, LangChain and CrewAI tool wrappers;
+    raises WishlistRequired and PaymentRequired; never auto-replays a paid authorization after a timeout.'
+- name: eqbuilder
+  language: JavaScript/TypeScript (Node 18+)
+  registry: npm
+  registry_url: https://www.npmjs.com/package/eqbuilder
+  install: npm install eqbuilder viem
+  version: 0.1.5
+  published: '2026-09-06'
+  first_published: '2026-08-16'
+  official: true
+  license: MIT
+  repository: null
+  peer_dependencies:
+    viem: '>=2'
+    '@langchain/core': '>=0.2'
+    zod: '>=3'
+  description: 'EqBuilder client: freeScore / score / autoScore, LangChain.js tool; paid x402 calls need viem.'
+- name: Human-Sounding AI Agent Starter Kit
+  language: Python + JavaScript
+  registry: cdn
+  registry_url: https://eqbuilder.dev/api/starter-kit
+  install: 'curl -s https://eqbuilder.dev/api/starter-kit/pay-and-score.py -o pay_and_score.py  # or pay-and-score.mjs;
+    guide at PAY_AND_SCORE.md'
+  version: null
+  published: null
+  official: true
+  description: Provider-hosted one-file examples (1,240-byte Python, 1,274-byte Node) wrapping the SDKs; served
+    unversioned from the API host, so the version floats — a consumer cannot tell what they fetched either.

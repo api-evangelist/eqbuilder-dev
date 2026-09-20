@@ -1,0 +1,110 @@
+generated: '2026-09-19'
+method: probed
+source: live GET of each path on 2026-09-19 with a browser User-Agent
+note: eqbuilder.dev is one host for everything (website, REST API, MCP endpoint, agent card); www.eqbuilder.dev
+  has no DNS record. The /.well-known and /api prefixes are routed to the FastAPI app, which returns honest JSON
+  404s, while every other unknown path returns the 5,879-byte SPA shell — so under /.well-known a 200 is a real
+  document. The five RFC-standard discovery documents (security.txt, openid-configuration, oauth-authorization-server,
+  oauth-protected-resource incl. the RFC 9728 path-suffixed form for /api/mcp, api-catalog) are NOT served. What
+  IS served is an OpenAI plugin manifest, an A2A agent card (three aliases), an MCP server.json (two aliases), a
+  Glama manifest, an MCP registry auth key, an x402 v2 payable-resource catalog, a corpus-evidence document and
+  the Storelayer catalog snapshot + Atom feed.
+hosts:
+- host: eqbuilder.dev
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    note: honest 404 {"detail":"Not Found"} (application/json) from the FastAPI layer — not served
+  - path: /.well-known/openid-configuration
+    status: 404
+    note: honest 404 {"detail":"Not Found"} (application/json) from the FastAPI layer — not served
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    note: honest 404 {"detail":"Not Found"} (application/json) from the FastAPI layer — not served
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    note: honest 404 {"detail":"Not Found"} (application/json) from the FastAPI layer — not served; also 404 at
+      /.well-known/oauth-protected-resource/api/mcp, /api/.well-known/oauth-protected-resource and /api/mcp/.well-known/oauth-protected-resource
+      — the MCP server is anonymous and publishes no RFC 9728 metadata
+  - path: /.well-known/api-catalog
+    status: 404
+    note: honest 404 {"detail":"Not Found"} (application/json) from the FastAPI layer — not served
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    file: well-known/eqbuilder-dev-ai-plugin.json
+    content_type: application/json
+    bytes: 17336
+    note: OpenAI plugin manifest schema_version v1, name_for_model eq_scoring_platform; also served at /api/.well-known/ai-plugin.json
+      and as /.well-known/ai-plugins.json
+  - path: /.well-known/agent-card.json
+    status: 200
+    file: well-known/eqbuilder-dev-agent-card.json
+    content_type: application/json
+    bytes: 24254
+    note: A2A agent card — graded near-conformant in a2a/eqbuilder-dev-a2a.yml
+  - path: /.well-known/agent.json
+    status: 200
+    content_type: application/json
+    bytes: 24254
+    note: byte-identical to agent-card.json (legacy alias); not saved twice
+  - path: /.well-known/agents.json
+    status: 200
+    content_type: application/json
+    bytes: 24254
+    note: byte-identical to agent-card.json; not a multi-agent manifest; not saved twice
+  - path: /.well-known/mcp.json
+    status: 200
+    file: well-known/eqbuilder-dev-mcp.json
+    content_type: application/json
+    bytes: 532
+    note: MCP server.json (schema 2025-12-11) name dev.eqbuilder/marz-greta-lock-network, version 1.0.9, remotes[0]
+      streamable-http https://eqbuilder.dev/api/mcp
+  - path: /.well-known/mcp/server-card.json
+    status: 200
+    content_type: application/json
+    bytes: 532
+    note: byte-identical to mcp.json; not saved twice
+  - path: /.well-known/glama.json
+    status: 200
+    file: well-known/eqbuilder-dev-glama.json
+    content_type: application/json
+    bytes: 223
+    note: Glama registry manifest naming the MCP endpoint and llms.txt
+  - path: /.well-known/mcp-registry-auth
+    status: 200
+    file: well-known/eqbuilder-dev-mcp-registry-auth.txt
+    content_type: text/plain
+    bytes: 66
+    note: v=MCPv1; k=ed25519; p=<public key> — the official MCP registry DNS/HTTP domain-verification record (public
+      key only)
+  - path: /.well-known/x402.json
+    status: 200
+    file: well-known/eqbuilder-dev-x402.json
+    content_type: application/json
+    bytes: 88973
+    note: 'x402 v2 payable-resource catalog: 10 POST resources, each accepting USDC on Base/Polygon/Arbitrum/Avalanche
+      (eip155) plus legacy Solana; provider "Marz Greta-Lock Network"'
+  - path: /.well-known/corpus-evidence.json
+    status: 200
+    file: well-known/eqbuilder-dev-corpus-evidence.json
+    content_type: application/json
+    bytes: 4331
+    note: Privacy-safe aggregate evidence about the consented training corpus (schema_version 2); alias of /api/corpus/evidence
+  - path: /.well-known/storelayer.json
+    status: 200
+    file: well-known/eqbuilder-dev-storelayer.json
+    content_type: application/json
+    bytes: 34603
+    note: Snapshot of the third-party Storelayer storefront-widget catalog (57 entries) that the MCP storelayer_widget_menu
+      tool also returns as a resource
+  - path: /.well-known/storelayer-feed.xml
+    status: 200
+    content_type: application/atom+xml
+    bytes: 24707
+    note: Atom feed of the same Storelayer catalog; recorded, not saved
+  - path: /.well-known/gpc.json
+    status: 404
+    note: honest 404 {"detail":"Not Found"} (application/json) from the FastAPI layer — not served
+- host: www.eqbuilder.dev
+  documents: []
+  note: No A/AAAA/CNAME record (dig returned nothing); curl exit 6. Not a host.

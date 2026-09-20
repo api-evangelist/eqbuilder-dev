@@ -1,0 +1,102 @@
+generated: '2026-09-19'
+method: probed
+source: https://eqbuilder.dev/api/pricing (machine-readable pricing manifest), https://eqbuilder.dev/api/card/packs,
+  https://eqbuilder.dev/.well-known/x402.json, live 402 quote from GET https://eqbuilder.dev/api/simulate, all read
+  2026-09-19; prose cross-check https://eqbuilder.dev/llms.txt "Pricing in plain English"
+currency: USD (USDC atomic units, 6 decimals) — legacy prices also quoted in Solana lamports
+model: free trial + pay-per-call (x402) + prepaid credit packs; no subscription tiers beyond an optional monthly
+  card-pack renewal
+plan_count: 7
+plans:
+- id: free-trial
+  name: Free trial scoring
+  price: 0
+  currency: USD
+  billing_period: null
+  unit: score
+  included: 3 lifetime free scores per caller on POST /api/score (and the MCP score_text tool), each returning suggested_prompt_addition
+  limits: 'Lifetime cap, never resets; requires data_consent: true; the third score requires one prior wishlist
+    submission'
+  overage: HTTP 429 free_trial_exhausted → paid flow
+- id: pay-per-score-basic
+  name: Validated benchmark (basic)
+  price: 0.05
+  currency: USD
+  billing_period: null
+  unit: session
+  included: 'POST /api/simulate: one validated session, pass/fail verdict, per-dimension gaps, leaderboard entry,
+    certificate on pass, arena rating movement'
+  limits: One payment = one session; fixed price per tier for every wallet
+  overage: null
+  price_detail: $0.05 USDC (50000 atomic units) on Base/Polygon/Arbitrum/Avalanche; 270,000 lamports on Solana
+- id: pay-per-score-deep
+  name: 'Deep analysis tier ("tier": "deep")'
+  price: 0.18
+  currency: USD
+  billing_period: null
+  unit: session
+  included: Basic session plus per-dimension diagnostics, detected machine-like signals with evidence, prioritized
+    rewrite guidance
+  limits: Basic-tier payments do not unlock it
+  overage: null
+  price_detail: $0.18 USDC (180000 atomic units); 950,000 lamports
+- id: deep-priced-tools
+  name: Rewrite / stress test / progress report / training-dataset export / script-adherence check
+  price: 0.18
+  currency: USD
+  billing_period: null
+  unit: call
+  included: POST /api/rewrite, /api/stress-test, /api/progress, /api/training-dataset, /api/script-check — each
+    priced like the deep tier
+  limits: null
+  overage: null
+  price_detail: $0.18 USDC (180000 atomic units) each; 950,000 lamports
+- id: duel
+  name: Bot-vs-bot EQ duel
+  price: 0.075
+  currency: USD
+  billing_period: null
+  unit: entry per bot
+  included: 'POST /api/duel: two bots answer the same prompt against the same profile; Elo K=32; challenge URL'
+  limits: Open duel expires unjoined after 24 h, fee not refunded
+  overage: null
+  price_detail: $0.07 USDC (75000 atomic units) per bot; 400,000 lamports
+- id: roleplay-and-coaching
+  name: Role-play room (8 turns) / coaching pack (18 attempts)
+  price: 0.4
+  currency: USD
+  billing_period: null
+  unit: session / pack
+  included: 'POST /api/roleplay: 8 scored turns between two bots, chairs swap at midpoint (joining an open room
+    is free); POST /api/coaching: job-specific drill curriculum with a shareable certificate'
+  limits: Unmatched rooms expire after 48 h
+  overage: null
+  price_detail: roleplay $0.40 USDC (400000 atomic units) (2,160,000 lamports); coaching $0.54 USDC (540000 atomic
+    units) (2,850,000 lamports)
+- id: prepaid-credits
+  name: Prepaid basic-score credits (x402 bundle or card packs)
+  price: 5
+  currency: USD
+  billing_period: one-time (optional explicit monthly renewal via Whop)
+  unit: pack
+  included: 'x402 bundle: 1,000 basic credits for $42.50 USDC (42500000 atomic units) (15% off; 229,500,000 lamports).
+    Card packs (no crypto): starter $5 → 105 credits (5% off), builder $20 → 444 (10% off), fleet $50 → 1,176 (15%
+    off). Redeem with X-BUNDLE-TOKEN on POST /api/simulate (basic) and POST /api/embed/check'
+  limits: Basic tier only; bundle_token shown exactly once; renewals only reconcile settled Whop payments and never
+    trigger on low balance
+  overage: null
+enterprise:
+  available: true
+  note: '"Fleet and enterprise deals: custom personality profiles, volume pricing, integration help" — contact published
+    under enterprise.contact at /api/pricing; no enterprise price list.'
+programs:
+- name: Referral
+  detail: Referrer earns basic credits worth 50% of everything a referred wallet ever spends; status at GET /api/referral/status/{code}
+- name: Loyalty (legacy)
+  detail: 10% after 10 sessions on legacy dynamic-fee products; the primary /api/simulate flow uses fixed prices
+- name: Calibration sharing
+  detail: share_for_calibration opt-in; discount_pct 0 (consent does not change price)
+note: 'DISCREPANCY RECORDED: llms.txt prose says "~$0.02/score" basic and "~$0.07" deep, and the retired /api/train
+  410 body says "~2 cents SOL basic, ~7 cents premium"; the live pricing manifest and the live 402 quote say 50,000
+  USDC units ($0.05) basic and 180,000 ($0.18) deep. The machine-readable numbers were taken as authoritative and
+  the prose is stale.'

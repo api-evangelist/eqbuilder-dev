@@ -1,0 +1,49 @@
+generated: '2026-09-19'
+method: searched
+source: https://eqbuilder.dev/llms.txt (Start here, Busy paid requests, Permanent tool setup), https://eqbuilder.dev/api/pricing
+  (score_endpoint, embedded_check_endpoint.capacity_retry, duel_endpoint), OpenAPI 429 declarations; live headers
+  on GET /api/stats 2026-09-19
+limit_count: 4
+limits:
+- scope: per-caller (free trial)
+  window: lifetime
+  limit: 3 free scores on POST /api/score / MCP score_text
+  burst: null
+  status_on_exhaustion: 429
+  error: free_trial_exhausted
+  note: Never resets; the 429 body carries the x402 upgrade recipe. Caller key is derived from the proxy chain (operator
+    diagnostic /api/operator/free-trial/whoami). Rejected requests (400 data_consent_required / wishlist_required
+    / invalid source) do not consume a round.
+- scope: platform (paid capacity)
+  window: transient
+  limit: paid work is capacity-limited before settlement or credit use
+  burst: null
+  status_on_exhaustion: 429
+  error: paid_capacity_busy
+  headers:
+  - Retry-After
+  note: Retry the same payment proof or Idempotency-Key with identical inputs after Retry-After; never send another
+    transfer.
+- scope: embedded component (client-side pacing)
+  window: per edit
+  limit: ≈800 ms debounce, 2 s minimum start interval, bounded transient 429/503/network retries with the same Idempotency-Key
+  burst: null
+  status_on_exhaustion: null
+  note: Behaviour of the provider's browser component, documented in ai-plugin.json and llms.txt; host caps and
+    pause controls are host-owned.
+- scope: per-wallet (duels)
+  window: consecutive failures
+  limit: wallet suspended after too many consecutive failures (429 declared on POST /api/duel); /api/simulate wallets
+    are explicitly never suspended
+  burst: null
+  status_on_exhaustion: 429
+  note: Reset via POST /api/bots/{bot_id}/reset (operator authorization).
+response_codes:
+  throttled: 429
+headers:
+  documented:
+  - Retry-After (paid_capacity_busy)
+  observed: []
+  note: No RateLimit-* or X-RateLimit-* header is documented, and none appeared on live 200 responses from GET /api/stats
+    (cache-control, strict-transport-security, x-cloud-trace-context only).
+note: No numeric requests-per-second quota is published for the free read surface (stats, profiles, pricing, leaderboard).

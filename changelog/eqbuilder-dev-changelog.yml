@@ -1,0 +1,37 @@
+generated: '2026-09-19'
+method: searched
+source: registry.npmjs.org/eqbuilder (time), pypi.org/pypi/eqbuilder/json (releases), /.well-known/mcp.json version,
+  /api/pricing train_endpoint
+scope: The API itself publishes no dated changelog (/changelog is the SPA shell; info.version 1.0.0; no release
+  notes anywhere on eqbuilder.dev). The only dated history is the first-party SDK release train on PyPI and npm,
+  recorded here as the SDK changelog, plus one API retirement recorded from its live 410 body.
+scheme: semver on the SDK packages; API document version 1.0.0; MCP server.json version 1.0.9
+current_version: 0.1.5 (SDKs)
+current_date: '2026-09-06'
+entries:
+- version: 0.1.5
+  date: '2026-09-06'
+  title: eqbuilder 0.1.5 (PyPI + npm, same day)
+  breaking: false
+  additions:
+  - Script-adherence check support ("check they stick to your approved facts") per the registry README
+  - Base USDC (gasless, EIP-3009) as the default paid path with viem as an npm peer dependency
+  highlights: Registry READMEs describe auto_score / autoScore graduating from the free trial to x402 on 429 free_trial_exhausted
+    and the WishlistRequired gate before the third free score.
+  url: https://pypi.org/project/eqbuilder/0.1.5/
+- version: 0.1.0 – 0.1.4
+  date: '2026-08-16'
+  title: 'Initial publication (six versions in one day: 0.1.0, 0.1.1 npm-only, 0.1.2, 0.1.3, 0.1.4)'
+  breaking: false
+  additions:
+  - Python and Node clients with free_score/score, LangChain and CrewAI tools
+  highlights: 0.1.1 exists on npm but not on PyPI.
+  url: https://www.npmjs.com/package/eqbuilder
+- version: api
+  date: null
+  title: POST /api/train retired
+  breaking: true
+  removals:
+  - POST /api/train (HTTP 410 endpoint_retired; replacement /api/simulate) "because it did not verify payment on-chain"
+  highlights: Undated; still listed in the OpenAPI.
+  url: https://eqbuilder.dev/api/pricing

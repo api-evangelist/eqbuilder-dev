@@ -1,0 +1,134 @@
+generated: '2026-09-19'
+method: searched
+source: https://eqbuilder.dev/llms.txt (Busy paid requests, Permanent tool setup, Paid validation, Card-paid credit
+  packs, Fixed paid-score policy, Rules), https://eqbuilder.dev/api/pricing, the OpenAPI header parameters and response
+  declarations, live probes 2026-09-19
+description: 'Cross-cutting runtime semantics of the EQ Scoring Platform REST API: payment-as-authorization (x402),
+  the two prepaid-credit rails, idempotency and replay rules, retry signalling, pagination, error envelope and versioning.'
+base_url: https://eqbuilder.dev/api
+api_style: REST over HTTPS, JSON request bodies (FastAPI), JSON responses; a few text/plain and CSV downloads
+authentication:
+  style: 'No API keys or accounts. Free surface is anonymous (free-trial cap keyed per caller). Paid operations
+    are authorized by payment: an x402 v2 PAYMENT-SIGNATURE header (default, USDC on Base) or legacy X-PAYMENT /
+    Solana tx_hash; prepaid credits via the secret X-BUNDLE-TOKEN header; wallet statements via a settled auth_tx_hash
+    query proof; operator/admin via X-Admin-Token or an HttpOnly operator session cookie.'
+  see: authentication/eqbuilder-dev-authentication.yml
+idempotency:
+  coverage: partial
+  supported: true
+  mechanism: Idempotency-Key request header
+  scope:
+  - run_simulation_api_simulate_post
+  - embedded_eq_check_api_embed_check_post
+  key_format: embed-<13-digit-ms-timestamp>-<opaque-suffix> (embedded checks); client-generated otherwise
+  retention: '86,400 seconds for embedded checks (pricing: idempotency_replay_retention_seconds)'
+  conflict_behavior: Completed exact-key replays return the stored result without consuming another credit; a busy
+    (429 paid_capacity_busy) or ambiguous response must be retried with the SAME key and identical payload, never
+    with a new payment.
+  docs: https://eqbuilder.dev/llms.txt
+  note: Two of 33 request-body operations declare the header. Every other paid write is protected by the single-use
+    transaction signature (409 double-spend guard) — replay PROTECTION, not idempotent replay — and the SDKs deliberately
+    do not auto-replay a paid authorization after a timeout.
+reversibility:
+  grade: documented
+  na: false
+  note: The write surface is mostly payments and scored sessions. No refund path exists for any paid call ("Fees
+    are charged on both passed and failed validations"; an expired open duel's "entry fee is not refunded"). The
+    only documented reversal is cancelling a card-pack monthly renewal; no window is stated, so the grade is documented,
+    not verified.
+  surfaces:
+  - write: POST /api/simulate, /api/rewrite, /api/stress-test, /api/progress, /api/training-dataset, /api/script-check,
+      /api/roleplay, /api/coaching (paid x402 calls)
+    reversal: null
+    window: null
+    note: Non-refundable by policy (llms.txt Paid validation). An UNUSED signed authorization expires harmlessly
+      (validBefore), which is the only pre-settlement escape.
+  - write: POST /api/duel (paid entry)
+    reversal: null
+    window: open duel expires after 24 hours unjoined (pricing duel_endpoint.expiry_policy) — the fee is NOT refunded
+    note: The leg still counts as a validated session.
+  - write: POST /api/card/checkout with auto_refill=true (monthly renewal enrolment)
+    reversal: Cancel the Whop membership/subscription from the Whop account controls used at checkout
+    window: null
+    docs: https://eqbuilder.dev/llms.txt
+    note: Cancellation stops future renewals; settled credits remain. EQBuilder never starts a low-balance charge.
+  - write: POST /api/wishlist, POST /api/free-score/contact
+    reversal: null
+    window: null
+    note: No delete/withdraw operation is published for submitted wishlist items or optional contacts.
+  - write: 'Consented free-trial text (data_consent: true) stored in the pseudonymous corpus'
+    reversal: null
+    window: null
+    note: No data-deletion or opt-out endpoint is published; the provider's advice is not to submit sensitive text.
+  - write: 'Operator: DELETE /api/admin/bots/{bot_id}'
+    reversal: null
+    window: null
+    note: '"Irreversible" per the spec; refused for wallets with on-chain verified payments unless ?force=true.'
+dry_run:
+  supported: true
+  mechanism: 'Free price quotes: GET on each paid path (/api/simulate, /api/rewrite, /api/stress-test, /api/progress,
+    /api/training-dataset, /api/script-check) returns the live HTTP 402 x402 quote without charging; GET /api/fee/simulate/{wallet_address}
+    previews the fixed tier fee; POST without a payment header returns the same 402 quote ("Free discovery and no-payment
+    quotes remain available").'
+  note: A quote is a price rehearsal, not a scored rehearsal — there is no validate-only mode for the scoring itself
+    beyond the three free /api/score calls.
+pagination:
+  style: limit/offset (partial)
+  request_params:
+    limit: /api/leaderboard (default 20), /api/duels (20), /api/ledger (50), /api/roleplay/open, /api/proof-cards,
+      /api/storelayer/jobs
+    offset: /api/ledger (default 0)
+  response_fields: null
+  note: No cursor or next-link scheme; 200 response schemas are empty so envelope fields are undocumented.
+filtering:
+  leaderboard:
+  - profile
+  ledger:
+  - bot_id
+  duels:
+  - status
+  note: Niche leaderboards via GET /api/leaderboard?profile=<id>.
+field_expansion:
+  supported: false
+metadata:
+  supported: false
+  note: result_ref / request_id fields exist on some payloads for client correlation; there is no free-form metadata
+    object.
+request_tracing:
+  request_id_header: null
+  observed: x-cloud-trace-context response header (Google Frontend) — infrastructure trace id, not a documented
+    request id
+versioning:
+  scheme: none (unversioned /api paths; info.version 1.0.0)
+  detail: lifecycle/eqbuilder-dev-lifecycle.yml
+error_envelope:
+  media_type: application/json
+  shape: '{"detail": {"error": "<slug>", "message": "…"}} for application errors; {"detail": [ValidationError]}
+    for 422; x402 payment-requirements object for 402'
+  detail: errors/eqbuilder-dev-problem-types.yml
+rate_limit_signaling:
+  status: 429
+  errors:
+  - free_trial_exhausted (lifetime cap; body carries the x402 upgrade recipe)
+  - paid_capacity_busy (transient; honour Retry-After, retry same key/proof)
+  headers:
+    documented:
+    - Retry-After (on paid_capacity_busy)
+    observed: []
+  detail: rate-limits/eqbuilder-dev-rate-limits.yml
+payment_headers:
+  PAYMENT-SIGNATURE: canonical x402 v2 payment payload (request)
+  PAYMENT-RESPONSE: settlement receipt (response) on success
+  X-PAYMENT: legacy x402 v1-style payment header (request), still accepted
+  X-BUNDLE-TOKEN: secret prepaid-credit token (request) on POST /api/simulate (basic tier), POST /api/embed/check,
+    GET /api/bundle/balance
+consent_semantics:
+  data_consent: required true on every free /api/score call; stores text + result pseudonymously; never required
+    on paid calls
+  share_for_calibration: optional paid opt-in (default false) to store high-scoring responses for manual calibration
+    review
+  share_answer: optional duel opt-in; both sides must consent for answers to be exchanged
+inbound_callbacks:
+  note: POST /api/storelayer/conversions is an inbound conversion callback from the Storelayer vendor, not a consumer-facing
+    webhook; the optional "contact" field on /api/score may be an http(s) callback URL for operator outreach. No
+    webhook catalog or AsyncAPI is published.

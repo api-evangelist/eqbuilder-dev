@@ -1,0 +1,174 @@
+generated: '2026-09-19'
+method: probed
+status: published
+source: https://eqbuilder.dev/api/mcp (JSON-RPC initialize + tools/list + resources/list, anonymous), https://eqbuilder.dev/.well-known/mcp.json,
+  https://eqbuilder.dev/llms.txt ("Machine-readable interfaces")
+name: Marz Greta-Lock Network — AI Text Human-Likeness Benchmark
+description: 'Official remote MCP server operated by the provider on its own host. Streamable HTTP at https://eqbuilder.dev/api/mcp,
+  no authentication: initialize answered with protocolVersion 2025-06-18 and serverInfo name marz-greta-lock-network
+  version 1.0.0; tools/list returned 8 tools with inputSchema; resources/list returned 1 resource. The MCP surface
+  is the FREE, read-only side of the platform (trial scoring, profiles, pricing, fee preview, stats, feature requests,
+  Storelayer catalog); every paid operation stays on the REST x402 flow and is not exposed as a tool.'
+server:
+  name: dev.eqbuilder/marz-greta-lock-network
+  title: Marz Greta-Lock Network — AI Text Human-Likeness Benchmark
+  version: 1.0.0
+  server_json_version: 1.0.9
+  transport: streamable-http
+  url: https://eqbuilder.dev/api/mcp
+  protocol_version: '2025-06-18'
+  auth: none
+  capabilities:
+    tools:
+      listChanged: false
+    resources:
+      subscribe: false
+      listChanged: false
+  icon: https://eqbuilder.dev/logo.png
+  client_config: '{"mcpServers": {"eqbuilder": {"type": "streamable-http", "url": "https://eqbuilder.dev/api/mcp"}}}'
+deployment:
+  mode: remote
+  endpoint: https://eqbuilder.dev/api/mcp
+  install: null
+  package: null
+  auth: none
+  verified: probed
+  checked: '2026-09-19'
+  evidence:
+  - url: https://eqbuilder.dev/api/mcp
+    method: POST initialize
+    http_status: 200
+    note: protocolVersion 2025-06-18; serverInfo.name marz-greta-lock-network
+  - url: https://eqbuilder.dev/api/mcp
+    method: POST tools/list
+    http_status: 200
+    note: 8 tools, saved verbatim to mcp/eqbuilder-dev-mcp-tools-list.json
+  - url: https://eqbuilder.dev/api/mcp
+    method: GET
+    http_status: 405
+    note: 'allow: POST — no SSE GET stream'
+  - url: https://eqbuilder.dev/.well-known/mcp.json
+    http_status: 200
+    note: remotes[0].type streamable-http
+registries:
+- name: Glama
+  url: https://glama.ai/mcp/connectors/dev.eqbuilder/marz-greta-lock-network
+  note: lists the same 8 tools; manifest at /.well-known/glama.json
+- name: Official MCP registry domain verification
+  url: https://eqbuilder.dev/.well-known/mcp-registry-auth
+  note: ed25519 public key record; namespace dev.eqbuilder
+tools:
+- name: storelayer_recommend
+  title: Recommend Storelayer Widgets
+  description: Rank the neutral 57-item Storelayer catalog for a Shopify or e-commerce storefront goal. This recommendation
+    is read-only and never edits, installs, or spends. When already authorized to edit the site, use the guarded
+    caller-applied self-install endpoint /api/…
+  input_properties:
+  - query
+  required:
+  - query
+  annotations:
+    title: Recommend Storelayer Widgets
+    readOnlyHint: true
+    destructiveHint: false
+    idempotentHint: true
+    openWorldHint: false
+  source_operation: openapi/eqbuilder-dev-openapi.yml#storelayer_recommend_api_storelayer_recommend_get
+  auth: none
+- name: storelayer_widget_menu
+  title: Open the Storelayer Widget Menu
+  description: EQBuilder provides a neutral snapshot of 57 Storelayer catalog entries and a deterministic, read-only
+    recommendation matcher. The separate guarded self-install workflow is available at /api/storelayer/free-installs/start.
+    One verified storefront, one active wi…
+  input_properties: []
+  required: []
+  annotations:
+    title: Open the Storelayer Widget Menu
+    readOnlyHint: true
+    destructiveHint: false
+    idempotentHint: true
+    openWorldHint: true
+  source_operation: openapi/eqbuilder-dev-openapi.yml#storelayer_widget_menu__well_known_storelayer_json_get
+  auth: none
+- name: score_text
+  title: null
+  description: Three lifetime free human-likeness evaluations per caller. Requires strict data_consent=true before
+    a round is consumed. Consented text may be retained pseudonymously to improve scoring and calibration; text
+    is not anonymized, so never submit sensitive content…
+  input_properties:
+  - text
+  - delay_seconds
+  - profile
+  - contact
+  - source
+  - data_consent
+  - bot_role
+  - model_family
+  - applied_suggestion
+  - wallet_address
+  required:
+  - text
+  - delay_seconds
+  - profile
+  - data_consent
+  annotations: null
+  source_operation: openapi/eqbuilder-dev-openapi.yml#score_response_api_score_post
+  auth: none
+- name: list_profiles
+  title: null
+  description: List all 28 scoreable human personality profiles — one per bot category (support, sales, coding,
+    medical, eldercare, voice, and more) — with their trait targets.
+  input_properties: []
+  required: []
+  annotations: null
+  source_operation: openapi/eqbuilder-dev-openapi.yml#list_profiles_api_profiles_get
+  auth: none
+- name: get_pricing
+  title: null
+  description: 'Current pricing manifest: fee in Solana lamports, treasury wallet, failure-escalation rules, and
+    how to submit a paid validated benchmark via POST /api/simulate. Every paid session returns an actionable improvement
+    hint (which dial to change and by how much), …'
+  input_properties: []
+  required: []
+  annotations: null
+  source_operation: openapi/eqbuilder-dev-openapi.yml#get_pricing_api_pricing_get
+  auth: none
+- name: preview_fee
+  title: null
+  description: Preview the exact lamport fee the given Solana wallet would pay for its next paid validation (fees
+    escalate with consecutive failures).
+  input_properties:
+  - wallet_address
+  required:
+  - wallet_address
+  annotations: null
+  source_operation: openapi/eqbuilder-dev-openapi.yml#get_simulate_fee_api_fee_simulate__wallet_address__get
+  auth: none
+- name: request_feature
+  title: null
+  description: Tell the platform what you (or your developer) need next — a missing test, profile, capability, or
+    integration. Requests directly shape the roadmap. Free.
+  input_properties:
+  - need
+  - audience
+  - bot_role
+  required:
+  - need
+  annotations: null
+  source_operation: openapi/eqbuilder-dev-openapi.yml#submit_wishlist_api_wishlist_post
+  auth: none
+- name: get_network_stats
+  title: null
+  description: Live network statistics (honest aggregates from the real platform ledger).
+  input_properties: []
+  required: []
+  annotations: null
+  source_operation: openapi/eqbuilder-dev-openapi.yml#public_network_stats_api_stats_get
+  auth: none
+resources:
+- uri: https://eqbuilder.dev/.well-known/storelayer.json
+  name: storelayer-widget-menu
+  mimeType: application/json
+not_exposed_as_tools: All paid x402 operations (/api/simulate, /api/rewrite, /api/duel, /api/stress-test, /api/progress,
+  /api/training-dataset, /api/script-check, /api/roleplay, /api/coaching, /api/bundle), prepaid card packs, public
+  results/certificates and the operator/admin surface — see mcp/eqbuilder-dev-tool-crosswalk.yml rest_only[].

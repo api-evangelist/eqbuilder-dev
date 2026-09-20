@@ -1,0 +1,109 @@
+generated: '2026-09-19'
+method: searched
+probe: true
+source: sitemap.xml, https://eqbuilder.dev/llms.txt, https://eqbuilder.dev/evidence (SPA), https://eqbuilder.dev/api/corpus/evidence,
+  https://eqbuilder.dev/.well-known/corpus-evidence.json, https://eqbuilder.dev/api/pricing, conventional-path probes
+  2026-09-19
+signals:
+  training_data_summary:
+    url: https://eqbuilder.dev/api/corpus/evidence
+    alias: https://eqbuilder.dev/.well-known/corpus-evidence.json
+    evidence:
+    - source: https://eqbuilder.dev/api/corpus/evidence
+      keywords:
+      - total_consented_non_canary
+      - usable
+      - quarantined_by_reason
+      - pseudonymous_callers
+      - coverage.profiles
+      - coverage.dimensions
+      - improvement.minimum_matched_pairs
+    - source: https://eqbuilder.dev/llms.txt
+      keywords:
+      - pseudonymous training corpus
+      - data_consent
+      - one-way hash
+      - text capped at 4000 chars
+    note: 'A live, machine-readable summary of the consented text corpus the provider stores to calibrate its scoring
+      (counts, quarantine reasons, per-profile/per-dimension coverage, evidence thresholds; identities as one-way
+      hashes). The provider calls it its "training corpus" (POST /api/training-dataset, eq_training_corpus). Scope
+      caveat: the scoring engine is deterministic statistics with no LLM, so this is a calibration-corpus summary
+      rather than a generative-model training-data disclosure; recorded because the page carries the substance,
+      not the word.'
+note: eqbuilder.dev answers 200 with the 5,879-byte SPA shell for every non-/api path, so each conventional-path
+  probe below was judged on body. No privacy policy, terms of service, accessibility statement, subprocessor list,
+  DPA, transparency report, data-residency page or SBOM is published or linked from the sitemap. Privacy commitments
+  exist only as prose inside llms.txt and /api/pricing (data_consent semantics, pseudonymous storage, "no automatic
+  or silent retraining", "The platform holds no private keys").
+probed_absent:
+- signal: accessibility_conformance
+  urls:
+  - url: https://eqbuilder.dev/accessibility
+    status: 200
+    body: SPA shell (5879 bytes), not a document
+- signal: subprocessors
+  urls:
+  - url: https://eqbuilder.dev/legal/subprocessors
+    status: 200
+    body: SPA shell
+  note: /api/pricing names a third-party LLM provider for contextual embedded checks ("OpenRouter via Replit AI
+    Integrations") and Whop for card renewals, but no subprocessor list exists.
+- signal: incident_notification
+  urls:
+  - url: https://eqbuilder.dev/legal/dpa
+    status: 200
+    body: SPA shell
+- signal: data_subject_request
+  urls:
+  - url: https://eqbuilder.dev/privacy
+    status: 200
+    body: SPA shell
+  - url: https://eqbuilder.dev/privacy-policy
+    status: 200
+    body: SPA shell
+  note: No privacy policy and no deletion/opt-out endpoint; consent is per request (data_consent).
+- signal: transparency_report
+  urls:
+  - url: https://eqbuilder.dev/transparency
+    status: 200
+    body: SPA shell (path not in sitemap)
+- signal: sbom
+  urls:
+  - url: https://eqbuilder.dev/security/sbom
+    status: 200
+    body: SPA shell
+  note: never derived — search only
+- signal: data_residency
+  urls:
+  - url: https://eqbuilder.dev/docs/data-residency
+    status: 200
+    body: SPA shell
+  note: 'Served from Google Cloud (server: Google Frontend); no residency statement.'
+- signal: ai_transparency
+  urls:
+  - url: https://eqbuilder.dev/ai/transparency
+    status: 200
+    body: SPA shell
+  note: The "no LLM calls" and OpenRouter contextual-mode disclosures in /api/pricing are product facts, not an
+    AI-transparency page.
+- signal: notice_and_action
+  urls:
+  - url: https://eqbuilder.dev/legal/report-content
+    status: 200
+    body: SPA shell
+- signal: global_privacy_control
+  urls:
+  - url: https://eqbuilder.dev/.well-known/gpc.json
+    status: 404
+  note: No published statement; not tested by header.
+- signal: support_lifetime
+  note: No versioning or support-period page (see lifecycle/).
+- signal: terms_and_privacy_pages
+  urls:
+  - url: https://eqbuilder.dev/terms
+    status: 200
+    body: SPA shell
+  - url: https://eqbuilder.dev/terms-of-service
+    status: 200
+    body: SPA shell
+  note: 'Recorded so that no TermsOfService/PrivacyPolicy pointer is emitted: the routes exist only as the SPA catch-all.'

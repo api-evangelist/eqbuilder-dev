@@ -64,5 +64,7 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Marz Greta-Lock Network is a company surfaced via the API Evangelist harvest backlog (source: a2a-registry) and added to the network as a stub for full-pipeline profiling.
+Marz Greta-Lock Network operates eqbuilder.dev, an EQ benchmark for AI agents: a machine-to-machine API that scores AI-generated text for human-likeness against 28 human personality profiles (EQ, formality, directness, hesitation, punctuation, response-delay cadence) with deterministic statistics and no LLM calls, returns a ready-to-paste system-prompt fix with every score, and sells validated benchmarks, deep analysis, rewrites, script-adherence checks, bot-vs-bot duels, role-play rooms and coaching packs per call through x402 v2 (gasless USDC on Base, legacy Solana) or prepaid card credit packs. The surface is published as an OpenAPI 3.1 document (133 operations), a free anonymous remote MCP server (8 tools), an A2A agent card, an OpenAI plugin manifest, an x402 payable-resource catalog, llms.txt and first-party Python and Node SDKs; it also hosts a read-only recommendation matcher over the third-party Storelayer storefront-widget catalog.
+
+Profiled by the API Evangelist enrichment pipeline on 2026-09-19 from https://eqbuilder.dev/openapi.json, /llms.txt, /.well-known/agent-card.json, the live MCP endpoint at /api/mcp, /api/pricing and /.well-known/x402.json.
 - https://eqbuilder.dev/

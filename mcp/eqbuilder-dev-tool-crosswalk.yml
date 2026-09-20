@@ -1,0 +1,220 @@
+generated: '2026-09-19'
+method: derived
+source: Live tools/list from https://eqbuilder.dev/api/mcp (8 tools with inputSchema) aligned with openapi/eqbuilder-dev-openapi.yml
+  (133 operations, source at openapi/_original/). Neither surface is gated.
+purpose: Bind each MCP tool to the REST operation that backs it so the tool inherits the operation's real parameters/requestBody,
+  and make visible that the MCP server exposes only the free read-only tenth of the REST surface.
+surfaces:
+  rest_openapi: openapi/eqbuilder-dev-openapi.yml (133 operations, 52 schemas; no securitySchemes)
+  mcp: https://eqbuilder.dev/api/mcp (streamable-http, anonymous, tools/list open)
+  graphql: null
+crosswalk:
+- tool: score_text
+  category: scoring
+  rest:
+  - score_response_api_score_post
+  binding: rest
+  confidence: high
+  note: Tool inputSchema fields (text, delay_seconds, profile, contact, source, data_consent, bot_role, model_family,
+    applied_suggestion, wallet_address) are the ScoreInput schema minus result_ref.
+- tool: list_profiles
+  category: scoring
+  rest:
+  - list_profiles_api_profiles_get
+  binding: rest
+  confidence: high
+- tool: get_pricing
+  category: pricing
+  rest:
+  - get_pricing_api_pricing_get
+  binding: rest
+  confidence: high
+- tool: preview_fee
+  category: pricing
+  rest:
+  - get_simulate_fee_api_fee_simulate__wallet_address__get
+  binding: rest
+  confidence: high
+  note: wallet_address path parameter
+- tool: get_network_stats
+  category: stats
+  rest:
+  - public_network_stats_api_stats_get
+  binding: rest
+  confidence: high
+- tool: request_feature
+  category: feedback
+  rest:
+  - submit_wishlist_api_wishlist_post
+  binding: rest
+  confidence: high
+  note: need / audience / bot_role = WishlistInput
+- tool: storelayer_recommend
+  category: storelayer
+  rest:
+  - storelayer_recommend_api_storelayer_recommend_get
+  binding: rest
+  confidence: high
+  note: query (1-160 chars) = the required query parameter
+- tool: storelayer_widget_menu
+  category: storelayer
+  rest:
+  - storelayer_widget_menu__well_known_storelayer_json_get
+  binding: rest
+  confidence: high
+  note: also exposed as the single MCP resource
+mcp_only: []
+rest_only:
+- category: credits-payments
+  operations:
+  - embedded_eq_check_api_embed_check_post (POST /api/embed/check)
+  - referral_status_api_referral_status__code__get (GET /api/referral/status/{code})
+  - buy_bundle_api_bundle_post (POST /api/bundle)
+  - bundle_balance_api_bundle_balance_get (GET /api/bundle/balance)
+  - card_packs_api_card_packs_get (GET /api/card/packs)
+  - card_checkout_api_card_checkout_post (POST /api/card/checkout)
+  - card_claim_api_card_claim_post (POST /api/card/claim)
+  - card_refill_api_card_refill_post (POST /api/card/refill)
+  - free_trial_status_api_free_trial_status_get (GET /api/free-trial/status)
+  - get_bot_fee_api_fee__bot_id__get (GET /api/fee/{bot_id})
+  - get_wallet_statement_api_wallet__wallet_address__statement_get (GET /api/wallet/{wallet_address}/statement)
+  - get_solana_balance_api_solana_balance__wallet_address__get (GET /api/solana/balance/{wallet_address})
+  - get_solana_history_api_solana_history__wallet_address__get (GET /api/solana/history/{wallet_address})
+  - verify_solana_signature_api_solana_verify_post (POST /api/solana/verify)
+- category: discovery
+  operations:
+  - starter_kit_index_api_starter_kit_get (GET /api/starter-kit)
+  - starter_kit_file_api_starter_kit__filename__get (GET /api/starter-kit/{filename})
+  - ai_plugin_manifest__well_known_ai_plugin_json_get (GET /.well-known/ai-plugin.json)
+  - ai_plugin_manifest_api_api__well_known_ai_plugin_json_get (GET /api/.well-known/ai-plugin.json)
+  - ai_plugins_manifest__well_known_ai_plugins_json_get (GET /.well-known/ai-plugins.json)
+  - ai_plugins_manifest_api_api__well_known_ai_plugins_json_get (GET /api/.well-known/ai-plugins.json)
+  - agent_card__well_known_agents_json_get (GET /.well-known/agents.json)
+  - agent_card__well_known_agent_json_get (GET /.well-known/agent.json)
+  - agent_card_api__well_known_agent_card_json_get (GET /api/.well-known/agent-card.json)
+  - agent_card__well_known_agent_card_json_get (GET /.well-known/agent-card.json)
+  - mcp_discovery_api__well_known_mcp_server_card_json_get (GET /api/.well-known/mcp/server-card.json)
+  - mcp_discovery__well_known_mcp_server_card_json_get (GET /.well-known/mcp/server-card.json)
+  - mcp_discovery_api__well_known_mcp_json_get (GET /api/.well-known/mcp.json)
+  - mcp_discovery__well_known_mcp_json_get (GET /.well-known/mcp.json)
+  - glama_manifest_api__well_known_glama_json_get (GET /api/.well-known/glama.json)
+  - glama_manifest__well_known_glama_json_get (GET /.well-known/glama.json)
+  - llms_txt_llms_txt_get (GET /llms.txt)
+  - mcp_endpoint_get_api_mcp_get (GET /api/mcp)
+  - mcp_endpoint_api_mcp_post (POST /api/mcp)
+  - llms_txt_api_api_llms_txt_get (GET /api/llms.txt)
+  - mcp_registry_auth_api__well_known_mcp_registry_auth_get (GET /api/.well-known/mcp-registry-auth)
+  - mcp_registry_auth__well_known_mcp_registry_auth_get (GET /.well-known/mcp-registry-auth)
+- category: duels
+  operations:
+  - list_duel_prompts_api_duel_prompts_get (GET /api/duel/prompts)
+  - enter_duel_api_duel_post (POST /api/duel)
+  - get_duel_challenge_api_duel_challenge__duel_id__get (GET /api/duel/challenge/{duel_id})
+  - list_duels_api_duels_get (GET /api/duels)
+  - get_duel_api_duels__duel_id__get (GET /api/duels/{duel_id})
+- category: operator-admin
+  operations:
+  - corpus_insights_api_operator_corpus_insights_get (GET /api/operator/corpus-insights)
+  - get_outreach_status_api_outreach_status_get (GET /api/outreach/status)
+  - set_outreach_status_api_outreach_status_post (POST /api/outreach/status)
+  - public_result_conversion_report_api_operator_public_results_conversion_get (GET /api/operator/public-results/conversion)
+  - read_network_config_api_admin_network_config_get (GET /api/admin/network-config)
+  - adjust_network_parameters_api_admin_configure_network_patch (PATCH /api/admin/configure-network)
+  - bulk_ingest_profiles_api_profiles_bulk_post (POST /api/profiles/bulk)
+  - delete_vault_profile_api_profiles_vault__profile_name__delete (DELETE /api/profiles/vault/{profile_name})
+  - get_profile_vault_api_profiles_vault_get (GET /api/profiles/vault)
+  - export_ledger_csv_api_ledger_export_get (GET /api/ledger/export)
+  - list_calibration_contributions_api_calibration_contributions_get (GET /api/calibration/contributions)
+  - admin_reset_bot_failures_api_admin_bots__bot_id__reset_post (POST /api/admin/bots/{bot_id}/reset)
+  - admin_purge_bot_api_admin_bots__bot_id__delete (DELETE /api/admin/bots/{bot_id})
+  - admin_purge_canary_api_admin_purge_canary_delete (DELETE /api/admin/purge-canary)
+  - admin_fleet_signals_api_admin_fleet_signals_get (GET /api/admin/fleet-signals)
+  - admin_fleet_plan_toggle_api_admin_fleet_plan_post (POST /api/admin/fleet-plan)
+  - free_trial_whoami_api_operator_free_trial_whoami_get (GET /api/operator/free-trial/whoami)
+  - free_trial_contacts_api_operator_free_trial_contacts_get (GET /api/operator/free-trial/contacts)
+  - purge_stale_free_trial_rows_api_operator_free_trial_purge_stale_post (POST /api/operator/free-trial/purge-stale)
+  - reset_free_trial_caller_api_operator_free_trial_reset_caller_post (POST /api/operator/free-trial/reset-caller)
+  - financial_snapshots_api_financial_snapshots_get (GET /api/financial/snapshots)
+  - operator_session_api_operator_session_get (GET /api/operator/session)
+  - operator_logout_api_operator_logout_post (POST /api/operator/logout)
+  - operator_login_api_operator_login_post (POST /api/operator/login)
+  - weekly_funnel_api_funnel_weekly_get (GET /api/funnel/weekly)
+  - visits_summary_api_visits_summary_get (GET /api/visits/summary)
+- category: public-results-stats
+  operations:
+  - health_check_api_healthz_get (GET /api/healthz)
+  - public_corpus_evidence_api_corpus_evidence_get (GET /api/corpus/evidence)
+  - public_leaderboard_api_leaderboard_get (GET /api/leaderboard)
+  - get_public_result_api_results__result_id__get (GET /api/results/{result_id})
+  - get_certificate_api_certificate__tx_hash__get (GET /api/certificate/{tx_hash})
+  - get_scoreboard_api_scoreboard_get (GET /api/scoreboard)
+  - health_capacity_api_health_capacity_get (GET /api/health-capacity)
+  - list_proof_cards_api_proof_cards_get (GET /api/proof-cards)
+  - get_proof_card_api_proof_cards__slug__get (GET /api/proof-cards/{slug})
+  - get_ledger_api_ledger_get (GET /api/ledger)
+  - calibration_uptake_api_calibration_uptake_get (GET /api/calibration/uptake)
+  - list_bots_api_bots_get (GET /api/bots)
+  - reset_bot_failures_api_bots__bot_id__reset_post (POST /api/bots/{bot_id}/reset)
+- category: roleplay-coaching
+  operations:
+  - api_roleplay_open_api_roleplay_post (POST /api/roleplay)
+  - api_roleplay_turn_api_roleplay_turn_post (POST /api/roleplay/turn)
+  - api_roleplay_open_rooms_api_roleplay_open_get (GET /api/roleplay/open)
+  - api_roleplay_join_api_roleplay_join_post (POST /api/roleplay/join)
+  - api_roleplay_status_api_roleplay_status_post (POST /api/roleplay/status)
+  - coaching_packs_catalog_api_coaching_packs_get (GET /api/coaching/packs)
+  - api_coaching_enroll_api_coaching_post (POST /api/coaching)
+  - api_coaching_drill_api_coaching_drill_post (POST /api/coaching/drill)
+  - api_coaching_cert_api_coaching_cert__enrollment_id__get (GET /api/coaching/cert/{enrollment_id})
+  - coaching_card_checkout_api_coaching_checkout_post (POST /api/coaching/checkout)
+  - coaching_card_claim_api_coaching_claim_post (POST /api/coaching/claim)
+- category: scoring
+  operations:
+  - simulate_quote_get_api_simulate_get (GET /api/simulate)
+  - run_simulation_api_simulate_post (POST /api/simulate)
+  - stress_quote_get_api_stress_test_get (GET /api/stress-test)
+  - api_stress_test_api_stress_test_post (POST /api/stress-test)
+  - progress_quote_get_api_progress_get (GET /api/progress)
+  - api_progress_api_progress_post (POST /api/progress)
+  - dataset_quote_get_api_training_dataset_get (GET /api/training-dataset)
+  - api_training_dataset_api_training_dataset_post (POST /api/training-dataset)
+  - script_check_quote_get_api_script_check_get (GET /api/script-check)
+  - api_script_check_api_script_check_post (POST /api/script-check)
+  - submit_free_score_contact_api_free_score_contact_post (POST /api/free-score/contact)
+  - process_training_api_train_post (POST /api/train)
+  - rewrite_quote_get_api_rewrite_get (GET /api/rewrite)
+  - api_rewrite_api_rewrite_post (POST /api/rewrite)
+- category: storelayer
+  operations:
+  - storelayer_widget_menu_api__well_known_storelayer_json_get (GET /api/.well-known/storelayer.json)
+  - storelayer_match_jobs_api_storelayer_jobs_get (GET /api/storelayer/jobs)
+  - create_storelayer_match_api_storelayer_match_post (POST /api/storelayer/match)
+  - storelayer_match_json_api_storelayer_match__job_slug__get (GET /api/storelayer/match/{job_slug})
+  - storelayer_conversion_callback_api_storelayer_conversions_post (POST /api/storelayer/conversions)
+  - get_storelayer_verified_install_api_storelayer_verified_installs__workflow_id__get (GET /api/storelayer/verified-installs/{workflow_id})
+  - start_storelayer_free_install_api_storelayer_free_installs_start_post (POST /api/storelayer/free-installs/start)
+  - storelayer_free_install_next_action_api_storelayer_free_installs__workflow_id__next_action_get (GET /api/storelayer/free-installs/{workflow_id}/next-action)
+  - storelayer_free_install_challenge_published_api_storelayer_free_installs__workflow_id__challenge_published_post
+    (POST /api/storelayer/free-installs/{workflow_id}/challenge-published)
+  - create_storelayer_free_installation_api_storelayer_free_installs__workflow_id__installation_post (POST /api/storelayer/free-installs/{workflow_id}/installation)
+  - get_storelayer_free_installation_code_api_storelayer_free_installs__workflow_id__code_get (GET /api/storelayer/free-installs/{workflow_id}/code)
+  - verify_storelayer_free_installation_live_api_storelayer_free_installs__workflow_id__live_verification_post (POST
+    /api/storelayer/free-installs/{workflow_id}/live-verification)
+  - storelayer_agent_catalog_api_storelayer_agent_catalog_get (GET /api/storelayer/agent/catalog)
+  - storelayer_agent_purchase_quote_api_storelayer_agent_quotes_post (POST /api/storelayer/agent/quotes)
+  - storelayer_agent_renewal_quote_api_storelayer_agent_renewals_post (POST /api/storelayer/agent/renewals)
+  - storelayer_agent_upgrade_quote_api_storelayer_agent_upgrades_post (POST /api/storelayer/agent/upgrades)
+  - storelayer_agent_settle_api_storelayer_agent_payments__quote_id__post (POST /api/storelayer/agent/payments/{quote_id})
+  - storelayer_agent_payment_status_api_storelayer_agent_payments__quote_id__get (GET /api/storelayer/agent/payments/{quote_id})
+  - storelayer_agent_retry_activation_api_storelayer_agent_payments__quote_id__retry_activation_post (POST /api/storelayer/agent/payments/{quote_id}/retry-activation)
+  - storelayer_attribution_summary_api_storelayer_attribution_summary_get (GET /api/storelayer/attribution/summary)
+coverage:
+  mcp_tools: 8
+  mcp_tools_bound: 8
+  mcp_only: 0
+  rest_operations: 133
+  rest_operations_with_tool: 8
+  rest_only: 125
+  note: 'Every paid (x402) operation, the credits/card surface, duels, role-play, coaching, public results and the
+    operator/admin surface are REST-only by the provider''s design: llms.txt states "this MCP surface is read-only/free"
+    and routes paid settlement to the REST x402 flow.'

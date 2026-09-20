@@ -1,0 +1,117 @@
+generated: '2026-09-19'
+method: searched
+source: https://eqbuilder.dev/llms.txt, https://eqbuilder.dev/api/pricing, https://eqbuilder.dev/.well-known/x402.json,
+  live 402 body from GET https://eqbuilder.dev/api/simulate, MCP initialize on https://eqbuilder.dev/api/mcp, https://eqbuilder.dev/.well-known/mcp.json,
+  https://eqbuilder.dev/.well-known/ai-plugin.json, openapi/_original/eqbuilder-dev-openapi-original.json, probes
+  2026-09-19
+standards:
+- id: x402-v2
+  name: x402 payment protocol v2 (HTTP 402 payment-requirements + PAYMENT-SIGNATURE / PAYMENT-RESPONSE)
+  conforms: true
+  evidence: GET https://eqbuilder.dev/api/simulate without payment returned HTTP 402 application/json with x402Version
+    2, accepts[] (scheme exact, network eip155:8453, maxAmountRequired, payTo, asset, maxTimeoutSeconds, extra.name/version)
+    and extensions; https://eqbuilder.dev/.well-known/x402.json (x402Version 2, 10 resources); the OpenAPI declares
+    402 responses and PAYMENT-SIGNATURE / X-PAYMENT header parameters on the paid operations.
+  caveat: Legacy X-PAYMENT and Solana tx_hash settlement are kept alongside the canonical v2 flow.
+- id: eip-3009
+  name: EIP-3009 TransferWithAuthorization signed as EIP-712 typed data (USDC)
+  conforms: true
+  evidence: The 402 accepts[].extra.note spells out the EIP-712 domain (name/version from extra, chainId 8453, verifyingContract
+    = the USDC asset) and the from/to/value/validAfter/validBefore/nonce fields; asset 0x8335…2913 is USDC on Base.
+- id: mcp-2025-06-18
+  name: Model Context Protocol (streamable HTTP), protocol revision 2025-06-18
+  conforms: true
+  evidence: POST https://eqbuilder.dev/api/mcp initialize → result.protocolVersion "2025-06-18", capabilities tools
+    + resources; tools/list returned 8 tools with JSON-Schema inputSchema and ToolAnnotations (readOnlyHint, destructiveHint,
+    idempotentHint, openWorldHint) on the two Storelayer tools.
+- id: mcp-server-json
+  name: MCP registry server.json (schema 2025-12-11)
+  conforms: true
+  evidence: https://eqbuilder.dev/.well-known/mcp.json declares $schema https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json
+    with name dev.eqbuilder/marz-greta-lock-network and a streamable-http remote; /.well-known/mcp-registry-auth
+    carries the ed25519 domain-verification record.
+- id: a2a-1.0
+  name: Agent2Agent Protocol agent card
+  conforms: true
+  evidence: '/.well-known/agent-card.json: capabilities object, protocolVersion "1.0", skills array (6). Graded
+    near-conformant in a2a/eqbuilder-dev-a2a.yml.'
+  caveat: No A2A transport is served — the card url is the website and no JSON-RPC/HTTP+JSON binding answers; preferredTransport
+    and default modes are absent.
+- id: openai-plugin-manifest
+  name: OpenAI plugin manifest (ai-plugin.json schema_version v1)
+  conforms: true
+  evidence: https://eqbuilder.dev/.well-known/ai-plugin.json (17,336 bytes) with name_for_model, description_for_model
+    and an api block; also declared as OpenAPI operations.
+- id: openapi-3.1
+  name: OpenAPI 3.1
+  conforms: true
+  evidence: 'https://eqbuilder.dev/openapi.json (byte-identical at /api/openapi.json) declares "openapi": "3.1.0"
+    with 124 paths / 133 operations, 52 component schemas, request bodies on 33 and parameters on 48 operations.'
+  caveat: No servers[], no tags, no securitySchemes (auth is x402 payment, prepaid tokens and an admin header, all
+    described in prose and header parameters), and every 200 response schema is an empty {} — FastAPI auto-generated.
+- id: llms-txt
+  name: llms.txt
+  conforms: true
+  evidence: https://eqbuilder.dev/llms.txt (50,647 bytes, text/plain; alias /api/llms.txt) — H1, blockquote summary
+    and H2 sections; named in robots.txt and as the agent card documentationUrl.
+- id: rfc8615-well-known
+  name: RFC 8615 well-known URIs
+  conforms: true
+  evidence: Provider-defined documents are served under /.well-known/ (agent card, mcp.json, x402.json, ai-plugin.json,
+    glama.json, corpus-evidence.json, storelayer.json) — see well-known/eqbuilder-dev-well-known.yml.
+  caveat: None of the IETF-registered discovery documents (security.txt, openid-configuration, oauth-*, api-catalog)
+    are served.
+- id: idempotency
+  name: Idempotency-Key replay-safe writes
+  conforms: true
+  evidence: 'Idempotency-Key is a declared header parameter on POST /api/simulate and POST /api/embed/check; https://eqbuilder.dev/api/pricing
+    embedded_check_endpoint states idempotency_replay_retention_seconds 86400 and key format embed-<13-digit-ms-timestamp>-<opaque-suffix>;
+    llms.txt: "retry the same payment proof or Idempotency-Key with identical inputs".'
+  caveat: 'Partial: two of 33 request-body operations. Other paid writes rely on the single-use transaction signature
+    (409 double-spend guard), which rejects a replay rather than returning the original result.'
+- id: retry-after
+  name: Retry-After on 429 (RFC 9110)
+  conforms: true
+  evidence: 'https://eqbuilder.dev/api/pricing embedded_check_endpoint.capacity_retry: status 429, error paid_capacity_busy,
+    delay_header Retry-After; llms.txt "Busy paid requests" section.'
+  caveat: Documented only; not observed live (no paid request was made).
+- id: pagination
+  name: Documented pagination
+  conforms: true
+  evidence: limit (default 20/50) on /api/leaderboard, /api/duels, /api/ledger and three more; offset on /api/ledger;
+    no cursor or next-link scheme.
+  caveat: limit/offset only where declared; no response-envelope pagination fields are documented (200 schemas are
+    empty).
+- id: oauth2
+  name: OAuth 2.0
+  conforms: false
+  evidence: No oauth2/openIdConnect securityScheme; /.well-known/oauth-authorization-server and /.well-known/oauth-protected-resource
+    (root and path-suffixed for /api/mcp) return 404. Access is anonymous, payment-authorized (x402) or token/header
+    based.
+- id: rfc9457
+  name: RFC 9457 Problem Details
+  conforms: false
+  evidence: 'Errors are application/json FastAPI envelopes: {"detail": [ValidationError…]} (422) or {"detail": {"error":
+    "<slug>", "message": "…"}} (400/403/404/410); the 402 body is the x402 payment-requirements object.'
+- id: rfc9116
+  name: RFC 9116 security.txt
+  conforms: false
+  evidence: /.well-known/security.txt → 404; /security.txt → SPA shell.
+- id: rfc9727
+  name: RFC 9727 API Catalog
+  conforms: false
+  evidence: /.well-known/api-catalog → 404.
+- id: rfc9728
+  name: RFC 9728 OAuth 2.0 Protected Resource Metadata (for the MCP resource server)
+  conforms: false
+  evidence: 404 at every RFC 9728 location for /api/mcp; the MCP server requires no authorization, so nothing is
+    missing for a client, but no metadata is published.
+- id: rfc8594-sunset
+  name: RFC 8594 Sunset / Deprecation headers
+  conforms: false
+  evidence: The retired POST /api/train answers 410 with a JSON body naming the replacement (/api/simulate) but
+    no Sunset or Deprecation header; no operation is marked deprecated in the OpenAPI.
+domain_standard:
+  applicable: false
+  note: AI-text human-likeness benchmarking has no sector interoperability standard (no SCIM/OData/OpenRTB/FHIR-class
+    schema to declare). Reward-only check; nothing recorded.

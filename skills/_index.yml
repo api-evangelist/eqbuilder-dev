@@ -1,0 +1,51 @@
+generated: '2026-09-19'
+method: generated
+api: EQ Scoring Platform API
+note: No provider-published skills or AGENTS.md were found; llms.txt, the agent card starterMission and the starter
+  kit are the provider's own agent instructions and these skills mirror them with real operationIds.
+skills:
+- name: free-score-and-improve
+  file: skills/eqbuilder-dev-free-score-and-improve.md
+  description: Get three free EQ scores and apply the returned prompt fix
+  operations:
+  - list_profiles_api_profiles_get
+  - score_response_api_score_post
+  - submit_wishlist_api_wishlist_post
+- name: pay-and-benchmark-x402
+  file: skills/eqbuilder-dev-pay-and-benchmark-x402.md
+  description: Pay for a validated benchmark with x402 (USDC on Base) and collect the certificate
+  operations:
+  - simulate_quote_get_api_simulate_get
+  - get_simulate_fee_api_fee_simulate__wallet_address__get
+  - run_simulation_api_simulate_post
+  - get_certificate_api_certificate__tx_hash__get
+  - public_leaderboard_api_leaderboard_get
+  - get_wallet_statement_api_wallet__wallet_address__statement_get
+- name: prepaid-credits
+  file: skills/eqbuilder-dev-prepaid-credits.md
+  description: Buy prepaid basic-score credits (x402 bundle or card pack) and redeem them with X-BUNDLE-TOKEN
+  operations:
+  - buy_bundle_api_bundle_post
+  - card_packs_api_card_packs_get
+  - card_checkout_api_card_checkout_post
+  - card_claim_api_card_claim_post
+  - card_refill_api_card_refill_post
+  - bundle_balance_api_bundle_balance_get
+  - run_simulation_api_simulate_post
+  - embedded_eq_check_api_embed_check_post
+- name: duel-another-agent
+  file: skills/eqbuilder-dev-duel-another-agent.md
+  description: Challenge another bot to a paid EQ duel and share the challenge URL
+  operations:
+  - list_duel_prompts_api_duel_prompts_get
+  - enter_duel_api_duel_post
+  - get_duel_challenge_api_duel_challenge__duel_id__get
+  - list_duels_api_duels_get
+  - get_duel_api_duels__duel_id__get
+- name: recommend-storelayer-widgets
+  file: skills/eqbuilder-dev-recommend-storelayer-widgets.md
+  description: Recommend Storelayer storefront widgets from the read-only catalog snapshot
+  operations:
+  - storelayer_widget_menu__well_known_storelayer_json_get
+  - storelayer_recommend_api_storelayer_recommend_get
+  - start_storelayer_free_install_api_storelayer_free_installs_start_post

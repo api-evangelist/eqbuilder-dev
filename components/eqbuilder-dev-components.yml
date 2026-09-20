@@ -1,0 +1,21 @@
+generated: '2026-09-19'
+method: searched
+source: https://eqbuilder.dev/.well-known/ai-plugin.json (description_for_model), https://eqbuilder.dev/llms.txt
+  ("Busy paid requests", "Integrating EqBuilder into a company agent stack"), https://eqbuilder.dev/api/pricing
+  embedded_check_endpoint; https://eqbuilder.dev/integrate is JS-rendered (SPA shell to a crawler) so component
+  loader details could not be read
+families:
+- name: Embedded EQ draft check (browser component)
+  kind: embedded client component (React draft checks, per llms.txt)
+  backed_by: POST /api/embed/check via a company-owned host proxy that holds the X-BUNDLE-TOKEN
+  behaviour: 'Automatic changed-text checks by default (≈800 ms debounce, 2 s minimum interval); autoCheck=false
+    for manual mode; bounded transient 429/503/network retries with the same Idempotency-Key and payload; stops
+    on manual pause, authorization/credit/cap exhaustion or retry-budget exhaustion; contextual mode (mode: contextual,
+    requires context.situation) evaluated by a third-party LLM provider with a 12 s timeout'
+  billing: one prepaid basic credit per accepted new edited-text request; exact-key replays free
+  loader: null
+  note: Loader library, package name and embed snippet are only on the JS-rendered /integrate page and were not
+    captured; recorded from the provider's machine-readable descriptions only.
+note: Distinct from the SDKs in packages/. The Storelayer widgets in /.well-known/storelayer.json are a THIRD PARTY's
+  storefront components that EQBuilder catalogs and recommends; they are not EQBuilder components and are not listed
+  here.

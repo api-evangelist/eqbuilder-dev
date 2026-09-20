@@ -1,0 +1,185 @@
+generated: '2026-09-19'
+method: probed
+source: https://eqbuilder.dev/.well-known/agent-card.json
+card:
+  file: a2a/eqbuilder-dev-agent-card.json
+  name: Marz Greta-Lock Network
+  url: https://eqbuilder.dev
+  version: 1.0.0
+  protocol_version: '1.0'
+  skills: 6
+  provider: &id001
+    organization: Marz Greta-Lock Network
+    url: https://eqbuilder.dev
+  documentation_url: https://eqbuilder.dev/llms.txt
+discovery:
+  path: /.well-known/agent-card.json
+  canonical: true
+  host: eqbuilder.dev
+  note: 'The same 24,254-byte body is served byte-identically at the legacy /.well-known/agent.json and at /.well-known/agents.json
+    (all three routes are declared in the OpenAPI). Ownership is not in question: provider.organization is "Marz
+    Greta-Lock Network" with provider.url https://eqbuilder.dev, the card sits on the host that serves the OpenAPI,
+    llms.txt, the MCP endpoint and the x402 catalog, robots.txt is titled "Marz Greta-Lock Network — EQ Scoring
+    Platform", and the a2aregistry.org record this harvest came from lists this card.'
+x-evidence:
+  fetched: '2026-09-19'
+  url: https://eqbuilder.dev/.well-known/agent-card.json
+  http_status: 200
+  content_type: application/json
+  body_bytes: 24254
+  body_parses_as: JSON object with AgentCard shape (name, url, version, protocolVersion, capabilities, skills, provider,
+    documentationUrl)
+  corroborating_probes:
+  - url: https://eqbuilder.dev/.well-known/agent.json
+    http_status: 200
+    note: byte-identical to agent-card.json
+  - url: https://eqbuilder.dev/.well-known/agents.json
+    http_status: 200
+    note: byte-identical to agent-card.json (not a multi-agent manifest)
+  - url: https://eqbuilder.dev/
+    method: POST
+    http_status: 200
+    note: A JSON-RPC message/send posted to the card url returned the 5,879-byte HTML shell of the SPA, not an A2A
+      response — the card url is the website, not an A2A transport.
+  - url: https://eqbuilder.dev/a2a
+    method: POST
+    http_status: 200
+    note: HTML shell (SPA catch-all); no A2A binding
+  - url: https://eqbuilder.dev/api/a2a
+    method: POST
+    http_status: 404
+    note: '{"detail":"Not Found"}'
+  - url: https://eqbuilder.dev/api/mcp
+    method: POST
+    http_status: 200
+    note: The card's protocols.mcp_streamable_http endpoint answered MCP initialize and tools/list anonymously (see
+      mcp/eqbuilder-dev-mcp.yml).
+agent_card:
+  name: Marz Greta-Lock Network
+  description: Spell check for your bot's EQ — flags when an agent sounds robotic and tells it how to fix itself,
+    automatically, all day. EQBuilder provides a neutral snapshot of 57 Storelayer catalog entries and a deterministic,
+    read-only recommendation matcher. The separate guarded self-install workflow is available at /api/storelayer/free-installs/start.
+    One verified storefront, one active widget, and 2,500 s…
+  version: 1.0.0
+  protocol_version: '1.0'
+  url: https://eqbuilder.dev
+  capabilities:
+    streaming: false
+    pushNotifications: false
+  provider: *id001
+  documentation_url: https://eqbuilder.dev/llms.txt
+  skills:
+  - id: agent-buy-and-run
+    name: Choose, Pay For, and Run an Agent Tool
+    tags:
+    - x402
+    - autonomous-payments
+    - developer-handoff
+    - duel
+    input_modes:
+    - application/json
+    output_modes:
+    - application/json
+  - id: storelayer-recommend
+    name: Recommend Storelayer Widgets
+    tags:
+    - storelayer
+    - recommendation
+    - shopify
+    - read-only
+    input_modes:
+    - text/plain
+    output_modes:
+    - application/json
+  - id: storelayer-widget-menu
+    name: Storelayer Widget Menu
+    tags:
+    - storelayer
+    - shopify
+    - e-commerce
+    - storefront-widgets
+    input_modes:
+    - application/json
+    output_modes:
+    - application/json
+    - text/html
+  - id: eq-score
+    name: EQ Score
+    tags:
+    - eq
+    - scoring
+    - human-likeness
+    - ai-text
+    - x402
+    input_modes:
+    - text/plain
+    output_modes:
+    - application/json
+  - id: eq-rewrite
+    name: EQ Rewrite
+    tags:
+    - rewrite
+    - eq
+    - human-likeness
+    - x402
+    input_modes:
+    - text/plain
+    output_modes:
+    - application/json
+  - id: script-check
+    name: Script Adherence Check
+    tags:
+    - script
+    - adherence
+    - compliance
+    - x402
+    input_modes:
+    - text/plain
+    output_modes:
+    - application/json
+  non_standard_keys:
+  - protocols (rest_openapi + mcp_streamable_http URLs)
+  - pricing (URL)
+  - agentInvitation
+  - starterMission
+  - storelayerWidgetMenu
+  - 'authentication.schemes [{scheme: none}] (in place of securitySchemes/security)'
+  - contact
+conformance:
+  against: A2A 1.0.0
+  grade: near-conformant
+  checks:
+    capabilities_is_object: true
+    protocolVersion_top_level: true
+    skills_is_array: true
+    preferredTransport: false
+    defaultInputModes: false
+    defaultOutputModes: false
+  protocol_version: '1.0'
+  preferred_transport: null
+  deviations:
+  - id: no-preferredTransport
+    note: No preferredTransport and no additionalInterfaces; the card never names a JSONRPC / GRPC / HTTP+JSON binding.
+  - id: no-defaultInputModes
+    note: Input/output modes are declared per skill only.
+  - id: no-defaultOutputModes
+    note: As above.
+  - id: url-is-not-an-a2a-endpoint
+    note: url is https://eqbuilder.dev (the website). POSTing an A2A message/send there returns the HTML shell.
+      The card is a discovery document that routes agents to REST (OpenAPI) and MCP via a non-standard protocols{}
+      key; no A2A task/message transport is served.
+  - id: authentication-instead-of-securitySchemes
+    note: Uses a custom authentication.schemes list rather than securitySchemes/security; the value ("none") matches
+      observed behaviour on the free surface.
+  - id: protocolVersion-1.0
+    note: Declares protocolVersion "1.0" (a 1.0-series string) while using the 0.3-era top-level field layout.
+  note: All three hard checks pass; the three optional fields are missing, so the grade is near-conformant. Six
+    skills, streaming and push notifications false. Because no A2A transport exists, the practical agent surface
+    behind this card is the MCP server and the REST API it points at, not A2A messaging.
+transports: []
+related_documents:
+  openapi: https://eqbuilder.dev/api/openapi.json
+  mcp: https://eqbuilder.dev/api/mcp
+  x402_catalog: https://eqbuilder.dev/.well-known/x402.json
+  pricing: https://eqbuilder.dev/api/pricing
+  llms_txt: https://eqbuilder.dev/llms.txt

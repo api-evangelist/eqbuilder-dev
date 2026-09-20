@@ -1,0 +1,124 @@
+generated: '2026-09-19'
+method: probed
+format: json-envelope (FastAPI detail) + x402 payment-requirements on 402
+source: Live unauthenticated probes 2026-09-19 on https://eqbuilder.dev, the OpenAPI responses (402/404/409/429
+  declared on /api/simulate, /api/bundle, /api/duel), https://eqbuilder.dev/api/pricing and https://eqbuilder.dev/llms.txt
+  ("Permanent tool setup" step 4, "Busy paid requests")
+envelope:
+  validation:
+    status: 422
+    shape: '{"detail":[{"type":"missing","loc":["body","text"],"msg":"Field required","input":{}}]}'
+    schema: '#/components/schemas/HTTPValidationError'
+    content_type: application/json
+  application:
+    shape: '{"detail":{"error":"<snake_case_slug>","message":"<human text>", …extra fields…}}'
+    content_type: application/json
+    request_id_header: null
+    note: Some 4xx bodies carry only {"detail":{"error":"<sentence>"}} (404, 403) and route misses carry {"detail":"Not
+      Found"} / {"detail":"Method Not Allowed"}.
+  payment_required:
+    status: 402
+    shape: 'x402 v2 payment-requirements object: {"x402Version":2,"error":"…","accepts":[…],"resource":"…","extensions":{…},"arena":{…},"integration":{…}}'
+    content_type: application/json
+problems:
+- code: validation_error
+  status: 422
+  title: Request body failed validation
+  observed: POST /api/score {} → detail[] with type missing for text, delay_seconds, profile
+  remediation: Send every required field of the operation's request schema (ScoreInput requires text, delay_seconds,
+    profile).
+- code: data_consent_required
+  status: 400
+  title: 'Free-trial score needs data_consent: true'
+  observed: 'POST /api/score without data_consent → {"detail":{"error":"data_consent_required","message":"Free trial
+    scores require data_consent: true …"}}'
+  remediation: 'Retry the same request with "data_consent": true; no free round is consumed. Paid sessions never
+    require consent.'
+- code: wishlist_required
+  status: 400
+  title: Final free score needs one wishlist submission first
+  observed: Documented (llms.txt "Start here"; PyPI/npm SDK raise WishlistRequired); not triggered
+  remediation: 'POST /api/wishlist {"need": "…", "audience": "bot"|"developer"} once, then retry; no round is consumed.'
+- code: free_trial_exhausted
+  status: 429
+  title: Three lifetime free scores used
+  observed: Documented (llms.txt, /api/pricing score_endpoint); not triggered
+  remediation: The body carries the machine-readable x402 upgrade recipe; move the standing call to POST /api/simulate
+    (or redeem prepaid credits with X-BUNDLE-TOKEN). The cap never resets.
+- code: paid_capacity_busy
+  status: 429
+  title: Paid work is capacity-limited
+  observed: Documented (llms.txt "Busy paid requests"; /api/pricing embedded_check_endpoint.capacity_retry); not
+    triggered
+  remediation: Wait for Retry-After and retry the SAME payment proof or Idempotency-Key with identical inputs. Never
+    send a second transfer for a busy response.
+- code: payment_required
+  status: 402
+  title: x402 payment required / payment could not be verified or was underpaid
+  observed: GET /api/simulate → 402 x402 v2 requirements (17,290 bytes); GET /api/rewrite → 402 (11,070 bytes);
+    declared on POST /api/simulate, /api/bundle, /api/duel
+  remediation: Select the Base USDC accepts[] entry, sign the EIP-3009 authorization, retry the exact request once
+    with PAYMENT-SIGNATURE; read PAYMENT-RESPONSE on success. A malformed payment is rejected before money moves.
+- code: transaction_signature_already_used
+  status: 409
+  title: 'Double-spend guard: transaction signature already used (or duel already resolved)'
+  observed: 'Declared in the OpenAPI on POST /api/simulate, /api/bundle, /api/duel; llms.txt Rules: "Each transaction
+    signature is accepted exactly once."'
+  remediation: Do not replay a settled proof; preserve the original receipt and check settlement status before creating
+    a new authorization.
+- code: duel_not_found
+  status: 404
+  title: Unknown duel_id or target profile
+  observed: Declared on POST /api/duel
+  remediation: List open duels (GET /api/duels) and profiles (GET /api/profiles) first.
+- code: wallet_suspended
+  status: 429
+  title: Too many consecutive failures; wallet suspended until reset
+  observed: Declared on POST /api/duel only
+  remediation: POST /api/bots/{bot_id}/reset requires operator authorization; /api/pricing states paid scoring wallets
+    on /api/simulate are never suspended (penalty_multiplier_per_failure 0).
+- code: public_result_not_found
+  status: 404
+  title: Public result not found
+  observed: GET /api/results/does-not-exist → {"detail":{"error":"Public result not found."}}
+  remediation: Use the result_ref / public URL returned by a paid session with publish_result.
+- code: certificate_not_found
+  status: 404
+  title: No passed settled session for this transaction
+  observed: GET /api/certificate/deadbeef → {"detail":{"error":"No passed settled session found for this transaction."}}
+  remediation: Certificates exist only for PASSED, settled paid sessions; use the certificate URL from the /api/simulate
+    response.
+- code: bundle_token_missing
+  status: 400
+  title: Missing X-BUNDLE-TOKEN header
+  observed: GET /api/bundle/balance → {"detail":{"error":"Missing X-BUNDLE-TOKEN header."}}
+  remediation: Send the secret bundle_token returned once by POST /api/bundle or POST /api/card/claim.
+- code: statement_auth_failed
+  status: 403
+  title: auth_tx_hash does not belong to this wallet
+  observed: GET /api/wallet/{wallet}/statement?auth_tx_hash=abc → 403
+  remediation: Pass any settled tx hash the wallet itself paid with; foreign or unknown hashes fail closed.
+- code: admin_token_required
+  status: 403
+  title: Admin token required (X-Admin-Token header)
+  observed: GET /api/admin/network-config → 403
+  remediation: Operator-only surface; not available to API consumers.
+- code: endpoint_retired
+  status: 410
+  title: POST /api/train has been retired
+  observed: POST /api/train {} → {"detail":{"error":"endpoint_retired","message":"POST /api/train has been retired
+    because it did not verify payment on-chain. Use POST /api/simulate instead …","replacement":"/api/simulate"}}
+  remediation: Use POST /api/simulate. (GET /api/train → 405.)
+- code: not_found
+  status: 404
+  title: Unknown route under /api or /.well-known
+  observed: '{"detail":"Not Found"}'
+  remediation: Note that paths OUTSIDE /api and /.well-known return the 200 HTML SPA shell instead of a 404.
+- code: method_not_allowed
+  status: 405
+  title: Wrong method
+  observed: 'GET /api/mcp → 405 with allow: POST'
+  remediation: The MCP endpoint is POST-only (no SSE GET stream).
+undocumented: The exact bodies of free_trial_exhausted, wishlist_required, paid_capacity_busy and the 409/402-underpaid
+  cases were not exercised (that would consume a free round or require a payment); they are recorded from the provider's
+  documentation. No error reference page exists beyond llms.txt and the OpenAPI response descriptions.
