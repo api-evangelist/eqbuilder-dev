@@ -27,34 +27,73 @@ tags:
 - Emotional Intelligence
 - Conversational AI
 - x402
+- Agentic Payments
+- MCP
+- A2A
+- Developer Tools
+tags_raw:
+- Company
+- AI Agents
+- Agent Evaluation
+- Benchmarking
+- Text Analysis
+- Emotional Intelligence
+- Conversational AI
+- x402
 - Agent Payments
 - MCP
 - A2A
 - Developer Tools
 apis:
-- name: EQ Scoring Platform API
-  description: 'REST API (OpenAPI 3.1, 133 operations) for scoring AI-generated text against 28 human personality
-    profiles. Free anonymous surface: three lifetime scores per caller (POST /api/score with data_consent), profiles,
-    pricing, stats, leaderboard, certificates, price quotes. Paid surface authorized by x402 payment (PAYMENT-SIGNATURE,
-    USDC on Base by default; legacy X-PAYMENT/Solana): validated benchmark sessions, deep analysis, rewrites, stress
-    tests, progress reports, training-dataset export, script-adherence checks, duels, role-play rooms and coaching
-    packs; prepaid credits via X-BUNDLE-TOKEN (x402 bundle or card packs). Also carries the Storelayer catalog/recommendation/self-install
-    endpoints and an operator/admin surface behind X-Admin-Token.'
+- name: Marz Greta-Lock Network MCP Server
+  description: >-
+    Official remote MCP server (streamable HTTP, protocol 2025-06-18) at https://eqbuilder.dev/api/mcp
+    with no authentication. Eight free, read-only tools — score_text (three trial scores), list_profiles,
+    get_pricing, preview_fee, get_network_stats, request_feature, storelayer_recommend, storelayer_widget_menu
+    — and one resource; every tool binds to a REST operation. Paid x402 operations are deliberately REST-only.
+    Registered in the official MCP registry namespace dev.eqbuilder (/.well-known/mcp.json, /.well-known/mcp-registry-auth)
+    and listed on Glama.
+  humanURL: https://eqbuilder.dev/guides/permanent-agent-tool-setup.html
+  baseURL: https://eqbuilder.dev/api/mcp
+  tags:
+  - MCP
+  - AI Agents
+  - EQ Scoring
+  properties:
+  - type: MCPServer
+    url: mcp/eqbuilder-dev-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/eqbuilder-dev-tool-crosswalk.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/guides/permanent-agent-tool-setup.html
+- name: Marz Greta-Lock Network A2A Agent Card
+  description: >-
+    A2A agent card served at /.well-known/agent-card.json (aliases /.well-known/agent.json and /.well-known/agents.json):
+    protocolVersion 1.0, six skills (agent-buy-and-run, storelayer-recommend, storelayer-widget-menu,
+    eq-score, eq-rewrite, script-check), streaming and push notifications false. Graded near-conformant:
+    all hard checks pass but preferredTransport and default modes are absent, and the card url is the
+    website — no A2A message transport is served; the card routes agents to the REST OpenAPI and the MCP
+    endpoint through a non-standard protocols key.
+  humanURL: https://eqbuilder.dev/
+  tags:
+  - A2A
+  - AI Agents
+  - Agent Discovery
+  properties:
+  - type: AgentCard
+    url: a2a/eqbuilder-dev-a2a.yml
+  - type: AgentCard
+    url: https://eqbuilder.dev/.well-known/agent-card.json
+- aid: eqbuilder-dev:eqbuilder-dev-admin-api
+  name: Marz Greta-Lock Network Admin API
+  description: The Admin API from Marz Greta-Lock Network — 7 operation(s) for admin.
   humanURL: https://eqbuilder.dev/api/docs
   baseURL: https://eqbuilder.dev/api
   tags:
-  - EQ Scoring
-  - Human-Likeness
-  - AI Text
-  - x402
-  - Duels
-  - Coaching
-  - Storelayer
+  - Admin
   properties:
   - type: OpenAPI
-    url: openapi/eqbuilder-dev-openapi.yml
-  - type: OpenAPI
-    url: https://eqbuilder.dev/openapi.json
+    url: openapi/eqbuilder-dev-admin-api-openapi.yml
   - type: Documentation
     url: https://eqbuilder.dev/llms.txt
   - type: APIReference
@@ -75,8 +114,6 @@ apis:
     url: rate-limits/eqbuilder-dev-rate-limits.yml
   - type: Plans
     url: plans/eqbuilder-dev-plans-pricing.yml
-  - type: Overlay
-    url: overlays/eqbuilder-dev-openapi-overlay.yaml
   - type: Sandbox
     url: sandbox/eqbuilder-dev-sandbox.yml
   - type: Lifecycle
@@ -91,45 +128,2032 @@ apis:
     url: components/eqbuilder-dev-components.yml
   - type: ChangeLog
     url: changelog/eqbuilder-dev-changelog.yml
-  - type: AgentSkill
-    url: skills/_index.yml
-- name: Marz Greta-Lock Network MCP Server
-  description: Official remote MCP server (streamable HTTP, protocol 2025-06-18) at https://eqbuilder.dev/api/mcp
-    with no authentication. Eight free, read-only tools — score_text (three trial scores), list_profiles, get_pricing,
-    preview_fee, get_network_stats, request_feature, storelayer_recommend, storelayer_widget_menu — and one resource;
-    every tool binds to a REST operation. Paid x402 operations are deliberately REST-only. Registered in the official
-    MCP registry namespace dev.eqbuilder (/.well-known/mcp.json, /.well-known/mcp-registry-auth) and listed on Glama.
-  humanURL: https://eqbuilder.dev/guides/permanent-agent-tool-setup.html
-  baseURL: https://eqbuilder.dev/api/mcp
+- aid: eqbuilder-dev:eqbuilder-dev-bots-api
+  name: Marz Greta-Lock Network Bots API
+  description: The Bots API from Marz Greta-Lock Network — 2 operation(s) for bots.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
   tags:
-  - MCP
-  - AI Agents
-  - EQ Scoring
+  - Bots
   properties:
-  - type: MCPServer
-    url: mcp/eqbuilder-dev-mcp.yml
-  - type: ToolCrosswalk
-    url: mcp/eqbuilder-dev-tool-crosswalk.yml
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-bots-api-openapi.yml
   - type: Documentation
-    url: https://eqbuilder.dev/guides/permanent-agent-tool-setup.html
-- name: Marz Greta-Lock Network A2A Agent Card
-  description: 'A2A agent card served at /.well-known/agent-card.json (aliases /.well-known/agent.json and /.well-known/agents.json):
-    protocolVersion 1.0, six skills (agent-buy-and-run, storelayer-recommend, storelayer-widget-menu, eq-score,
-    eq-rewrite, script-check), streaming and push notifications false. Graded near-conformant: all hard checks pass
-    but preferredTransport and default modes are absent, and the card url is the website — no A2A message transport
-    is served; the card routes agents to the REST OpenAPI and the MCP endpoint through a non-standard protocols
-    key.'
-  humanURL: https://eqbuilder.dev/
-  baseURL: https://eqbuilder.dev
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-bundle-api
+  name: Marz Greta-Lock Network Bundle API
+  description: The Bundle API from Marz Greta-Lock Network — 2 operation(s) for bundle.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
   tags:
-  - A2A
-  - AI Agents
-  - Agent Discovery
+  - Bundle
   properties:
-  - type: AgentCard
-    url: a2a/eqbuilder-dev-a2a.yml
-  - type: AgentCard
-    url: https://eqbuilder.dev/.well-known/agent-card.json
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-bundle-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-calibration-api
+  name: Marz Greta-Lock Network Calibration API
+  description: The Calibration API from Marz Greta-Lock Network — 2 operation(s) for calibration.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Calibration
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-calibration-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-card-api
+  name: Marz Greta-Lock Network Card API
+  description: The Card API from Marz Greta-Lock Network — 4 operation(s) for card.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Card
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-card-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-certificate-api
+  name: Marz Greta-Lock Network Certificate API
+  description: The Certificate API from Marz Greta-Lock Network — 1 operation(s) for certificate.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Certificate
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-certificate-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-coaching-api
+  name: Marz Greta-Lock Network Coaching API
+  description: The Coaching API from Marz Greta-Lock Network — 6 operation(s) for coaching.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Coaching
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-coaching-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-corpus-api
+  name: Marz Greta-Lock Network Corpus API
+  description: The Corpus API from Marz Greta-Lock Network — 1 operation(s) for corpus.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Corpus
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-corpus-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-duel-api
+  name: Marz Greta-Lock Network Duel API
+  description: The Duel API from Marz Greta-Lock Network — 3 operation(s) for duel.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Duel
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-duel-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-duels-api
+  name: Marz Greta-Lock Network Duels API
+  description: The Duels API from Marz Greta-Lock Network — 2 operation(s) for duels.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Duels
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-duels-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-embed-api
+  name: Marz Greta-Lock Network Embed API
+  description: The Embed API from Marz Greta-Lock Network — 1 operation(s) for embed.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Embed
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-embed-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-fee-api
+  name: Marz Greta-Lock Network Fee API
+  description: The Fee API from Marz Greta-Lock Network — 2 operation(s) for fee.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Fee
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-fee-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-financial-api
+  name: Marz Greta-Lock Network Financial API
+  description: The Financial API from Marz Greta-Lock Network — 1 operation(s) for financial.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Financial
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-financial-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-free-score-api
+  name: Marz Greta-Lock Network Free Score API
+  description: The Free Score API from Marz Greta-Lock Network — 1 operation(s) for free score.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Free Score
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-free-score-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-free-trial-api
+  name: Marz Greta-Lock Network Free Trial API
+  description: The Free Trial API from Marz Greta-Lock Network — 1 operation(s) for free trial.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Free Trial
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-free-trial-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-funnel-api
+  name: Marz Greta-Lock Network Funnel API
+  description: The Funnel API from Marz Greta-Lock Network — 1 operation(s) for funnel.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Funnel
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-funnel-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-health-capacity-api
+  name: Marz Greta-Lock Network Health Capacity API
+  description: >-
+    The Health Capacity API from Marz Greta-Lock Network — 1 operation(s) for health capacity.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Health Capacity
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-health-capacity-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-healthz-api
+  name: Marz Greta-Lock Network Healthz API
+  description: The Healthz API from Marz Greta-Lock Network — 1 operation(s) for healthz.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Healthz
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-healthz-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-leaderboard-api
+  name: Marz Greta-Lock Network Leaderboard API
+  description: The Leaderboard API from Marz Greta-Lock Network — 1 operation(s) for leaderboard.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Leaderboard
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-leaderboard-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-ledger-api
+  name: Marz Greta-Lock Network Ledger API
+  description: The Ledger API from Marz Greta-Lock Network — 2 operation(s) for ledger.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Ledger
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-ledger-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-llms-txt-api
+  name: Marz Greta-Lock Network Llms.txt API
+  description: The Llms.txt API from Marz Greta-Lock Network — 2 operation(s) for llms.txt.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Llms.txt
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-llms-txt-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-mcp-api
+  name: Marz Greta-Lock Network MCP API
+  description: The Mcp API from Marz Greta-Lock Network — 1 operation(s) for mcp.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Mcp
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-mcp-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-operator-api
+  name: Marz Greta-Lock Network Operator API
+  description: The Operator API from Marz Greta-Lock Network — 9 operation(s) for operator.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Operator
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-operator-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-outreach-api
+  name: Marz Greta-Lock Network Outreach API
+  description: The Outreach API from Marz Greta-Lock Network — 1 operation(s) for outreach.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Outreach
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-outreach-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-pricing-api
+  name: Marz Greta-Lock Network Pricing API
+  description: The Pricing API from Marz Greta-Lock Network — 1 operation(s) for pricing.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Pricing
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-pricing-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-profiles-api
+  name: Marz Greta-Lock Network Profiles API
+  description: The Profiles API from Marz Greta-Lock Network — 4 operation(s) for profiles.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Profiles
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-profiles-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-progress-api
+  name: Marz Greta-Lock Network Progress API
+  description: The Progress API from Marz Greta-Lock Network — 1 operation(s) for progress.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Progress
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-progress-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-proof-cards-api
+  name: Marz Greta-Lock Network Proof Cards API
+  description: The Proof Cards API from Marz Greta-Lock Network — 2 operation(s) for proof cards.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Proof Cards
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-proof-cards-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-referral-api
+  name: Marz Greta-Lock Network Referral API
+  description: The Referral API from Marz Greta-Lock Network — 1 operation(s) for referral.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Referral
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-referral-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-results-api
+  name: Marz Greta-Lock Network Results API
+  description: The Results API from Marz Greta-Lock Network — 1 operation(s) for results.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Results
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-results-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-rewrite-api
+  name: Marz Greta-Lock Network Rewrite API
+  description: The Rewrite API from Marz Greta-Lock Network — 1 operation(s) for rewrite.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Rewrite
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-rewrite-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-roleplay-api
+  name: Marz Greta-Lock Network Roleplay API
+  description: The Roleplay API from Marz Greta-Lock Network — 5 operation(s) for roleplay.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Roleplay
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-roleplay-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-score-api
+  name: Marz Greta-Lock Network Score API
+  description: The Score API from Marz Greta-Lock Network — 1 operation(s) for score.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Score
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-score-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-scoreboard-api
+  name: Marz Greta-Lock Network Scoreboard API
+  description: The Scoreboard API from Marz Greta-Lock Network — 1 operation(s) for scoreboard.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Scoreboard
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-scoreboard-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-script-check-api
+  name: Marz Greta-Lock Network Script Check API
+  description: The Script Check API from Marz Greta-Lock Network — 1 operation(s) for script check.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Script Check
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-script-check-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-simulate-api
+  name: Marz Greta-Lock Network Simulate API
+  description: The Simulate API from Marz Greta-Lock Network — 1 operation(s) for simulate.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Simulate
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-simulate-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-solana-api
+  name: Marz Greta-Lock Network Solana API
+  description: The Solana API from Marz Greta-Lock Network — 3 operation(s) for solana.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Solana
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-solana-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-starter-kit-api
+  name: Marz Greta-Lock Network Starter Kit API
+  description: The Starter Kit API from Marz Greta-Lock Network — 2 operation(s) for starter kit.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Starter Kit
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-starter-kit-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-stats-api
+  name: Marz Greta-Lock Network Stats API
+  description: The Stats API from Marz Greta-Lock Network — 1 operation(s) for stats.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Stats
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-stats-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-storelayer-api
+  name: Marz Greta-Lock Network Storelayer API
+  description: The Storelayer API from Marz Greta-Lock Network — 19 operation(s) for storelayer.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Storelayer
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-storelayer-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-stress-test-api
+  name: Marz Greta-Lock Network Stress Test API
+  description: The Stress Test API from Marz Greta-Lock Network — 1 operation(s) for stress test.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Stress Test
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-stress-test-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-train-api
+  name: Marz Greta-Lock Network Train API
+  description: The Train API from Marz Greta-Lock Network — 1 operation(s) for train.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Train
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-train-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-training-dataset-api
+  name: Marz Greta-Lock Network Training Dataset API
+  description: >-
+    The Training Dataset API from Marz Greta-Lock Network — 1 operation(s) for training dataset.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Training Dataset
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-training-dataset-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-visits-api
+  name: Marz Greta-Lock Network Visits API
+  description: The Visits API from Marz Greta-Lock Network — 1 operation(s) for visits.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Visits
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-visits-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-wallet-api
+  name: Marz Greta-Lock Network Wallet API
+  description: The Wallet API from Marz Greta-Lock Network — 1 operation(s) for wallet.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Wallet
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-wallet-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-well-known-api
+  name: Marz Greta-Lock Network .well Known API
+  description: The .well Known API from Marz Greta-Lock Network — 18 operation(s) for .well known.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - .well Known
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-well-known-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-wishlist-api
+  name: Marz Greta-Lock Network Wishlist API
+  description: The Wishlist API from Marz Greta-Lock Network — 1 operation(s) for wishlist.
+  humanURL: https://eqbuilder.dev/api/docs
+  baseURL: https://eqbuilder.dev/api
+  tags:
+  - Wishlist
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-wishlist-api-openapi.yml
+  - type: Documentation
+    url: https://eqbuilder.dev/llms.txt
+  - type: APIReference
+    url: https://eqbuilder.dev/api/docs
+  - type: GettingStarted
+    url: https://eqbuilder.dev/api/starter-kit/PAY_AND_SCORE.md
+  - type: Authentication
+    url: authentication/eqbuilder-dev-authentication.yml
+  - type: Conventions
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: Idempotency
+    url: conventions/eqbuilder-dev-conventions.yml
+  - type: ErrorCatalog
+    url: errors/eqbuilder-dev-problem-types.yml
+  - type: DataModel
+    url: data-model/eqbuilder-dev-data-model.yml
+  - type: RateLimits
+    url: rate-limits/eqbuilder-dev-rate-limits.yml
+  - type: Plans
+    url: plans/eqbuilder-dev-plans-pricing.yml
+  - type: Sandbox
+    url: sandbox/eqbuilder-dev-sandbox.yml
+  - type: Lifecycle
+    url: lifecycle/eqbuilder-dev-lifecycle.yml
+  - type: Conformance
+    url: conformance/eqbuilder-dev-conformance.yml
+  - type: Packages
+    url: packages/eqbuilder-dev-packages.yml
+  - type: SDKs
+    url: packages/eqbuilder-dev-packages.yml
+  - type: Components
+    url: components/eqbuilder-dev-components.yml
+  - type: ChangeLog
+    url: changelog/eqbuilder-dev-changelog.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -199,3 +2223,10 @@ x-enrichment:
   status: enriched
   artifacts_added: 38
   pass: local-v3
+x-a2a:
+  verified: true
+  probed: '2026-09-26'
+  url: "https://eqbuilder.dev/.well-known/agent-card.json"
+  grade: "near-conformant"
+  protocol_version: "1.0"
+  control: 404

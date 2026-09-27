@@ -1,0 +1,309 @@
+openapi: 3.2.0
+info:
+  title: Eqbuilder Dev Admin API
+  version: 1.0.0
+  description: 'Operations tagged Admin across 2 of this provider''s published API definitions: eqbuilder-dev-openapi-original.json, eqbuilder-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://eqbuilder.dev
+  description: 'Added by API Evangelist: the published document (https://eqbuilder.dev/openapi.json, byte-identical at /api/openapi.json) declares no servers[]; every path already carries its /api or /.well-known prefix and every URL in the provider''s llms.txt, agent card and x402 catalog resolves against https://eqbuilder.dev, which is also the host that serves the document.'
+tags:
+- name: Admin
+paths:
+  /api/admin/network-config:
+    get:
+      summary: Read Network Config
+      description: Current runtime network configuration. Requires admin token.
+      operationId: read_network_config_api_admin_network_config_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Admin
+  /api/admin/configure-network:
+    patch:
+      summary: Adjust Network Parameters
+      description: 'Adjust base simulation fee (lamports) and the consecutive-failure suspension cap.
+
+        Changes are persisted and take effect immediately. Requires admin token.'
+      operationId: adjust_network_parameters_api_admin_configure_network_patch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NetworkConfigUpdate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Admin
+  /api/admin/bots/{bot_id}/reset:
+    post:
+      summary: Admin Reset Bot Failures
+      description: 'Operator unblock: zero a wallet/bot''s consecutive-failure counter so a
+
+        suspended wallet can transact again. Requires admin token.'
+      operationId: admin_reset_bot_failures_api_admin_bots__bot_id__reset_post
+      parameters:
+      - name: bot_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Bot Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Admin
+  /api/admin/bots/{bot_id}:
+    delete:
+      summary: Admin Purge Bot
+      description: 'Operator data cleanup: permanently remove a wallet/bot and every record it
+
+        produced — ledger transactions, the bot registry row, duels it took part
+
+        in, calibration contributions, and any verified-signature rows tied to its
+
+        transactions. Intended for scrubbing test/synthetic wallets from the
+
+        public ledger and stats. Requires admin token. Irreversible.
+
+
+        Safeguard: a wallet with on-chain verified payments is treated as a real
+
+        paying customer. Purging it is refused unless the request explicitly sets
+
+        ?force=true, so an accidental purge cannot destroy real ledger history.'
+      operationId: admin_purge_bot_api_admin_bots__bot_id__delete
+      parameters:
+      - name: bot_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Bot Id
+      - name: force
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Force
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Admin
+  /api/admin/purge-canary:
+    delete:
+      summary: Admin Purge Canary
+      description: 'Delete all quality=''canary'' rows from eq_training_corpus and eq_wishlist.
+
+
+        Canary rows are written during automated self-test runs (see CANARY_PREFIXES /
+
+        CANARY_WISHLIST_PREFIX). The server back-fills them at startup, but rows that
+
+        arrive during a running deployment are not cleaned up until the next restart.
+
+        This endpoint lets an operator flush them on demand without a restart.
+
+
+        Returns { training_corpus_deleted, wishlist_deleted } counts.
+
+        Requires X-Admin-Token header.'
+      operationId: admin_purge_canary_api_admin_purge_canary_delete
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Admin
+  /api/admin/fleet-signals:
+    get:
+      summary: Admin Fleet Signals
+      description: 'Operator-only: wallets buying in volume over the last 30 days — the
+
+        trigger for offering the monthly fleet plan — plus the plan''s current
+
+        state and the exact terms it would publish.'
+      operationId: admin_fleet_signals_api_admin_fleet_signals_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Admin
+  /api/admin/fleet-plan:
+    post:
+      summary: Admin Fleet Plan Toggle
+      description: 'Operator-only: publish (or retract) the monthly fleet plan.'
+      operationId: admin_fleet_plan_toggle_api_admin_fleet_plan_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FleetPlanToggle'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Admin
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    FleetPlanToggle:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+      type: object
+      required:
+      - enabled
+      title: FleetPlanToggle
+    NetworkConfigUpdate:
+      properties:
+        new_base_fee:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: New Base Fee
+        new_failure_cap:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: New Failure Cap
+        new_calibration_discount_pct:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: New Calibration Discount Pct
+        new_deep_analysis_fee:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: New Deep Analysis Fee
+        new_loyalty_threshold_sessions:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: New Loyalty Threshold Sessions
+        new_loyalty_discount_pct:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: New Loyalty Discount Pct
+        new_duel_fee:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: New Duel Fee
+        new_usdc_base_fee:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: New Usdc Base Fee
+        new_usdc_deep_fee:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: New Usdc Deep Fee
+        new_usdc_duel_fee:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: New Usdc Duel Fee
+        new_bundle_size:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: New Bundle Size
+        new_bundle_discount_pct:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: New Bundle Discount Pct
+      type: object
+      title: NetworkConfigUpdate
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+x-refined-from:
+- eqbuilder-dev-openapi-original.json
+- eqbuilder-dev-openapi.yml

@@ -1,0 +1,293 @@
+openapi: 3.2.0
+info:
+  title: Eqbuilder Dev Coaching API
+  version: 1.0.0
+  description: 'Operations tagged Coaching across 2 of this provider''s published API definitions: eqbuilder-dev-openapi-original.json, eqbuilder-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://eqbuilder.dev
+  description: 'Added by API Evangelist: the published document (https://eqbuilder.dev/openapi.json, byte-identical at /api/openapi.json) declares no servers[]; every path already carries its /api or /.well-known prefix and every URL in the provider''s llms.txt, agent card and x402 catalog resolves against https://eqbuilder.dev, which is also the host that serves the document.'
+tags:
+- name: Coaching
+paths:
+  /api/coaching/packs:
+    get:
+      summary: Job-specific EQ coaching pack catalog
+      description: 'The pack catalog: what each pack teaches, its drills, and how
+
+        certification works. Enrollment is one x402 payment at POST /api/coaching.'
+      operationId: coaching_packs_catalog_api_coaching_packs_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Coaching
+  /api/coaching:
+    post:
+      summary: Enroll in a job-specific EQ coaching pack (paid)
+      description: 'One x402 payment enrolls the paying wallet in a coaching pack. Returns
+
+        enrollment_id + coach_token (shown ONCE).'
+      operationId: api_coaching_enroll_api_coaching_post
+      parameters:
+      - name: X-PAYMENT
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Payment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/CoachingEnrollPayload'
+              - type: 'null'
+              title: Body
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Coaching
+  /api/coaching/drill:
+    post:
+      summary: Submit a coaching drill attempt (prepaid by enrollment)
+      description: 'Score one drill attempt against its profile. Returns the full score
+
+        breakdown, keyword-aware prompt advice, best-per-drill progress, and the
+
+        certificate URL the moment certification is earned.'
+      operationId: api_coaching_drill_api_coaching_drill_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CoachingDrillPayload'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Coaching
+  /api/coaching/cert/{enrollment_id}:
+    get:
+      summary: Public coaching certificate
+      description: 'Public, shareable certificate for a certified enrollment. The
+
+        enrollment_id is an unguessable token; knowing it is the share grant.
+
+        Returns JSON by default; browsers and link unfurlers (Accept: text/html)
+
+        get a shareable HTML page with OG/Twitter meta tags.'
+      operationId: api_coaching_cert_api_coaching_cert__enrollment_id__get
+      parameters:
+      - name: enrollment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Enrollment Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Coaching
+  /api/coaching/checkout:
+    post:
+      summary: Buy a coaching pack by card (USD)
+      description: 'Start a card purchase of a coaching-pack enrollment. Returns a hosted
+
+        checkout URL (card, USD — no crypto needed to pay) plus the checkout_id
+
+        and once-shown claim_secret needed to collect the coach_token after
+
+        paying. Pack and wallet are frozen now.'
+      operationId: coaching_card_checkout_api_coaching_checkout_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CoachingCardCheckoutPayload'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Coaching
+  /api/coaching/claim:
+    post:
+      summary: Collect a card-paid coaching enrollment
+      description: 'After paying by card, exchange {checkout_id, claim_secret} for the
+
+        once-shown coach_token. Payment is verified server-side with Whop —
+
+        the redirect is never trusted.'
+      operationId: coaching_card_claim_api_coaching_claim_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CoachingCardClaimPayload'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Coaching
+components:
+  schemas:
+    CoachingCardClaimPayload:
+      properties:
+        checkout_id:
+          type: string
+          title: Checkout Id
+        claim_secret:
+          type: string
+          title: Claim Secret
+      type: object
+      required:
+      - checkout_id
+      - claim_secret
+      title: CoachingCardClaimPayload
+    CoachingEnrollPayload:
+      properties:
+        wallet_address:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Wallet Address
+        tx_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tx Hash
+        pack_id:
+          type: string
+          title: Pack Id
+          default: ''
+      type: object
+      title: CoachingEnrollPayload
+    CoachingCardCheckoutPayload:
+      properties:
+        wallet_address:
+          type: string
+          title: Wallet Address
+        pack_id:
+          type: string
+          title: Pack Id
+      type: object
+      required:
+      - wallet_address
+      - pack_id
+      title: CoachingCardCheckoutPayload
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    CoachingDrillPayload:
+      properties:
+        enrollment_id:
+          type: string
+          title: Enrollment Id
+          default: ''
+        coach_token:
+          type: string
+          title: Coach Token
+          default: ''
+        drill_id:
+          type: string
+          title: Drill Id
+          default: ''
+        text:
+          type: string
+          title: Text
+          default: ''
+        delay_seconds:
+          type: number
+          title: Delay Seconds
+          default: 0.0
+      type: object
+      title: CoachingDrillPayload
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+x-refined-from:
+- eqbuilder-dev-openapi-original.json
+- eqbuilder-dev-openapi.yml

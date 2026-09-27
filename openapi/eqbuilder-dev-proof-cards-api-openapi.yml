@@ -1,0 +1,96 @@
+openapi: 3.2.0
+info:
+  title: Eqbuilder Dev Proof Cards API
+  version: 1.0.0
+  description: 'Operations tagged Proof Cards across 2 of this provider''s published API definitions: eqbuilder-dev-openapi-original.json, eqbuilder-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://eqbuilder.dev
+  description: 'Added by API Evangelist: the published document (https://eqbuilder.dev/openapi.json, byte-identical at /api/openapi.json) declares no servers[]; every path already carries its /api or /.well-known prefix and every URL in the provider''s llms.txt, agent card and x402 catalog resolves against https://eqbuilder.dev, which is also the host that serves the document.'
+tags:
+- name: Proof Cards
+paths:
+  /api/proof-cards:
+    get:
+      summary: List Proof Cards
+      operationId: list_proof_cards_api_proof_cards_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Proof Cards
+  /api/proof-cards/{slug}:
+    get:
+      summary: Get Proof Card
+      operationId: get_proof_card_api_proof_cards__slug__get
+      parameters:
+      - name: slug
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Slug
+      - name: format
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Format
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Proof Cards
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+x-refined-from:
+- eqbuilder-dev-openapi-original.json
+- eqbuilder-dev-openapi.yml

@@ -1,0 +1,260 @@
+openapi: 3.2.0
+info:
+  title: Eqbuilder Dev .well Known API
+  version: 1.0.0
+  description: 'Operations tagged .well Known across 2 of this provider''s published API definitions: eqbuilder-dev-openapi-original.json, eqbuilder-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://eqbuilder.dev
+  description: 'Added by API Evangelist: the published document (https://eqbuilder.dev/openapi.json, byte-identical at /api/openapi.json) declares no servers[]; every path already carries its /api or /.well-known prefix and every URL in the provider''s llms.txt, agent card and x402 catalog resolves against https://eqbuilder.dev, which is also the host that serves the document.'
+tags:
+- name: .well Known
+paths:
+  /.well-known/ai-plugin.json:
+    get:
+      summary: Ai Plugin Manifest
+      description: Standard AI plugin manifest for honest, opt-in discoverability by integrators.
+      operationId: ai_plugin_manifest__well_known_ai_plugin_json_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - .well Known
+  /api/.well-known/ai-plugin.json:
+    get:
+      summary: Ai Plugin Manifest Api
+      description: Manifest also served under the /api prefix for path-routed environments.
+      operationId: ai_plugin_manifest_api_api__well_known_ai_plugin_json_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - .well Known
+  /.well-known/ai-plugins.json:
+    get:
+      summary: Ai Plugins Manifest
+      description: Extended manifest (plural filename) with explicit capabilities, base fee, and treasury.
+      operationId: ai_plugins_manifest__well_known_ai_plugins_json_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - .well Known
+  /api/.well-known/ai-plugins.json:
+    get:
+      summary: Ai Plugins Manifest Api
+      description: Extended manifest also served under the /api prefix for path-routed environments.
+      operationId: ai_plugins_manifest_api_api__well_known_ai_plugins_json_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - .well Known
+  /api/.well-known/storelayer.json:
+    get:
+      summary: Storelayer Widget Menu
+      description: Canonical crawler-readable Storelayer developer handoff.
+      operationId: storelayer_widget_menu_api__well_known_storelayer_json_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - .well Known
+  /.well-known/storelayer.json:
+    get:
+      summary: Storelayer Widget Menu
+      description: Canonical crawler-readable Storelayer developer handoff.
+      operationId: storelayer_widget_menu__well_known_storelayer_json_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - .well Known
+  /.well-known/agents.json:
+    get:
+      summary: Agent Card
+      description: Service descriptor for discovery crawlers (honest, non-A2A).
+      operationId: agent_card__well_known_agents_json_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - .well Known
+  /.well-known/agent.json:
+    get:
+      summary: Agent Card
+      description: Service descriptor for discovery crawlers (honest, non-A2A).
+      operationId: agent_card__well_known_agent_json_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - .well Known
+  /api/.well-known/agent-card.json:
+    get:
+      summary: Agent Card
+      description: Service descriptor for discovery crawlers (honest, non-A2A).
+      operationId: agent_card_api__well_known_agent_card_json_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - .well Known
+  /.well-known/agent-card.json:
+    get:
+      summary: Agent Card
+      description: Service descriptor for discovery crawlers (honest, non-A2A).
+      operationId: agent_card__well_known_agent_card_json_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - .well Known
+  /api/.well-known/mcp/server-card.json:
+    get:
+      summary: Mcp Discovery
+      description: 'MCP server discovery: the official registry schema document.'
+      operationId: mcp_discovery_api__well_known_mcp_server_card_json_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - .well Known
+  /.well-known/mcp/server-card.json:
+    get:
+      summary: Mcp Discovery
+      description: 'MCP server discovery: the official registry schema document.'
+      operationId: mcp_discovery__well_known_mcp_server_card_json_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - .well Known
+  /api/.well-known/mcp.json:
+    get:
+      summary: Mcp Discovery
+      description: 'MCP server discovery: the official registry schema document.'
+      operationId: mcp_discovery_api__well_known_mcp_json_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - .well Known
+  /.well-known/mcp.json:
+    get:
+      summary: Mcp Discovery
+      description: 'MCP server discovery: the official registry schema document.'
+      operationId: mcp_discovery__well_known_mcp_json_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - .well Known
+  /api/.well-known/glama.json:
+    get:
+      summary: Glama Manifest
+      description: 'Glama directory manifest: maintainer proof + MCP endpoint pointer.'
+      operationId: glama_manifest_api__well_known_glama_json_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - .well Known
+  /.well-known/glama.json:
+    get:
+      summary: Glama Manifest
+      description: 'Glama directory manifest: maintainer proof + MCP endpoint pointer.'
+      operationId: glama_manifest__well_known_glama_json_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - .well Known
+  /api/.well-known/mcp-registry-auth:
+    get:
+      summary: Mcp Registry Auth
+      description: 'Domain-verification record for publishing our MCP server to the official MCP Registry.
+
+
+        Overridable via the MCP_REGISTRY_PUBKEY env var (a PUBLIC key, not a secret) so a
+
+        regenerated keypair can go live with an env change instead of a code change.'
+      operationId: mcp_registry_auth_api__well_known_mcp_registry_auth_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            text/plain:
+              schema:
+                type: string
+      tags:
+      - .well Known
+  /.well-known/mcp-registry-auth:
+    get:
+      summary: Mcp Registry Auth
+      description: 'Domain-verification record for publishing our MCP server to the official MCP Registry.
+
+
+        Overridable via the MCP_REGISTRY_PUBKEY env var (a PUBLIC key, not a secret) so a
+
+        regenerated keypair can go live with an env change instead of a code change.'
+      operationId: mcp_registry_auth__well_known_mcp_registry_auth_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            text/plain:
+              schema:
+                type: string
+      tags:
+      - .well Known
+x-refined-from:
+- eqbuilder-dev-openapi-original.json
+- eqbuilder-dev-openapi.yml

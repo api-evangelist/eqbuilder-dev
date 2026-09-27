@@ -1,0 +1,100 @@
+openapi: 3.2.0
+info:
+  title: Eqbuilder Dev Wallet API
+  version: 1.0.0
+  description: 'Operations tagged Wallet across 2 of this provider''s published API definitions: eqbuilder-dev-openapi-original.json, eqbuilder-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://eqbuilder.dev
+  description: 'Added by API Evangelist: the published document (https://eqbuilder.dev/openapi.json, byte-identical at /api/openapi.json) declares no servers[]; every path already carries its /api or /.well-known prefix and every URL in the provider''s llms.txt, agent card and x402 catalog resolves against https://eqbuilder.dev, which is also the host that serves the document.'
+tags:
+- name: Wallet
+paths:
+  /api/wallet/{wallet_address}/statement:
+    get:
+      summary: Get Wallet Statement
+      description: 'Machine-readable spend & usage statement for a paying wallet.
+
+
+        Proof of ownership: pass ?auth_tx_hash=. Only the wallet''s keyholder made those payments, and presenting
+
+        one ties the request to the wallet''s own history (fail-closed: an
+
+        unknown or foreign tx hash returns 403). This is the same ownership
+
+        logic the paid training-dataset export uses, without requiring a new
+
+        payment just to read your own meter.
+
+
+        Operators may bypass auth_tx_hash by supplying a valid X-Admin-Token
+
+        header — the same bearer token used by other admin endpoints.'
+      operationId: get_wallet_statement_api_wallet__wallet_address__statement_get
+      parameters:
+      - name: wallet_address
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Wallet Address
+      - name: auth_tx_hash
+        in: query
+        required: false
+        schema:
+          type: string
+          default: ''
+          title: Auth Tx Hash
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Wallet
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+x-refined-from:
+- eqbuilder-dev-openapi-original.json
+- eqbuilder-dev-openapi.yml

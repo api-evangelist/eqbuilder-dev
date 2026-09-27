@@ -1,0 +1,29 @@
+openapi: 3.2.0
+info:
+  title: Eqbuilder Dev Stats API
+  version: 1.0.0
+  description: 'Operations tagged Stats across 2 of this provider''s published API definitions: eqbuilder-dev-openapi-original.json, eqbuilder-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://eqbuilder.dev
+  description: 'Added by API Evangelist: the published document (https://eqbuilder.dev/openapi.json, byte-identical at /api/openapi.json) declares no servers[]; every path already carries its /api or /.well-known prefix and every URL in the provider''s llms.txt, agent card and x402 catalog resolves against https://eqbuilder.dev, which is also the host that serves the document.'
+tags:
+- name: Stats
+paths:
+  /api/stats:
+    get:
+      summary: Public Network Stats
+      description: 'Public live network statistics: honest, clearly-labeled aggregates from
+
+        the platform database. Cached briefly (single-flight) to stay cheap.'
+      operationId: public_network_stats_api_stats_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Stats
+x-refined-from:
+- eqbuilder-dev-openapi-original.json
+- eqbuilder-dev-openapi.yml

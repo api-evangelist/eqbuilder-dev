@@ -1,0 +1,358 @@
+openapi: 3.2.0
+info:
+  title: Eqbuilder Dev Operator API
+  version: 1.0.0
+  description: 'Operations tagged Operator across 2 of this provider''s published API definitions: eqbuilder-dev-openapi-original.json, eqbuilder-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://eqbuilder.dev
+  description: 'Added by API Evangelist: the published document (https://eqbuilder.dev/openapi.json, byte-identical at /api/openapi.json) declares no servers[]; every path already carries its /api or /.well-known prefix and every URL in the provider''s llms.txt, agent card and x402 catalog resolves against https://eqbuilder.dev, which is also the host that serves the document.'
+tags:
+- name: Operator
+paths:
+  /api/operator/corpus-insights:
+    get:
+      summary: Corpus Insights
+      description: 'Operator-only learning report from the consented free-trial corpus.
+
+
+        Per profile: how many clean samples exist, average score, and the
+
+        measured uplift when bots say they applied our previous suggestion —
+
+        the evidence base for evolving better tests and coaching.'
+      operationId: corpus_insights_api_operator_corpus_insights_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Operator
+  /api/operator/public-results/conversion:
+    get:
+      summary: Public Result Conversion Report
+      description: Aggregate, identity-free public-result funnel for operators.
+      operationId: public_result_conversion_report_api_operator_public_results_conversion_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicResultConversionResponse'
+      tags:
+      - Operator
+  /api/operator/free-trial/whoami:
+    get:
+      summary: Free Trial Whoami
+      description: 'Operator-only diagnostic: echo the X-Forwarded-For chain, per-hop skip
+
+        classification, and the caller key the free-trial cap would use for this
+
+        request. Exists to verify caller-key derivation against the REAL proxy
+
+        chain in each environment (the published LB tail differs from dev).'
+      operationId: free_trial_whoami_api_operator_free_trial_whoami_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Operator
+  /api/operator/free-trial/contacts:
+    get:
+      summary: Free Trial Contacts
+      description: 'Operator-only: list free-trial callers who left an optional contact
+
+        (email or callback URL) with a free score, newest first — the outreach
+
+        list for follow-up offers. Also includes a 12-week contact cohort matching
+
+        the Funnel page''s new-free-caller window.'
+      operationId: free_trial_contacts_api_operator_free_trial_contacts_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Operator
+  /api/operator/free-trial/purge-stale:
+    post:
+      summary: Purge Stale Free Trial Rows
+      description: 'Clean up free_score_usage rows keyed by rotating LB IPs (stale buckets
+
+        created before the caller-key fix). Requires operator authorization.
+
+
+        Without `keys`, returns candidate stale rows (dry run). With `keys`,
+
+        deletes exactly those rows — the operator confirms the specific keys, so a
+
+        legitimate client that happens to live in a Google range is never purged
+
+        without review.'
+      operationId: purge_stale_free_trial_rows_api_operator_free_trial_purge_stale_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FreeTrialPurgeInput'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Operator
+  /api/operator/free-trial/reset-caller:
+    post:
+      summary: Reset Free Trial Caller
+      description: 'Operator-only: zero out the free-trial usage count for one specific
+
+        caller key so the full cap-exhaustion sequence can be re-verified without
+
+        repurposing the stale-purge endpoint.
+
+
+        The row is deleted (not updated to 0) so the caller starts completely
+
+        fresh — same state as a brand-new caller who has never scored.
+
+        Wishlist rows for this caller are NOT removed; those are independent.'
+      operationId: reset_free_trial_caller_api_operator_free_trial_reset_caller_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FreeTrialResetCallerInput'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Operator
+  /api/operator/session:
+    get:
+      summary: Operator Session
+      description: Report whether the caller holds a valid operator session.
+      operationId: operator_session_api_operator_session_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Operator
+  /api/operator/logout:
+    post:
+      summary: Operator Logout
+      description: Clear the operator session cookie.
+      operationId: operator_logout_api_operator_logout_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Operator
+  /api/operator/login:
+    post:
+      summary: Operator Login
+      description: Exchange the operator key for a server-managed HttpOnly session cookie.
+      operationId: operator_login_api_operator_login_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperatorLoginInput'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Operator
+components:
+  schemas:
+    FreeTrialResetCallerInput:
+      properties:
+        caller_key:
+          type: string
+          title: Caller Key
+      type: object
+      required:
+      - caller_key
+      title: FreeTrialResetCallerInput
+    FreeTrialPurgeInput:
+      properties:
+        keys:
+          items:
+            type: string
+          type: array
+          title: Keys
+          default: []
+      type: object
+      title: FreeTrialPurgeInput
+    OperatorLoginInput:
+      properties:
+        key:
+          type: string
+          title: Key
+      type: object
+      required:
+      - key
+      title: OperatorLoginInput
+    PublicResultProfileConversionResponse:
+      properties:
+        profile:
+          type: string
+          title: Profile
+        result_views:
+          type: integer
+          title: Result Views
+        new_scores:
+          type: integer
+          title: New Scores
+        second_sessions:
+          type: integer
+          title: Second Sessions
+        verified_paid_within_7_days:
+          type: integer
+          title: Verified Paid Within 7 Days
+        viewer_to_score_conversion_pct:
+          type: number
+          title: Viewer To Score Conversion Pct
+        viewer_to_verified_paid_7_day_conversion_pct:
+          type: number
+          title: Viewer To Verified Paid 7 Day Conversion Pct
+        suppressed:
+          type: boolean
+          title: Suppressed
+      type: object
+      required:
+      - profile
+      - result_views
+      - new_scores
+      - second_sessions
+      - verified_paid_within_7_days
+      - viewer_to_score_conversion_pct
+      - viewer_to_verified_paid_7_day_conversion_pct
+      - suppressed
+      title: PublicResultProfileConversionResponse
+    PublicResultConversionResponse:
+      properties:
+        viewers:
+          type: integer
+          title: Viewers
+        viewers_to_score:
+          type: integer
+          title: Viewers To Score
+        attributed_scores:
+          type: integer
+          title: Attributed Scores
+        second_session_viewers:
+          type: integer
+          title: Second Session Viewers
+        verified_paid_within_7_days:
+          type: integer
+          title: Verified Paid Within 7 Days
+        viewer_to_score_conversion_pct:
+          type: number
+          title: Viewer To Score Conversion Pct
+        viewer_to_verified_paid_7_day_conversion_pct:
+          type: number
+          title: Viewer To Verified Paid 7 Day Conversion Pct
+        profile_breakdown:
+          items:
+            $ref: '#/components/schemas/PublicResultProfileConversionResponse'
+          type: array
+          title: Profile Breakdown
+        cohort_suppression_threshold:
+          type: integer
+          title: Cohort Suppression Threshold
+        privacy:
+          type: string
+          title: Privacy
+      type: object
+      required:
+      - viewers
+      - viewers_to_score
+      - attributed_scores
+      - second_session_viewers
+      - verified_paid_within_7_days
+      - viewer_to_score_conversion_pct
+      - viewer_to_verified_paid_7_day_conversion_pct
+      - profile_breakdown
+      - cohort_suppression_threshold
+      - privacy
+      title: PublicResultConversionResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+x-refined-from:
+- eqbuilder-dev-openapi-original.json
+- eqbuilder-dev-openapi.yml

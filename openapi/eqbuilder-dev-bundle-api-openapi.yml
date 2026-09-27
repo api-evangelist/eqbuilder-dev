@@ -1,0 +1,218 @@
+openapi: 3.2.0
+info:
+  title: Eqbuilder Dev Bundle API
+  version: 1.0.0
+  description: 'Operations tagged Bundle across 2 of this provider''s published API definitions: eqbuilder-dev-openapi-original.json, eqbuilder-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://eqbuilder.dev
+  description: 'Added by API Evangelist: the published document (https://eqbuilder.dev/openapi.json, byte-identical at /api/openapi.json) declares no servers[]; every path already carries its /api or /.well-known prefix and every URL in the provider''s llms.txt, agent card and x402 catalog resolves against https://eqbuilder.dev, which is also the host that serves the document.'
+tags:
+- name: Bundle
+paths:
+  /api/bundle:
+    post:
+      summary: Buy Bundle
+      description: 'Buy a prepaid bundle of basic-score credits at a discount.
+
+
+        One x402 payment (SOL or USDC) buys the published number of credits,
+
+        credited to the paying wallet. The response contains a SECRET
+
+        `bundle_token` — store it; it is shown exactly once. Redeem credits by
+
+        sending the `X-BUNDLE-TOKEN` header on POST /api/simulate (basic tier).
+
+        Check remaining credits at GET /api/bundle/balance.
+
+
+        ## Default x402 v2 payment flow
+
+
+        1. **Quote** — POST /api/bundle with no payment header. Read the full
+
+        HTTP **402** body and select the first `accepts` entry: Base USDC
+
+        (`network: eip155:8453`).
+
+        2. **Sign** — sign that entry''s exact EIP-3009
+
+        `TransferWithAuthorization` fields. The wallet needs Base USDC but
+
+        no ETH; the facilitator submits the authorization.
+
+        3. **Build** — create the canonical x402 v2 payload using the full
+
+        response''s `resource`, the selected entry as `accepted`, the signed
+
+        `payload`, and `extensions` when present:
+
+
+        ```json
+
+        {"x402Version":2,
+
+        "resource":{"url":"https://eqbuilder.dev/api/bundle"},
+
+        "accepted":{"scheme":"exact","network":"eip155:8453","amount":"","payTo":"","asset":""},
+
+        "payload":{"signature":"0x...65-byte EIP-712 signature...","authorization":{"from":"0xYourAddress","to":"0xPayToAddress","value":"","validAfter":"0","validBefore":"","nonce":"0x...32 random bytes..."}},
+
+        "extensions":{}}
+
+        ```
+
+
+        4. **Retry once** — base64-encode the compact JSON and send it in
+
+        `PAYMENT-SIGNATURE`. Success is HTTP 200 with the bundle and a
+
+        `PAYMENT-RESPONSE` settlement receipt.
+
+
+        If the paid request times out, preserve the error and any receipt.
+
+        Confirm payment status before creating or replaying an authorization.
+
+
+        ### Legacy compatibility
+
+
+        Existing Solana and `X-PAYMENT` clients remain accepted. A legacy
+
+        Solana proof still has this shape:
+
+
+        ```json
+
+        {"x402Version":2,"scheme":"exact","network":"solana","payload":{"signature":"5KtP...your tx signature...","payer":"9xQe...your wallet..."}}
+
+        ```'
+      operationId: buy_bundle_api_bundle_post
+      parameters:
+      - name: X-PAYMENT
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: x402 payment proof (same format as /api/simulate).
+          title: X-Payment
+        description: x402 payment proof (same format as /api/simulate).
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/BundlePayload'
+              - type: 'null'
+              title: Body
+      responses:
+        '200':
+          description: Bundle purchased; response contains the SECRET bundle_token.
+          content:
+            application/json:
+              schema: {}
+        '402':
+          description: Payment required (x402 payment-requirements body) or payment could not be verified.
+        '409':
+          description: Transaction signature already used (double-spend guard).
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Bundle
+  /api/bundle/balance:
+    get:
+      summary: Bundle Balance
+      description: Check remaining prepaid credits for a bundle token.
+      operationId: bundle_balance_api_bundle_balance_get
+      parameters:
+      - name: X-BUNDLE-TOKEN
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Secret bundle token from POST /api/bundle.
+          title: X-Bundle-Token
+        description: Secret bundle token from POST /api/bundle.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Bundle
+components:
+  schemas:
+    BundlePayload:
+      properties:
+        tx_hash:
+          type: string
+          title: Tx Hash
+          default: ''
+        wallet_address:
+          type: string
+          title: Wallet Address
+          default: ''
+        referral_code:
+          type: string
+          title: Referral Code
+          default: ''
+        plan:
+          type: string
+          title: Plan
+          default: bundle
+      type: object
+      title: BundlePayload
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+x-refined-from:
+- eqbuilder-dev-openapi-original.json
+- eqbuilder-dev-openapi.yml

@@ -1,0 +1,121 @@
+openapi: 3.2.0
+info:
+  title: Eqbuilder Dev Calibration API
+  version: 1.0.0
+  description: 'Operations tagged Calibration across 2 of this provider''s published API definitions: eqbuilder-dev-openapi-original.json, eqbuilder-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://eqbuilder.dev
+  description: 'Added by API Evangelist: the published document (https://eqbuilder.dev/openapi.json, byte-identical at /api/openapi.json) declares no servers[]; every path already carries its /api or /.well-known prefix and every URL in the provider''s llms.txt, agent card and x402 catalog resolves against https://eqbuilder.dev, which is also the host that serves the document.'
+tags:
+- name: Calibration
+paths:
+  /api/calibration/uptake:
+    get:
+      summary: Calibration Uptake
+      description: 'Public, aggregate-only view of the calibration-sharing program: how many
+
+        consented contributions exist per profile, plus the current discount.
+
+        Contains no response text or wallet addresses.'
+      operationId: calibration_uptake_api_calibration_uptake_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Calibration
+  /api/calibration/contributions:
+    get:
+      summary: List Calibration Contributions
+      description: 'Operator-only review of consented calibration contributions (wallet,
+
+        profile, score, text, delay, date). Bots opted in explicitly via
+
+        share_for_calibration=true; the program promises this data is used for
+
+        manual operator calibration review only, so this endpoint requires the
+
+        admin token (X-Admin-Token header).'
+      operationId: list_calibration_contributions_api_calibration_contributions_get
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 200
+          minimum: 1
+          default: 50
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      - name: profile
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Profile
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Calibration
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+x-refined-from:
+- eqbuilder-dev-openapi-original.json
+- eqbuilder-dev-openapi.yml

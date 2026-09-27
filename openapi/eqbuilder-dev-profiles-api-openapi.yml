@@ -1,0 +1,202 @@
+openapi: 3.2.0
+info:
+  title: Eqbuilder Dev Profiles API
+  version: 1.0.0
+  description: 'Operations tagged Profiles across 2 of this provider''s published API definitions: eqbuilder-dev-openapi-original.json, eqbuilder-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://eqbuilder.dev
+  description: 'Added by API Evangelist: the published document (https://eqbuilder.dev/openapi.json, byte-identical at /api/openapi.json) declares no servers[]; every path already carries its /api or /.well-known prefix and every URL in the provider''s llms.txt, agent card and x402 catalog resolves against https://eqbuilder.dev, which is also the host that serves the document.'
+tags:
+- name: Profiles
+paths:
+  /api/profiles/bulk:
+    post:
+      summary: Bulk Ingest Profiles
+      operationId: bulk_ingest_profiles_api_profiles_bulk_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkProfileUpload'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Profiles
+  /api/profiles/vault/{profile_name}:
+    delete:
+      summary: Delete Vault Profile
+      description: 'Remove a profile from the reference vault. Operator-only.
+
+
+        Counterpart to POST /api/profiles/bulk — needed to clean up probe or
+
+        mistakenly ingested profiles. Built-in (code-shipped) profiles are not
+
+        affected; deleting a vault row that shadows a built-in reverts scoring
+
+        for that name to the built-in values.'
+      operationId: delete_vault_profile_api_profiles_vault__profile_name__delete
+      parameters:
+      - name: profile_name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Profile Name
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Profiles
+  /api/profiles/vault:
+    get:
+      summary: Get Profile Vault
+      description: 'All rows from the reference profile vault (eq_reference_profiles).
+
+
+        Operator-only: raw reference text samples are not published publicly.'
+      operationId: get_profile_vault_api_profiles_vault_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Profiles
+  /api/profiles:
+    get:
+      summary: List Profiles
+      operationId: list_profiles_api_profiles_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Profiles
+components:
+  schemas:
+    ReferenceProfileEntry:
+      properties:
+        profile_name:
+          type: string
+          title: Profile Name
+        description:
+          type: string
+          title: Description
+          default: ''
+        text_sample:
+          type: string
+          title: Text Sample
+          default: ''
+        metrics_target:
+          $ref: '#/components/schemas/ReferenceProfileMetrics'
+        behavioral_delay_bounds:
+          $ref: '#/components/schemas/ReferenceProfileDelayBounds'
+      type: object
+      required:
+      - profile_name
+      - metrics_target
+      - behavioral_delay_bounds
+      title: ReferenceProfileEntry
+    BulkProfileUpload:
+      properties:
+        profiles:
+          items:
+            $ref: '#/components/schemas/ReferenceProfileEntry'
+          type: array
+          title: Profiles
+      type: object
+      required:
+      - profiles
+      title: BulkProfileUpload
+    ReferenceProfileDelayBounds:
+      properties:
+        ideal_delay_seconds:
+          type: number
+          title: Ideal Delay Seconds
+        acceptable_variance:
+          type: number
+          title: Acceptable Variance
+      type: object
+      required:
+      - ideal_delay_seconds
+      - acceptable_variance
+      title: ReferenceProfileDelayBounds
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ReferenceProfileMetrics:
+      properties:
+        formality:
+          type: number
+          title: Formality
+        directness:
+          type: number
+          title: Directness
+        hesitation_tolerance:
+          type: number
+          title: Hesitation Tolerance
+      type: object
+      required:
+      - formality
+      - directness
+      - hesitation_tolerance
+      title: ReferenceProfileMetrics
+x-refined-from:
+- eqbuilder-dev-openapi-original.json
+- eqbuilder-dev-openapi.yml

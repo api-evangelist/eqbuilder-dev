@@ -1,0 +1,314 @@
+openapi: 3.2.0
+info:
+  title: Eqbuilder Dev Simulate API
+  version: 1.0.0
+  description: 'Operations tagged Simulate across 2 of this provider''s published API definitions: eqbuilder-dev-openapi-original.json, eqbuilder-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://eqbuilder.dev
+  description: 'Added by API Evangelist: the published document (https://eqbuilder.dev/openapi.json, byte-identical at /api/openapi.json) declares no servers[]; every path already carries its /api or /.well-known prefix and every URL in the provider''s llms.txt, agent card and x402 catalog resolves against https://eqbuilder.dev, which is also the host that serves the document.'
+tags:
+- name: Simulate
+paths:
+  /api/simulate:
+    get:
+      summary: Simulate Quote Get
+      description: 'GET on a paid endpoint returns the same 402 challenge the POST would.
+
+
+        Directory crawlers (and curious agents) probe with GET; a 405 hides the
+
+        payment contract from them. Never settles anything — quote only.'
+      operationId: simulate_quote_get_api_simulate_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Simulate
+    post:
+      summary: Run Simulation
+      description: 'Wallet-addressed validation simulation (fees in lamports).
+
+        Merges the Marz Greta-Lock reference design with our PostgreSQL backend
+
+        and full EQ scoring engine. Settled transactions are logged to the local
+
+        revenue ledger and broadcast to the dashboard''s live feed in real time.'
+      operationId: run_simulation_api_simulate_post
+      parameters:
+      - name: X-PAYMENT
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'x402 payment proof: base64-encoded JSON {"x402Version":1,"scheme":"exact","network":"solana","payload":{"signature":"<finalized tx signature>","payer":"<wallet address>"}}. Alternative to the legacy tx_hash/wallet_address body fields. Always verified read-only against the Solana network.'
+          title: X-Payment
+        description: 'x402 payment proof: base64-encoded JSON {"x402Version":1,"scheme":"exact","network":"solana","payload":{"signature":"<finalized tx signature>","payer":"<wallet address>"}}. Alternative to the legacy tx_hash/wallet_address body fields. Always verified read-only against the Solana network.'
+      - name: PAYMENT-SIGNATURE
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Canonical x402 v2 payment payload: base64-encoded PaymentPayload with the selected requirement under accepted and the signed authorization under payload.'
+          title: Payment-Signature
+        description: 'Canonical x402 v2 payment payload: base64-encoded PaymentPayload with the selected requirement under accepted and the signed authorization under payload.'
+      - name: X-BUNDLE-TOKEN
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Prepaid bundle token (from POST /api/bundle). Redeems one prepaid basic-score credit instead of a per-call payment. Basic tier only.
+          title: X-Bundle-Token
+        description: Prepaid bundle token (from POST /api/bundle). Redeems one prepaid basic-score credit instead of a per-call payment. Basic tier only.
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Idempotency-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimulationPayload'
+      responses:
+        '200':
+          description: 'Scored and settled session. When paid via x402, the settlement receipt is returned in the standard PAYMENT-RESPONSE header and legacy X-PAYMENT-RESPONSE header (base64 JSON: {success, transaction, network, payer}).'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulationResultResponse'
+          headers:
+            PAYMENT-RESPONSE:
+              description: Canonical x402 v2 settlement receipt (base64-encoded JSON).
+              schema:
+                type: string
+            X-PAYMENT-RESPONSE:
+              description: Legacy alias of PAYMENT-RESPONSE.
+              schema:
+                type: string
+        '402':
+          description: 'Payment required (x402). Returned when no payment proof is present (x402 payment-requirements body: x402Version, accepts[] with scheme/network/maxAmountRequired/payTo) or when the submitted payment could not be verified / underpaid.'
+        '409':
+          description: Transaction signature already used (double-spend guard).
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Simulate
+components:
+  schemas:
+    SimulationResultResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+        tier:
+          type: string
+          title: Tier
+        certificate_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Certificate Url
+        public_result_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Public Result Url
+      additionalProperties: true
+      type: object
+      required:
+      - status
+      - tier
+      title: SimulationResultResponse
+    EmbeddedContext:
+      properties:
+        situation:
+          type: string
+          title: Situation
+        desired_outcome:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Desired Outcome
+        constraints:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Constraints
+        conversation:
+          items:
+            $ref: '#/components/schemas/EmbeddedConversationTurn'
+          type: array
+          title: Conversation
+        communication_preferences:
+          anyOf:
+          - $ref: '#/components/schemas/EmbeddedCommunicationPreferences'
+          - type: 'null'
+      additionalProperties: false
+      type: object
+      required:
+      - situation
+      title: EmbeddedContext
+      description: Bounded ephemeral identity for an explicit contextual check.
+    SimulationPayload:
+      properties:
+        tx_hash:
+          type: string
+          title: Tx Hash
+          default: ''
+        wallet_address:
+          type: string
+          title: Wallet Address
+          default: ''
+        target_profile:
+          type: string
+          title: Target Profile
+        proposed_text:
+          type: string
+          title: Proposed Text
+        response_delay_seconds:
+          type: number
+          title: Response Delay Seconds
+        mode:
+          type: string
+          title: Mode
+          default: structural
+        context:
+          anyOf:
+          - $ref: '#/components/schemas/EmbeddedContext'
+          - type: 'null'
+        share_for_calibration:
+          type: boolean
+          title: Share For Calibration
+          default: false
+        tier:
+          type: string
+          title: Tier
+          default: basic
+        referral_code:
+          type: string
+          title: Referral Code
+          default: ''
+        publish_result:
+          type: boolean
+          title: Publish Result
+          default: false
+        result_ref:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Result Ref
+      type: object
+      required:
+      - target_profile
+      - proposed_text
+      - response_delay_seconds
+      title: SimulationPayload
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    EmbeddedConversationTurn:
+      properties:
+        role:
+          type: string
+          enum:
+          - user
+          - assistant
+          title: Role
+        content:
+          type: string
+          title: Content
+      additionalProperties: false
+      type: object
+      required:
+      - role
+      - content
+      title: EmbeddedConversationTurn
+      description: One bounded, text-only turn supplied for a contextual assessment.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    EmbeddedCommunicationPreferences:
+      properties:
+        tone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tone
+        audience:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Audience
+        channel:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Channel
+        formality:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Formality
+        directness:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Directness
+        length:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Length
+      additionalProperties: false
+      type: object
+      title: EmbeddedCommunicationPreferences
+      description: Optional host-declared communication intent for contextual guidance.
+x-refined-from:
+- eqbuilder-dev-openapi-original.json
+- eqbuilder-dev-openapi.yml

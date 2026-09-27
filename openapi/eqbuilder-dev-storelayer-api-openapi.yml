@@ -1,0 +1,525 @@
+openapi: 3.2.0
+info:
+  title: Eqbuilder Dev Storelayer API
+  version: 1.0.0
+  description: 'Operations tagged Storelayer across 2 of this provider''s published API definitions: eqbuilder-dev-openapi-original.json, eqbuilder-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://eqbuilder.dev
+  description: 'Added by API Evangelist: the published document (https://eqbuilder.dev/openapi.json, byte-identical at /api/openapi.json) declares no servers[]; every path already carries its /api or /.well-known prefix and every URL in the provider''s llms.txt, agent card and x402 catalog resolves against https://eqbuilder.dev, which is also the host that serves the document.'
+tags:
+- name: Storelayer
+paths:
+  /api/storelayer/recommend:
+    get:
+      summary: Storelayer Recommend
+      description: 'One-call, read-only recommendation from the verified Storelayer snapshot.
+
+
+        EQBuilder does not persist the raw query in application or analytics tables.
+
+        Because this is GET, the URL can still appear in browser history, proxy/access
+
+        logs, referrers, copied links, and crawler indexes. Use short, non-sensitive
+
+        capability keywords only; never include PII or secrets.'
+      operationId: storelayer_recommend_api_storelayer_recommend_get
+      parameters:
+      - name: query
+        in: query
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 160
+          description: Short, non-sensitive capability keywords only. Never include PII or secrets because GET URLs can appear in history, logs, referrers, copied links, and crawler indexes.
+          title: Query
+        description: Short, non-sensitive capability keywords only. Never include PII or secrets because GET URLs can appear in history, logs, referrers, copied links, and crawler indexes.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Storelayer
+  /api/storelayer/jobs:
+    get:
+      summary: Storelayer Match Jobs
+      description: The ten curated developer intents supported by the deterministic matcher.
+      operationId: storelayer_match_jobs_api_storelayer_jobs_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Storelayer
+  /api/storelayer/match:
+    post:
+      summary: Create Storelayer Match
+      description: Record a completed human selection and return its stable match resource.
+      operationId: create_storelayer_match_api_storelayer_match_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StorelayerMatchInput'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Storelayer
+  /api/storelayer/match/{job_slug}:
+    get:
+      summary: Storelayer Match Json
+      description: Stable JSON match for agents and copyable machine actions.
+      operationId: storelayer_match_json_api_storelayer_match__job_slug__get
+      parameters:
+      - name: job_slug
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Job Slug
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Storelayer
+  /api/storelayer/conversions:
+    post:
+      summary: Storelayer Conversion Callback
+      description: Accept a signed Storelayer conversion matched to a real attributed handoff.
+      operationId: storelayer_conversion_callback_api_storelayer_conversions_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Storelayer
+  /api/storelayer/verified-installs/{workflow_id}:
+    get:
+      summary: Get Storelayer Verified Install
+      operationId: get_storelayer_verified_install_api_storelayer_verified_installs__workflow_id__get
+      parameters:
+      - name: workflow_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Workflow Id
+      - name: format
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Format
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Storelayer
+  /api/storelayer/free-installs/start:
+    post:
+      summary: Start Storelayer Free Install
+      description: Coordinate a caller-applied install; EQBuilder does not host or edit the site.
+      operationId: start_storelayer_free_install_api_storelayer_free_installs_start_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StorelayerFreeInstallStart'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Storelayer
+  /api/storelayer/free-installs/{workflow_id}/next-action:
+    get:
+      summary: Storelayer Free Install Next Action
+      operationId: storelayer_free_install_next_action_api_storelayer_free_installs__workflow_id__next_action_get
+      parameters:
+      - name: workflow_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Workflow Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Storelayer
+  /api/storelayer/free-installs/{workflow_id}/challenge-published:
+    post:
+      summary: Storelayer Free Install Challenge Published
+      operationId: storelayer_free_install_challenge_published_api_storelayer_free_installs__workflow_id__challenge_published_post
+      parameters:
+      - name: workflow_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Workflow Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Storelayer
+  /api/storelayer/free-installs/{workflow_id}/installation:
+    post:
+      summary: Create Storelayer Free Installation
+      operationId: create_storelayer_free_installation_api_storelayer_free_installs__workflow_id__installation_post
+      parameters:
+      - name: workflow_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Workflow Id
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Storelayer
+  /api/storelayer/free-installs/{workflow_id}/code:
+    get:
+      summary: Get Storelayer Free Installation Code
+      operationId: get_storelayer_free_installation_code_api_storelayer_free_installs__workflow_id__code_get
+      parameters:
+      - name: workflow_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Workflow Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Storelayer
+  /api/storelayer/free-installs/{workflow_id}/live-verification:
+    post:
+      summary: Verify Storelayer Free Installation Live
+      operationId: verify_storelayer_free_installation_live_api_storelayer_free_installs__workflow_id__live_verification_post
+      parameters:
+      - name: workflow_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Workflow Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Storelayer
+  /api/storelayer/agent/catalog:
+    get:
+      summary: Storelayer Agent Catalog
+      operationId: storelayer_agent_catalog_api_storelayer_agent_catalog_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Storelayer
+  /api/storelayer/agent/quotes:
+    post:
+      summary: Storelayer Agent Purchase Quote
+      operationId: storelayer_agent_purchase_quote_api_storelayer_agent_quotes_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Storelayer
+  /api/storelayer/agent/renewals:
+    post:
+      summary: Storelayer Agent Renewal Quote
+      operationId: storelayer_agent_renewal_quote_api_storelayer_agent_renewals_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Storelayer
+  /api/storelayer/agent/upgrades:
+    post:
+      summary: Storelayer Agent Upgrade Quote
+      operationId: storelayer_agent_upgrade_quote_api_storelayer_agent_upgrades_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Storelayer
+  /api/storelayer/agent/payments/{quote_id}:
+    post:
+      summary: Storelayer Agent Settle
+      operationId: storelayer_agent_settle_api_storelayer_agent_payments__quote_id__post
+      parameters:
+      - name: quote_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Quote Id
+      - name: X-PAYMENT
+        in: header
+        required: false
+        schema:
+          type: string
+          default: ''
+          title: X-Payment
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Storelayer
+    get:
+      summary: Storelayer Agent Payment Status
+      operationId: storelayer_agent_payment_status_api_storelayer_agent_payments__quote_id__get
+      parameters:
+      - name: quote_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Quote Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Storelayer
+  /api/storelayer/agent/payments/{quote_id}/retry-activation:
+    post:
+      summary: Storelayer Agent Retry Activation
+      operationId: storelayer_agent_retry_activation_api_storelayer_agent_payments__quote_id__retry_activation_post
+      parameters:
+      - name: quote_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Quote Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Storelayer
+  /api/storelayer/attribution/summary:
+    get:
+      summary: Storelayer Attribution Summary
+      description: Public installer/handoff totals plus operator-only vendor conversion totals.
+      operationId: storelayer_attribution_summary_api_storelayer_attribution_summary_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Storelayer
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    StorelayerMatchInput:
+      properties:
+        job:
+          type: string
+          title: Job
+        source:
+          type: string
+          title: Source
+          default: catalog_matcher
+      type: object
+      required:
+      - job
+      title: StorelayerMatchInput
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    StorelayerFreeInstallStart:
+      properties:
+        origin:
+          type: string
+          title: Origin
+        widget_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Widget Id
+        storefront_need:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Storefront Need
+      additionalProperties: false
+      type: object
+      required:
+      - origin
+      title: StorelayerFreeInstallStart
+x-refined-from:
+- eqbuilder-dev-openapi-original.json
+- eqbuilder-dev-openapi.yml

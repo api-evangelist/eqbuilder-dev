@@ -1,0 +1,90 @@
+openapi: 3.2.0
+info:
+  title: Eqbuilder Dev Financial API
+  version: 1.0.0
+  description: 'Operations tagged Financial across 2 of this provider''s published API definitions: eqbuilder-dev-openapi-original.json, eqbuilder-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://eqbuilder.dev
+  description: 'Added by API Evangelist: the published document (https://eqbuilder.dev/openapi.json, byte-identical at /api/openapi.json) declares no servers[]; every path already carries its /api or /.well-known prefix and every URL in the provider''s llms.txt, agent card and x402 catalog resolves against https://eqbuilder.dev, which is also the host that serves the document.'
+tags:
+- name: Financial
+paths:
+  /api/financial/snapshots:
+    get:
+      summary: Financial Snapshots
+      description: 'Recent rows from the financial audit trail written by the background
+
+        financial-ops worker (every 5 minutes): SOL/USD spot price, change vs the
+
+        previous snapshot, spike flag, total ASSESSED charged lamports, and their
+
+        USD value at spot. Ledger figures are assessed charges recorded by the
+
+        platform (see /api/stats note) — not independently on-chain-verified
+
+        settlements. Rows are returned oldest-first for charting. Read-only.'
+      operationId: financial_snapshots_api_financial_snapshots_get
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 2000
+          minimum: 1
+          default: 288
+          title: Limit
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Financial
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+x-refined-from:
+- eqbuilder-dev-openapi-original.json
+- eqbuilder-dev-openapi.yml

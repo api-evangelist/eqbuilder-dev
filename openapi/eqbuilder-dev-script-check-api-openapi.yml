@@ -1,0 +1,134 @@
+openapi: 3.2.0
+info:
+  title: Eqbuilder Dev Script Check API
+  version: 1.0.0
+  description: 'Operations tagged Script Check across 2 of this provider''s published API definitions: eqbuilder-dev-openapi-original.json, eqbuilder-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://eqbuilder.dev
+  description: 'Added by API Evangelist: the published document (https://eqbuilder.dev/openapi.json, byte-identical at /api/openapi.json) declares no servers[]; every path already carries its /api or /.well-known prefix and every URL in the provider''s llms.txt, agent card and x402 catalog resolves against https://eqbuilder.dev, which is also the host that serves the document.'
+tags:
+- name: Script Check
+paths:
+  /api/script-check:
+    get:
+      summary: Script Check Quote Get
+      operationId: script_check_quote_get_api_script_check_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Script Check
+    post:
+      summary: Paid script-adherence check — deterministic on-script/off-script verdict per…
+      description: 'Deterministic script-adherence check (priced like the deep tier,
+
+        payable in SOL or USDC). Supply your bot''s reply plus the approved
+
+        facts/script; every checkable claim is flagged on-script or off-script
+
+        with exact positions and an adherence score. Pure string/number
+
+        matching — this is NOT hallucination or factual-accuracy detection.'
+      operationId: api_script_check_api_script_check_post
+      parameters:
+      - name: X-PAYMENT
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Payment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/ScriptCheckPayload'
+              - type: 'null'
+              title: Body
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Script Check
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ScriptCheckPayload:
+      properties:
+        wallet_address:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Wallet Address
+        tx_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tx Hash
+        reply_text:
+          type: string
+          title: Reply Text
+          default: ''
+        approved_facts:
+          items:
+            type: string
+          type: array
+          title: Approved Facts
+          default: []
+        source_text:
+          type: string
+          title: Source Text
+          default: ''
+      type: object
+      title: ScriptCheckPayload
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+x-refined-from:
+- eqbuilder-dev-openapi-original.json
+- eqbuilder-dev-openapi.yml

@@ -1,0 +1,114 @@
+openapi: 3.2.0
+info:
+  title: Eqbuilder Dev Free Score API
+  version: 1.0.0
+  description: 'Operations tagged Free Score across 2 of this provider''s published API definitions: eqbuilder-dev-openapi-original.json, eqbuilder-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://eqbuilder.dev
+  description: 'Added by API Evangelist: the published document (https://eqbuilder.dev/openapi.json, byte-identical at /api/openapi.json) declares no servers[]; every path already carries its /api or /.well-known prefix and every URL in the provider''s llms.txt, agent card and x402 catalog resolves against https://eqbuilder.dev, which is also the host that serves the document.'
+tags:
+- name: Free Score
+paths:
+  /api/free-score/contact:
+    post:
+      summary: Submit Free Score Contact
+      description: 'Record an optional contact (email, http(s) URL, or @handle) for the
+
+        caller''s free-trial row. No auth required — but the caller must have used
+
+        at least one free score already so we are not creating orphan rows.
+
+
+        Idempotent: calling again updates to the latest value.'
+      operationId: submit_free_score_contact_api_free_score_contact_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FreeScoreContactInput'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Free Score
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    CampaignSource:
+      type: string
+      enum:
+      - livekit-slack
+      - langchain-forum
+      - reddit-community
+      - reddit-ad
+      - github-outreach
+      - agent-directory
+      title: CampaignSource
+      description: 'Server-approved outreach markers.
+
+
+        Keeping this as a small enum prevents source attribution from becoming a
+
+        free-form visitor-tracking store. Add a new value only when a campaign link
+
+        is intentionally approved.'
+    FreeScoreContactInput:
+      properties:
+        contact:
+          type: string
+          title: Contact
+        source:
+          anyOf:
+          - $ref: '#/components/schemas/CampaignSource'
+          - type: 'null'
+      type: object
+      required:
+      - contact
+      title: FreeScoreContactInput
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+x-refined-from:
+- eqbuilder-dev-openapi-original.json
+- eqbuilder-dev-openapi.yml

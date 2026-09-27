@@ -1,0 +1,111 @@
+openapi: 3.2.0
+info:
+  title: Eqbuilder Dev Fee API
+  version: 1.0.0
+  description: 'Operations tagged Fee across 2 of this provider''s published API definitions: eqbuilder-dev-openapi-original.json, eqbuilder-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://eqbuilder.dev
+  description: 'Added by API Evangelist: the published document (https://eqbuilder.dev/openapi.json, byte-identical at /api/openapi.json) declares no servers[]; every path already carries its /api or /.well-known prefix and every URL in the provider''s llms.txt, agent card and x402 catalog resolves against https://eqbuilder.dev, which is also the host that serves the document.'
+tags:
+- name: Fee
+paths:
+  /api/fee/{bot_id}:
+    get:
+      summary: Get Bot Fee
+      operationId: get_bot_fee_api_fee__bot_id__get
+      parameters:
+      - name: bot_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Bot Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Fee
+  /api/fee/simulate/{wallet_address}:
+    get:
+      summary: Get Simulate Fee
+      description: 'Preview the fixed /api/simulate fee (lamports) for a wallet before submitting.
+
+        Pass ?tier=deep for the premium deep-analysis fee.'
+      operationId: get_simulate_fee_api_fee_simulate__wallet_address__get
+      parameters:
+      - name: wallet_address
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Wallet Address
+      - name: tier
+        in: query
+        required: false
+        schema:
+          type: string
+          default: basic
+          title: Tier
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Fee
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+x-refined-from:
+- eqbuilder-dev-openapi-original.json
+- eqbuilder-dev-openapi.yml
