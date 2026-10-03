@@ -1,11 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Eqbuilder Dev Storelayer API
+  title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
+  description: Human-likeness scoring and AI text benchmark API.
   version: 1.0.0
-  description: 'Operations tagged Storelayer across 2 of this provider''s published API definitions: eqbuilder-dev-openapi-original.json, eqbuilder-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://eqbuilder.dev
-  description: 'Added by API Evangelist: the published document (https://eqbuilder.dev/openapi.json, byte-identical at /api/openapi.json) declares no servers[]; every path already carries its /api or /.well-known prefix and every URL in the provider''s llms.txt, agent card and x402 catalog resolves against https://eqbuilder.dev, which is also the host that serves the document.'
 tags:
 - name: Storelayer
 paths:
@@ -452,6 +449,35 @@ paths:
       - Storelayer
 components:
   schemas:
+    StorelayerFreeInstallStart:
+      properties:
+        origin:
+          type: string
+          title: Origin
+        widget_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Widget Id
+        storefront_need:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Storefront Need
+      additionalProperties: false
+      type: object
+      required:
+      - origin
+      title: StorelayerFreeInstallStart
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -491,35 +517,3 @@ components:
       required:
       - job
       title: StorelayerMatchInput
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    StorelayerFreeInstallStart:
-      properties:
-        origin:
-          type: string
-          title: Origin
-        widget_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Widget Id
-        storefront_need:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Storefront Need
-      additionalProperties: false
-      type: object
-      required:
-      - origin
-      title: StorelayerFreeInstallStart
-x-refined-from:
-- eqbuilder-dev-openapi-original.json
-- eqbuilder-dev-openapi.yml

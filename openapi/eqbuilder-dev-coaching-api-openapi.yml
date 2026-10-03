@@ -1,11 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Eqbuilder Dev Coaching API
+  title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
+  description: Human-likeness scoring and AI text benchmark API.
   version: 1.0.0
-  description: 'Operations tagged Coaching across 2 of this provider''s published API definitions: eqbuilder-dev-openapi-original.json, eqbuilder-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://eqbuilder.dev
-  description: 'Added by API Evangelist: the published document (https://eqbuilder.dev/openapi.json, byte-identical at /api/openapi.json) declares no servers[]; every path already carries its /api or /.well-known prefix and every URL in the provider''s llms.txt, agent card and x402 catalog resolves against https://eqbuilder.dev, which is also the host that serves the document.'
 tags:
 - name: Coaching
 paths:
@@ -185,19 +182,6 @@ paths:
       - Coaching
 components:
   schemas:
-    CoachingCardClaimPayload:
-      properties:
-        checkout_id:
-          type: string
-          title: Checkout Id
-        claim_secret:
-          type: string
-          title: Claim Secret
-      type: object
-      required:
-      - checkout_id
-      - claim_secret
-      title: CoachingCardClaimPayload
     CoachingEnrollPayload:
       properties:
         wallet_address:
@@ -229,15 +213,6 @@ components:
       - wallet_address
       - pack_id
       title: CoachingCardCheckoutPayload
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     CoachingDrillPayload:
       properties:
         enrollment_id:
@@ -288,6 +263,25 @@ components:
       - msg
       - type
       title: ValidationError
-x-refined-from:
-- eqbuilder-dev-openapi-original.json
-- eqbuilder-dev-openapi.yml
+    CoachingCardClaimPayload:
+      properties:
+        checkout_id:
+          type: string
+          title: Checkout Id
+        claim_secret:
+          type: string
+          title: Claim Secret
+      type: object
+      required:
+      - checkout_id
+      - claim_secret
+      title: CoachingCardClaimPayload
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError

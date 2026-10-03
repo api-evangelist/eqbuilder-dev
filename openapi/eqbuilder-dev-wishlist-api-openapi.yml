@@ -1,11 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Eqbuilder Dev Wishlist API
+  title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
+  description: Human-likeness scoring and AI text benchmark API.
   version: 1.0.0
-  description: 'Operations tagged Wishlist across 2 of this provider''s published API definitions: eqbuilder-dev-openapi-original.json, eqbuilder-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://eqbuilder.dev
-  description: 'Added by API Evangelist: the published document (https://eqbuilder.dev/openapi.json, byte-identical at /api/openapi.json) declares no servers[]; every path already carries its /api or /.well-known prefix and every URL in the provider''s llms.txt, agent card and x402 catalog resolves against https://eqbuilder.dev, which is also the host that serves the document.'
 tags:
 - name: Wishlist
 paths:
@@ -38,24 +35,15 @@ paths:
       - Wishlist
 components:
   schemas:
-    WishlistInput:
+    HTTPValidationError:
       properties:
-        need:
-          type: string
-          title: Need
-        audience:
-          type: string
-          title: Audience
-          default: bot
-        bot_role:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Bot Role
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - need
-      title: WishlistInput
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -82,15 +70,21 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
+    WishlistInput:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        need:
+          type: string
+          title: Need
+        audience:
+          type: string
+          title: Audience
+          default: bot
+        bot_role:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Bot Role
       type: object
-      title: HTTPValidationError
-x-refined-from:
-- eqbuilder-dev-openapi-original.json
-- eqbuilder-dev-openapi.yml
+      required:
+      - need
+      title: WishlistInput

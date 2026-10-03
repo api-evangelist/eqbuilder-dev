@@ -1,11 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Eqbuilder Dev Results API
+  title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
+  description: Human-likeness scoring and AI text benchmark API.
   version: 1.0.0
-  description: 'Operations tagged Results across 2 of this provider''s published API definitions: eqbuilder-dev-openapi-original.json, eqbuilder-dev-openapi.yml. Each path carries the servers of the definition it was published in.'
-servers:
-- url: https://eqbuilder.dev
-  description: 'Added by API Evangelist: the published document (https://eqbuilder.dev/openapi.json, byte-identical at /api/openapi.json) declares no servers[]; every path already carries its /api or /.well-known prefix and every URL in the provider''s llms.txt, agent card and x402 catalog resolves against https://eqbuilder.dev, which is also the host that serves the document.'
 tags:
 - name: Results
 paths:
@@ -38,164 +35,6 @@ paths:
       - Results
 components:
   schemas:
-    PublicResultBadgeResponse:
-      properties:
-        label:
-          type: string
-          title: Label
-        text:
-          type: string
-          title: Text
-        evidence_url:
-          type: string
-          title: Evidence Url
-        copyable_markdown:
-          type: string
-          title: Copyable Markdown
-        profile_version:
-          type: string
-          title: Profile Version
-        observed_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Observed At
-        certification:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Certification
-      additionalProperties: false
-      type: object
-      required:
-      - label
-      - text
-      - evidence_url
-      - copyable_markdown
-      - profile_version
-      title: PublicResultBadgeResponse
-    PublicResultActionsResponse:
-      properties:
-        challenge:
-          $ref: '#/components/schemas/PublicResultActionResponse'
-        run_same_profile:
-          $ref: '#/components/schemas/PublicResultActionResponse'
-        premium_continuation:
-          $ref: '#/components/schemas/PublicResultActionResponse'
-      type: object
-      required:
-      - challenge
-      - run_same_profile
-      - premium_continuation
-      title: PublicResultActionsResponse
-    PublicResultActionResponse:
-      properties:
-        method:
-          type: string
-          title: Method
-        url:
-          type: string
-          title: Url
-        result_ref:
-          type: string
-          title: Result Ref
-        api_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Api Url
-        browser_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Browser Url
-        profile:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Profile
-        tier:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Tier
-      additionalProperties: false
-      type: object
-      required:
-      - method
-      - url
-      - result_ref
-      title: PublicResultActionResponse
-    PublicResultEvidenceResponse:
-      properties:
-        kind:
-          type: string
-          title: Kind
-        result_url:
-          type: string
-          title: Result Url
-        privacy:
-          type: string
-          title: Privacy
-      type: object
-      required:
-      - kind
-      - result_url
-      - privacy
-      title: PublicResultEvidenceResponse
-    PublicResultResponse:
-      properties:
-        result_id:
-          type: string
-          title: Result Id
-        canonical_url:
-          type: string
-          title: Canonical Url
-        observed_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Observed At
-        profile:
-          $ref: '#/components/schemas/PublicResultProfileResponse'
-        score:
-          $ref: '#/components/schemas/PublicResultScoreResponse'
-        claim:
-          type: string
-          title: Claim
-        freshness:
-          $ref: '#/components/schemas/PublicResultFreshnessResponse'
-        evidence:
-          $ref: '#/components/schemas/PublicResultEvidenceResponse'
-        badge:
-          $ref: '#/components/schemas/PublicResultBadgeResponse'
-        actions:
-          $ref: '#/components/schemas/PublicResultActionsResponse'
-      type: object
-      required:
-      - result_id
-      - canonical_url
-      - profile
-      - score
-      - claim
-      - freshness
-      - evidence
-      - badge
-      - actions
-      title: PublicResultResponse
-    PublicResultScoreResponse:
-      properties:
-        percentage:
-          type: number
-          title: Percentage
-        passed_validation:
-          type: boolean
-          title: Passed Validation
-      type: object
-      required:
-      - percentage
-      - passed_validation
-      title: PublicResultScoreResponse
     PublicResultProfileResponse:
       properties:
         id:
@@ -244,6 +83,164 @@ components:
       - msg
       - type
       title: ValidationError
+    PublicResultActionResponse:
+      properties:
+        method:
+          type: string
+          title: Method
+        url:
+          type: string
+          title: Url
+        result_ref:
+          type: string
+          title: Result Ref
+        api_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Url
+        browser_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Browser Url
+        profile:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Profile
+        tier:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tier
+      additionalProperties: false
+      type: object
+      required:
+      - method
+      - url
+      - result_ref
+      title: PublicResultActionResponse
+    PublicResultBadgeResponse:
+      properties:
+        label:
+          type: string
+          title: Label
+        text:
+          type: string
+          title: Text
+        evidence_url:
+          type: string
+          title: Evidence Url
+        copyable_markdown:
+          type: string
+          title: Copyable Markdown
+        profile_version:
+          type: string
+          title: Profile Version
+        observed_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Observed At
+        certification:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Certification
+      additionalProperties: false
+      type: object
+      required:
+      - label
+      - text
+      - evidence_url
+      - copyable_markdown
+      - profile_version
+      title: PublicResultBadgeResponse
+    PublicResultScoreResponse:
+      properties:
+        percentage:
+          type: number
+          title: Percentage
+        passed_validation:
+          type: boolean
+          title: Passed Validation
+      type: object
+      required:
+      - percentage
+      - passed_validation
+      title: PublicResultScoreResponse
+    PublicResultActionsResponse:
+      properties:
+        challenge:
+          $ref: '#/components/schemas/PublicResultActionResponse'
+        run_same_profile:
+          $ref: '#/components/schemas/PublicResultActionResponse'
+        premium_continuation:
+          $ref: '#/components/schemas/PublicResultActionResponse'
+      type: object
+      required:
+      - challenge
+      - run_same_profile
+      - premium_continuation
+      title: PublicResultActionsResponse
+    PublicResultResponse:
+      properties:
+        result_id:
+          type: string
+          title: Result Id
+        canonical_url:
+          type: string
+          title: Canonical Url
+        observed_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Observed At
+        profile:
+          $ref: '#/components/schemas/PublicResultProfileResponse'
+        score:
+          $ref: '#/components/schemas/PublicResultScoreResponse'
+        claim:
+          type: string
+          title: Claim
+        freshness:
+          $ref: '#/components/schemas/PublicResultFreshnessResponse'
+        evidence:
+          $ref: '#/components/schemas/PublicResultEvidenceResponse'
+        badge:
+          $ref: '#/components/schemas/PublicResultBadgeResponse'
+        actions:
+          $ref: '#/components/schemas/PublicResultActionsResponse'
+      type: object
+      required:
+      - result_id
+      - canonical_url
+      - profile
+      - score
+      - claim
+      - freshness
+      - evidence
+      - badge
+      - actions
+      title: PublicResultResponse
+    PublicResultEvidenceResponse:
+      properties:
+        kind:
+          type: string
+          title: Kind
+        result_url:
+          type: string
+          title: Result Url
+        privacy:
+          type: string
+          title: Privacy
+      type: object
+      required:
+      - kind
+      - result_url
+      - privacy
+      title: PublicResultEvidenceResponse
     PublicResultFreshnessResponse:
       properties:
         age_seconds:
@@ -271,6 +268,3 @@ components:
       - status
       - checked_at
       title: PublicResultFreshnessResponse
-x-refined-from:
-- eqbuilder-dev-openapi-original.json
-- eqbuilder-dev-openapi.yml
