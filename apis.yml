@@ -266,6 +266,8 @@ apis:
   humanURL: https://eqbuilder.dev/api/docs
   baseURL: https://eqbuilder.dev/api
   tags:
+  - Cards
+  tags_raw:
   - Card
   properties:
   - type: OpenAPI
@@ -618,6 +620,8 @@ apis:
   humanURL: https://eqbuilder.dev/api/docs
   baseURL: https://eqbuilder.dev/api
   tags:
+  - Finance
+  tags_raw:
   - Financial
   properties:
   - type: OpenAPI
@@ -883,6 +887,8 @@ apis:
   humanURL: https://eqbuilder.dev/api/docs
   baseURL: https://eqbuilder.dev/api
   tags:
+  - Leaderboards
+  tags_raw:
   - Leaderboard
   properties:
   - type: OpenAPI
@@ -971,6 +977,8 @@ apis:
   humanURL: https://eqbuilder.dev/api/docs
   baseURL: https://eqbuilder.dev/api
   tags:
+  - llms-txt
+  tags_raw:
   - Llms.txt
   properties:
   - type: OpenAPI
@@ -1015,6 +1023,8 @@ apis:
   humanURL: https://eqbuilder.dev/api/docs
   baseURL: https://eqbuilder.dev/api
   tags:
+  - MCP
+  tags_raw:
   - Mcp
   properties:
   - type: OpenAPI
@@ -1323,6 +1333,8 @@ apis:
   humanURL: https://eqbuilder.dev/api/docs
   baseURL: https://eqbuilder.dev/api
   tags:
+  - Referrals
+  tags_raw:
   - Referral
   properties:
   - type: OpenAPI
@@ -1631,6 +1643,8 @@ apis:
   humanURL: https://eqbuilder.dev/api/docs
   baseURL: https://eqbuilder.dev/api
   tags:
+  - simulate
+  tags_raw:
   - Simulate
   properties:
   - type: OpenAPI
@@ -1895,6 +1909,8 @@ apis:
   humanURL: https://eqbuilder.dev/api/docs
   baseURL: https://eqbuilder.dev/api
   tags:
+  - Trains
+  tags_raw:
   - Train
   properties:
   - type: OpenAPI
@@ -2028,6 +2044,8 @@ apis:
   humanURL: https://eqbuilder.dev/api/docs
   baseURL: https://eqbuilder.dev/api
   tags:
+  - Wallets
+  tags_raw:
   - Wallet
   properties:
   - type: OpenAPI
