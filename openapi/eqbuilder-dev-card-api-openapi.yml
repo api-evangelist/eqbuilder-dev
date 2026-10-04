@@ -120,15 +120,32 @@ paths:
       - Card
 components:
   schemas:
-    HTTPValidationError:
+    CardClaimPayload:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        checkout_id:
+          type: string
+          title: Checkout Id
+        claim_secret:
+          type: string
+          title: Claim Secret
       type: object
-      title: HTTPValidationError
+      required:
+      - checkout_id
+      - claim_secret
+      title: CardClaimPayload
+    CardRefillPayload:
+      properties:
+        checkout_id:
+          type: string
+          title: Checkout Id
+        claim_secret:
+          type: string
+          title: Claim Secret
+      type: object
+      required:
+      - checkout_id
+      - claim_secret
+      title: CardRefillPayload
     ValidationError:
       properties:
         loc:
@@ -155,6 +172,15 @@ components:
       - msg
       - type
       title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     CardCheckoutPayload:
       properties:
         wallet_address:
@@ -172,29 +198,3 @@ components:
       - wallet_address
       - pack
       title: CardCheckoutPayload
-    CardRefillPayload:
-      properties:
-        checkout_id:
-          type: string
-          title: Checkout Id
-        claim_secret:
-          type: string
-          title: Claim Secret
-      type: object
-      required:
-      - checkout_id
-      - claim_secret
-      title: CardRefillPayload
-    CardClaimPayload:
-      properties:
-        checkout_id:
-          type: string
-          title: Checkout Id
-        claim_secret:
-          type: string
-          title: Claim Secret
-      type: object
-      required:
-      - checkout_id
-      - claim_secret
-      title: CardClaimPayload

@@ -449,6 +449,19 @@ paths:
       - Storelayer
 components:
   schemas:
+    StorelayerMatchInput:
+      properties:
+        job:
+          type: string
+          title: Job
+        source:
+          type: string
+          title: Source
+          default: catalog_matcher
+      type: object
+      required:
+      - job
+      title: StorelayerMatchInput
     StorelayerFreeInstallStart:
       properties:
         origin:
@@ -504,16 +517,3 @@ components:
       - msg
       - type
       title: ValidationError
-    StorelayerMatchInput:
-      properties:
-        job:
-          type: string
-          title: Job
-        source:
-          type: string
-          title: Source
-          default: catalog_matcher
-      type: object
-      required:
-      - job
-      title: StorelayerMatchInput

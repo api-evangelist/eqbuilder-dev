@@ -35,28 +35,59 @@ paths:
       - Results
 components:
   schemas:
-    PublicResultProfileResponse:
+    PublicResultBadgeResponse:
       properties:
-        id:
+        label:
           type: string
-          title: Id
-        version:
+          title: Label
+        text:
           type: string
-          title: Version
+          title: Text
+        evidence_url:
+          type: string
+          title: Evidence Url
+        copyable_markdown:
+          type: string
+          title: Copyable Markdown
+        profile_version:
+          type: string
+          title: Profile Version
+        observed_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Observed At
+        certification:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Certification
+      additionalProperties: false
       type: object
       required:
-      - id
-      - version
-      title: PublicResultProfileResponse
-    HTTPValidationError:
+      - label
+      - text
+      - evidence_url
+      - copyable_markdown
+      - profile_version
+      title: PublicResultBadgeResponse
+    PublicResultEvidenceResponse:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        kind:
+          type: string
+          title: Kind
+        result_url:
+          type: string
+          title: Result Url
+        privacy:
+          type: string
+          title: Privacy
       type: object
-      title: HTTPValidationError
+      required:
+      - kind
+      - result_url
+      - privacy
+      title: PublicResultEvidenceResponse
     ValidationError:
       properties:
         loc:
@@ -83,6 +114,33 @@ components:
       - msg
       - type
       title: ValidationError
+    PublicResultFreshnessResponse:
+      properties:
+        age_seconds:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Age Seconds
+        stale_after_days:
+          type: integer
+          title: Stale After Days
+        profile_is_current:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Profile Is Current
+        status:
+          type: string
+          title: Status
+        checked_at:
+          type: string
+          title: Checked At
+      type: object
+      required:
+      - stale_after_days
+      - status
+      - checked_at
+      title: PublicResultFreshnessResponse
     PublicResultActionResponse:
       properties:
         method:
@@ -121,55 +179,6 @@ components:
       - url
       - result_ref
       title: PublicResultActionResponse
-    PublicResultBadgeResponse:
-      properties:
-        label:
-          type: string
-          title: Label
-        text:
-          type: string
-          title: Text
-        evidence_url:
-          type: string
-          title: Evidence Url
-        copyable_markdown:
-          type: string
-          title: Copyable Markdown
-        profile_version:
-          type: string
-          title: Profile Version
-        observed_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Observed At
-        certification:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Certification
-      additionalProperties: false
-      type: object
-      required:
-      - label
-      - text
-      - evidence_url
-      - copyable_markdown
-      - profile_version
-      title: PublicResultBadgeResponse
-    PublicResultScoreResponse:
-      properties:
-        percentage:
-          type: number
-          title: Percentage
-        passed_validation:
-          type: boolean
-          title: Passed Validation
-      type: object
-      required:
-      - percentage
-      - passed_validation
-      title: PublicResultScoreResponse
     PublicResultActionsResponse:
       properties:
         challenge:
@@ -184,6 +193,28 @@ components:
       - run_same_profile
       - premium_continuation
       title: PublicResultActionsResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PublicResultScoreResponse:
+      properties:
+        percentage:
+          type: number
+          title: Percentage
+        passed_validation:
+          type: boolean
+          title: Passed Validation
+      type: object
+      required:
+      - percentage
+      - passed_validation
+      title: PublicResultScoreResponse
     PublicResultResponse:
       properties:
         result_id:
@@ -224,47 +255,16 @@ components:
       - badge
       - actions
       title: PublicResultResponse
-    PublicResultEvidenceResponse:
+    PublicResultProfileResponse:
       properties:
-        kind:
+        id:
           type: string
-          title: Kind
-        result_url:
+          title: Id
+        version:
           type: string
-          title: Result Url
-        privacy:
-          type: string
-          title: Privacy
+          title: Version
       type: object
       required:
-      - kind
-      - result_url
-      - privacy
-      title: PublicResultEvidenceResponse
-    PublicResultFreshnessResponse:
-      properties:
-        age_seconds:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Age Seconds
-        stale_after_days:
-          type: integer
-          title: Stale After Days
-        profile_is_current:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Profile Is Current
-        status:
-          type: string
-          title: Status
-        checked_at:
-          type: string
-          title: Checked At
-      type: object
-      required:
-      - stale_after_days
-      - status
-      - checked_at
-      title: PublicResultFreshnessResponse
+      - id
+      - version
+      title: PublicResultProfileResponse

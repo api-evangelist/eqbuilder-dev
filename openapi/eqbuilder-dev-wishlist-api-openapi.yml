@@ -44,6 +44,24 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    WishlistInput:
+      properties:
+        need:
+          type: string
+          title: Need
+        audience:
+          type: string
+          title: Audience
+          default: bot
+        bot_role:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Bot Role
+      type: object
+      required:
+      - need
+      title: WishlistInput
     ValidationError:
       properties:
         loc:
@@ -70,21 +88,3 @@ components:
       - msg
       - type
       title: ValidationError
-    WishlistInput:
-      properties:
-        need:
-          type: string
-          title: Need
-        audience:
-          type: string
-          title: Audience
-          default: bot
-        bot_role:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Bot Role
-      type: object
-      required:
-      - need
-      title: WishlistInput

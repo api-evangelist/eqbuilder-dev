@@ -40,6 +40,24 @@ paths:
       - Free Score
 components:
   schemas:
+    CampaignSource:
+      type: string
+      enum:
+      - livekit-slack
+      - langchain-forum
+      - reddit-community
+      - reddit-ad
+      - github-outreach
+      - agent-directory
+      title: CampaignSource
+      description: 'Server-approved outreach markers.
+
+
+        Keeping this as a small enum prevents source attribution from becoming a
+
+        free-form visitor-tracking store. Add a new value only when a campaign link
+
+        is intentionally approved.'
     FreeScoreContactInput:
       properties:
         contact:
@@ -88,21 +106,3 @@ components:
       - msg
       - type
       title: ValidationError
-    CampaignSource:
-      type: string
-      enum:
-      - livekit-slack
-      - langchain-forum
-      - reddit-community
-      - reddit-ad
-      - github-outreach
-      - agent-directory
-      title: CampaignSource
-      description: 'Server-approved outreach markers.
-
-
-        Keeping this as a small enum prevents source attribution from becoming a
-
-        free-form visitor-tracking store. Add a new value only when a campaign link
-
-        is intentionally approved.'

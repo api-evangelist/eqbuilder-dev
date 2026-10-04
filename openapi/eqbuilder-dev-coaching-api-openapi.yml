@@ -200,19 +200,6 @@ components:
           default: ''
       type: object
       title: CoachingEnrollPayload
-    CoachingCardCheckoutPayload:
-      properties:
-        wallet_address:
-          type: string
-          title: Wallet Address
-        pack_id:
-          type: string
-          title: Pack Id
-      type: object
-      required:
-      - wallet_address
-      - pack_id
-      title: CoachingCardCheckoutPayload
     CoachingDrillPayload:
       properties:
         enrollment_id:
@@ -263,6 +250,15 @@ components:
       - msg
       - type
       title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     CoachingCardClaimPayload:
       properties:
         checkout_id:
@@ -276,12 +272,16 @@ components:
       - checkout_id
       - claim_secret
       title: CoachingCardClaimPayload
-    HTTPValidationError:
+    CoachingCardCheckoutPayload:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        wallet_address:
+          type: string
+          title: Wallet Address
+        pack_id:
+          type: string
+          title: Pack Id
       type: object
-      title: HTTPValidationError
+      required:
+      - wallet_address
+      - pack_id
+      title: CoachingCardCheckoutPayload

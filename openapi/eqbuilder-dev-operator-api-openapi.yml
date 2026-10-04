@@ -203,41 +203,15 @@ paths:
       - Operator
 components:
   schemas:
-    HTTPValidationError:
+    OperatorLoginInput:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
+        key:
           type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: Key
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - key
+      title: OperatorLoginInput
     FreeTrialResetCallerInput:
       properties:
         caller_key:
@@ -247,16 +221,6 @@ components:
       required:
       - caller_key
       title: FreeTrialResetCallerInput
-    FreeTrialPurgeInput:
-      properties:
-        keys:
-          items:
-            type: string
-          type: array
-          title: Keys
-          default: []
-      type: object
-      title: FreeTrialPurgeInput
     PublicResultProfileConversionResponse:
       properties:
         profile:
@@ -294,15 +258,6 @@ components:
       - viewer_to_verified_paid_7_day_conversion_pct
       - suppressed
       title: PublicResultProfileConversionResponse
-    OperatorLoginInput:
-      properties:
-        key:
-          type: string
-          title: Key
-      type: object
-      required:
-      - key
-      title: OperatorLoginInput
     PublicResultConversionResponse:
       properties:
         viewers:
@@ -350,3 +305,48 @@ components:
       - cohort_suppression_threshold
       - privacy
       title: PublicResultConversionResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    FreeTrialPurgeInput:
+      properties:
+        keys:
+          items:
+            type: string
+          type: array
+          title: Keys
+          default: []
+      type: object
+      title: FreeTrialPurgeInput

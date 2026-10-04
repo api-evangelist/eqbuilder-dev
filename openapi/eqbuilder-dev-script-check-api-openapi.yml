@@ -63,6 +63,34 @@ paths:
       - Script Check
 components:
   schemas:
+    ScriptCheckPayload:
+      properties:
+        wallet_address:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Wallet Address
+        tx_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tx Hash
+        reply_text:
+          type: string
+          title: Reply Text
+          default: ''
+        approved_facts:
+          items:
+            type: string
+          type: array
+          title: Approved Facts
+          default: []
+        source_text:
+          type: string
+          title: Source Text
+          default: ''
+      type: object
+      title: ScriptCheckPayload
     HTTPValidationError:
       properties:
         detail:
@@ -98,31 +126,3 @@ components:
       - msg
       - type
       title: ValidationError
-    ScriptCheckPayload:
-      properties:
-        wallet_address:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Wallet Address
-        tx_hash:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Tx Hash
-        reply_text:
-          type: string
-          title: Reply Text
-          default: ''
-        approved_facts:
-          items:
-            type: string
-          type: array
-          title: Approved Facts
-          default: []
-        source_text:
-          type: string
-          title: Source Text
-          default: ''
-      type: object
-      title: ScriptCheckPayload

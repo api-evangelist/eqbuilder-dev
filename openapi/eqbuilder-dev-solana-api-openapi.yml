@@ -120,19 +120,6 @@ paths:
       - Solana
 components:
   schemas:
-    SolanaVerifyInput:
-      properties:
-        signature:
-          type: string
-          title: Signature
-        network:
-          type: string
-          title: Network
-          default: mainnet
-      type: object
-      required:
-      - signature
-      title: SolanaVerifyInput
     HTTPValidationError:
       properties:
         detail:
@@ -168,3 +155,16 @@ components:
       - msg
       - type
       title: ValidationError
+    SolanaVerifyInput:
+      properties:
+        signature:
+          type: string
+          title: Signature
+        network:
+          type: string
+          title: Network
+          default: mainnet
+      type: object
+      required:
+      - signature
+      title: SolanaVerifyInput

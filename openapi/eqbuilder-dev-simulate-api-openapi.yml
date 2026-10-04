@@ -109,15 +109,42 @@ paths:
       - Simulate
 components:
   schemas:
-    HTTPValidationError:
+    EmbeddedCommunicationPreferences:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        tone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tone
+        audience:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Audience
+        channel:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Channel
+        formality:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Formality
+        directness:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Directness
+        length:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Length
+      additionalProperties: false
       type: object
-      title: HTTPValidationError
+      title: EmbeddedCommunicationPreferences
+      description: Optional host-declared communication intent for contextual guidance.
     ValidationError:
       properties:
         loc:
@@ -144,6 +171,54 @@ components:
       - msg
       - type
       title: ValidationError
+    EmbeddedConversationTurn:
+      properties:
+        role:
+          type: string
+          enum:
+          - user
+          - assistant
+          title: Role
+        content:
+          type: string
+          title: Content
+      additionalProperties: false
+      type: object
+      required:
+      - role
+      - content
+      title: EmbeddedConversationTurn
+      description: One bounded, text-only turn supplied for a contextual assessment.
+    EmbeddedContext:
+      properties:
+        situation:
+          type: string
+          title: Situation
+        desired_outcome:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Desired Outcome
+        constraints:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Constraints
+        conversation:
+          items:
+            $ref: '#/components/schemas/EmbeddedConversationTurn'
+          type: array
+          title: Conversation
+        communication_preferences:
+          anyOf:
+          - $ref: '#/components/schemas/EmbeddedCommunicationPreferences'
+          - type: 'null'
+      additionalProperties: false
+      type: object
+      required:
+      - situation
+      title: EmbeddedContext
+      description: Bounded ephemeral identity for an explicit contextual check.
     SimulationResultResponse:
       properties:
         status:
@@ -168,6 +243,15 @@ components:
       - status
       - tier
       title: SimulationResultResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     SimulationPayload:
       properties:
         tx_hash:
@@ -222,87 +306,3 @@ components:
       - proposed_text
       - response_delay_seconds
       title: SimulationPayload
-    EmbeddedCommunicationPreferences:
-      properties:
-        tone:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Tone
-        audience:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Audience
-        channel:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Channel
-        formality:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Formality
-        directness:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Directness
-        length:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Length
-      additionalProperties: false
-      type: object
-      title: EmbeddedCommunicationPreferences
-      description: Optional host-declared communication intent for contextual guidance.
-    EmbeddedConversationTurn:
-      properties:
-        role:
-          type: string
-          enum:
-          - user
-          - assistant
-          title: Role
-        content:
-          type: string
-          title: Content
-      additionalProperties: false
-      type: object
-      required:
-      - role
-      - content
-      title: EmbeddedConversationTurn
-      description: One bounded, text-only turn supplied for a contextual assessment.
-    EmbeddedContext:
-      properties:
-        situation:
-          type: string
-          title: Situation
-        desired_outcome:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Desired Outcome
-        constraints:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Constraints
-        conversation:
-          items:
-            $ref: '#/components/schemas/EmbeddedConversationTurn'
-          type: array
-          title: Conversation
-        communication_preferences:
-          anyOf:
-          - $ref: '#/components/schemas/EmbeddedCommunicationPreferences'
-          - type: 'null'
-      additionalProperties: false
-      type: object
-      required:
-      - situation
-      title: EmbeddedContext
-      description: Bounded ephemeral identity for an explicit contextual check.
