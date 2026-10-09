@@ -1,0 +1,30 @@
+# Front Door AI Index — eqbuilder-dev — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: eqbuilder-dev
+  lexicon_version: '1.0'
+  probed_at: '2026-09-25'
+  host: eqbuilder.dev
+  final_host: eqbuilder.dev
+  ownership: own
+  owner: eqbuilder-dev
+  shares_host_with: null
+  inherited_from: null
+  alias_of: null
+  verdict: scored
+  score: 2
+  band: 3
+  band_label: light
+  host_score: 2
+  density: 20.62
+  words: 97
+  tiers:
+    agentic: 1
+    core: 1
+    model: 0
+  ambiguous: 1
+  top_terms:
+    AI agent: 1
+    AI: 1
+    agent: 1
