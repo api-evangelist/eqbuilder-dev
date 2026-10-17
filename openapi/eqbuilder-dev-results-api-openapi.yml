@@ -35,150 +35,6 @@ paths:
       - Results
 components:
   schemas:
-    PublicResultBadgeResponse:
-      properties:
-        label:
-          type: string
-          title: Label
-        text:
-          type: string
-          title: Text
-        evidence_url:
-          type: string
-          title: Evidence Url
-        copyable_markdown:
-          type: string
-          title: Copyable Markdown
-        profile_version:
-          type: string
-          title: Profile Version
-        observed_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Observed At
-        certification:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Certification
-      additionalProperties: false
-      type: object
-      required:
-      - label
-      - text
-      - evidence_url
-      - copyable_markdown
-      - profile_version
-      title: PublicResultBadgeResponse
-    PublicResultEvidenceResponse:
-      properties:
-        kind:
-          type: string
-          title: Kind
-        result_url:
-          type: string
-          title: Result Url
-        privacy:
-          type: string
-          title: Privacy
-      type: object
-      required:
-      - kind
-      - result_url
-      - privacy
-      title: PublicResultEvidenceResponse
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    PublicResultFreshnessResponse:
-      properties:
-        age_seconds:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Age Seconds
-        stale_after_days:
-          type: integer
-          title: Stale After Days
-        profile_is_current:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Profile Is Current
-        status:
-          type: string
-          title: Status
-        checked_at:
-          type: string
-          title: Checked At
-      type: object
-      required:
-      - stale_after_days
-      - status
-      - checked_at
-      title: PublicResultFreshnessResponse
-    PublicResultActionResponse:
-      properties:
-        method:
-          type: string
-          title: Method
-        url:
-          type: string
-          title: Url
-        result_ref:
-          type: string
-          title: Result Ref
-        api_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Api Url
-        browser_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Browser Url
-        profile:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Profile
-        tier:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Tier
-      additionalProperties: false
-      type: object
-      required:
-      - method
-      - url
-      - result_ref
-      title: PublicResultActionResponse
     PublicResultActionsResponse:
       properties:
         challenge:
@@ -193,28 +49,6 @@ components:
       - run_same_profile
       - premium_continuation
       title: PublicResultActionsResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    PublicResultScoreResponse:
-      properties:
-        percentage:
-          type: number
-          title: Percentage
-        passed_validation:
-          type: boolean
-          title: Passed Validation
-      type: object
-      required:
-      - percentage
-      - passed_validation
-      title: PublicResultScoreResponse
     PublicResultResponse:
       properties:
         result_id:
@@ -255,6 +89,62 @@ components:
       - badge
       - actions
       title: PublicResultResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    PublicResultEvidenceResponse:
+      properties:
+        kind:
+          type: string
+          title: Kind
+        result_url:
+          type: string
+          title: Result Url
+        privacy:
+          type: string
+          title: Privacy
+      type: object
+      required:
+      - kind
+      - result_url
+      - privacy
+      title: PublicResultEvidenceResponse
+    PublicResultScoreResponse:
+      properties:
+        percentage:
+          type: number
+          title: Percentage
+        passed_validation:
+          type: boolean
+          title: Passed Validation
+      type: object
+      required:
+      - percentage
+      - passed_validation
+      title: PublicResultScoreResponse
     PublicResultProfileResponse:
       properties:
         id:
@@ -268,3 +158,113 @@ components:
       - id
       - version
       title: PublicResultProfileResponse
+    PublicResultFreshnessResponse:
+      properties:
+        age_seconds:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Age Seconds
+        stale_after_days:
+          type: integer
+          title: Stale After Days
+        profile_is_current:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Profile Is Current
+        status:
+          type: string
+          title: Status
+        checked_at:
+          type: string
+          title: Checked At
+      type: object
+      required:
+      - stale_after_days
+      - status
+      - checked_at
+      title: PublicResultFreshnessResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PublicResultActionResponse:
+      properties:
+        method:
+          type: string
+          title: Method
+        url:
+          type: string
+          title: Url
+        result_ref:
+          type: string
+          title: Result Ref
+        api_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Url
+        browser_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Browser Url
+        profile:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Profile
+        tier:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tier
+      additionalProperties: false
+      type: object
+      required:
+      - method
+      - url
+      - result_ref
+      title: PublicResultActionResponse
+    PublicResultBadgeResponse:
+      properties:
+        label:
+          type: string
+          title: Label
+        text:
+          type: string
+          title: Text
+        evidence_url:
+          type: string
+          title: Evidence Url
+        copyable_markdown:
+          type: string
+          title: Copyable Markdown
+        profile_version:
+          type: string
+          title: Profile Version
+        observed_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Observed At
+        certification:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Certification
+      additionalProperties: false
+      type: object
+      required:
+      - label
+      - text
+      - evidence_url
+      - copyable_markdown
+      - profile_version
+      title: PublicResultBadgeResponse

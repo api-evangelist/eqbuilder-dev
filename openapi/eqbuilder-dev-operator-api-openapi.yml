@@ -221,43 +221,32 @@ components:
       required:
       - caller_key
       title: FreeTrialResetCallerInput
-    PublicResultProfileConversionResponse:
+    ValidationError:
       properties:
-        profile:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
           type: string
-          title: Profile
-        result_views:
-          type: integer
-          title: Result Views
-        new_scores:
-          type: integer
-          title: New Scores
-        second_sessions:
-          type: integer
-          title: Second Sessions
-        verified_paid_within_7_days:
-          type: integer
-          title: Verified Paid Within 7 Days
-        viewer_to_score_conversion_pct:
-          type: number
-          title: Viewer To Score Conversion Pct
-        viewer_to_verified_paid_7_day_conversion_pct:
-          type: number
-          title: Viewer To Verified Paid 7 Day Conversion Pct
-        suppressed:
-          type: boolean
-          title: Suppressed
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
       required:
-      - profile
-      - result_views
-      - new_scores
-      - second_sessions
-      - verified_paid_within_7_days
-      - viewer_to_score_conversion_pct
-      - viewer_to_verified_paid_7_day_conversion_pct
-      - suppressed
-      title: PublicResultProfileConversionResponse
+      - loc
+      - msg
+      - type
+      title: ValidationError
     PublicResultConversionResponse:
       properties:
         viewers:
@@ -305,41 +294,6 @@ components:
       - cohort_suppression_threshold
       - privacy
       title: PublicResultConversionResponse
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     FreeTrialPurgeInput:
       properties:
         keys:
@@ -350,3 +304,49 @@ components:
           default: []
       type: object
       title: FreeTrialPurgeInput
+    PublicResultProfileConversionResponse:
+      properties:
+        profile:
+          type: string
+          title: Profile
+        result_views:
+          type: integer
+          title: Result Views
+        new_scores:
+          type: integer
+          title: New Scores
+        second_sessions:
+          type: integer
+          title: Second Sessions
+        verified_paid_within_7_days:
+          type: integer
+          title: Verified Paid Within 7 Days
+        viewer_to_score_conversion_pct:
+          type: number
+          title: Viewer To Score Conversion Pct
+        viewer_to_verified_paid_7_day_conversion_pct:
+          type: number
+          title: Viewer To Verified Paid 7 Day Conversion Pct
+        suppressed:
+          type: boolean
+          title: Suppressed
+      type: object
+      required:
+      - profile
+      - result_views
+      - new_scores
+      - second_sessions
+      - verified_paid_within_7_days
+      - viewer_to_score_conversion_pct
+      - viewer_to_verified_paid_7_day_conversion_pct
+      - suppressed
+      title: PublicResultProfileConversionResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError

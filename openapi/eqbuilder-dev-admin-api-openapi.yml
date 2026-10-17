@@ -193,6 +193,15 @@ paths:
       - Admin
 components:
   schemas:
+    FleetPlanToggle:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+      type: object
+      required:
+      - enabled
+      title: FleetPlanToggle
     NetworkConfigUpdate:
       properties:
         new_base_fee:
@@ -292,12 +301,3 @@ components:
       - msg
       - type
       title: ValidationError
-    FleetPlanToggle:
-      properties:
-        enabled:
-          type: boolean
-          title: Enabled
-      type: object
-      required:
-      - enabled
-      title: FleetPlanToggle

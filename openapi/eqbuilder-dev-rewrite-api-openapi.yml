@@ -64,30 +64,6 @@ paths:
       - Rewrite
 components:
   schemas:
-    RewritePayload:
-      properties:
-        wallet_address:
-          type: string
-          title: Wallet Address
-          default: ''
-        tx_hash:
-          type: string
-          title: Tx Hash
-          default: ''
-        target_profile:
-          type: string
-          title: Target Profile
-          default: ''
-        proposed_text:
-          type: string
-          title: Proposed Text
-          default: ''
-        response_delay_seconds:
-          type: number
-          title: Response Delay Seconds
-          default: 0.0
-      type: object
-      title: RewritePayload
     HTTPValidationError:
       properties:
         detail:
@@ -123,3 +99,27 @@ components:
       - msg
       - type
       title: ValidationError
+    RewritePayload:
+      properties:
+        wallet_address:
+          type: string
+          title: Wallet Address
+          default: ''
+        tx_hash:
+          type: string
+          title: Tx Hash
+          default: ''
+        target_profile:
+          type: string
+          title: Target Profile
+          default: ''
+        proposed_text:
+          type: string
+          title: Proposed Text
+          default: ''
+        response_delay_seconds:
+          type: number
+          title: Response Delay Seconds
+          default: 0.0
+      type: object
+      title: RewritePayload

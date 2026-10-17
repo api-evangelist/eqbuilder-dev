@@ -97,45 +97,6 @@ components:
       type: object
       title: EmbeddedCommunicationPreferences
       description: Optional host-declared communication intent for contextual guidance.
-    EmbeddedCheckPayload:
-      properties:
-        text:
-          type: string
-          title: Text
-        profile:
-          type: string
-          title: Profile
-          default: analytical_executive
-        delay_seconds:
-          type: number
-          title: Delay Seconds
-          default: 4.0
-        mode:
-          type: string
-          title: Mode
-          default: structural
-        context:
-          anyOf:
-          - $ref: '#/components/schemas/EmbeddedContext'
-          - type: 'null'
-        request_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Request Id
-      additionalProperties: false
-      type: object
-      required:
-      - text
-      title: EmbeddedCheckPayload
-      description: 'Public browser contract for the company host-proxy target.
-
-
-        Payment identity, wallet and bundle token are intentionally absent.  The
-
-        host backend authenticates the user and forwards the token server-to-server
-
-        in the existing X-BUNDLE-TOKEN header.'
     ValidationError:
       properties:
         loc:
@@ -180,6 +141,15 @@ components:
       - content
       title: EmbeddedConversationTurn
       description: One bounded, text-only turn supplied for a contextual assessment.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     EmbeddedContext:
       properties:
         situation:
@@ -210,12 +180,42 @@ components:
       - situation
       title: EmbeddedContext
       description: Bounded ephemeral identity for an explicit contextual check.
-    HTTPValidationError:
+    EmbeddedCheckPayload:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        text:
+          type: string
+          title: Text
+        profile:
+          type: string
+          title: Profile
+          default: analytical_executive
+        delay_seconds:
+          type: number
+          title: Delay Seconds
+          default: 4.0
+        mode:
+          type: string
+          title: Mode
+          default: structural
+        context:
+          anyOf:
+          - $ref: '#/components/schemas/EmbeddedContext'
+          - type: 'null'
+        request_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Request Id
+      additionalProperties: false
       type: object
-      title: HTTPValidationError
+      required:
+      - text
+      title: EmbeddedCheckPayload
+      description: 'Public browser contract for the company host-proxy target.
+
+
+        Payment identity, wallet and bundle token are intentionally absent.  The
+
+        host backend authenticates the user and forwards the token server-to-server
+
+        in the existing X-BUNDLE-TOKEN header.'

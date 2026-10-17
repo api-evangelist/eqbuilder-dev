@@ -58,6 +58,15 @@ components:
         free-form visitor-tracking store. Add a new value only when a campaign link
 
         is intentionally approved.'
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     FreeScoreContactInput:
       properties:
         contact:
@@ -71,15 +80,6 @@ components:
       required:
       - contact
       title: FreeScoreContactInput
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ValidationError:
       properties:
         loc:

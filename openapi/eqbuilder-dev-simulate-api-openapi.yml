@@ -145,6 +145,30 @@ components:
       type: object
       title: EmbeddedCommunicationPreferences
       description: Optional host-declared communication intent for contextual guidance.
+    SimulationResultResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+        tier:
+          type: string
+          title: Tier
+        certificate_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Certificate Url
+        public_result_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Public Result Url
+      additionalProperties: true
+      type: object
+      required:
+      - status
+      - tier
+      title: SimulationResultResponse
     ValidationError:
       properties:
         loc:
@@ -189,6 +213,15 @@ components:
       - content
       title: EmbeddedConversationTurn
       description: One bounded, text-only turn supplied for a contextual assessment.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     EmbeddedContext:
       properties:
         situation:
@@ -219,39 +252,6 @@ components:
       - situation
       title: EmbeddedContext
       description: Bounded ephemeral identity for an explicit contextual check.
-    SimulationResultResponse:
-      properties:
-        status:
-          type: string
-          title: Status
-        tier:
-          type: string
-          title: Tier
-        certificate_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Certificate Url
-        public_result_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Public Result Url
-      additionalProperties: true
-      type: object
-      required:
-      - status
-      - tier
-      title: SimulationResultResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     SimulationPayload:
       properties:
         tx_hash:

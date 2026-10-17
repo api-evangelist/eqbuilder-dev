@@ -182,48 +182,6 @@ paths:
       - Coaching
 components:
   schemas:
-    CoachingEnrollPayload:
-      properties:
-        wallet_address:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Wallet Address
-        tx_hash:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Tx Hash
-        pack_id:
-          type: string
-          title: Pack Id
-          default: ''
-      type: object
-      title: CoachingEnrollPayload
-    CoachingDrillPayload:
-      properties:
-        enrollment_id:
-          type: string
-          title: Enrollment Id
-          default: ''
-        coach_token:
-          type: string
-          title: Coach Token
-          default: ''
-        drill_id:
-          type: string
-          title: Drill Id
-          default: ''
-        text:
-          type: string
-          title: Text
-          default: ''
-        delay_seconds:
-          type: number
-          title: Delay Seconds
-          default: 0.0
-      type: object
-      title: CoachingDrillPayload
     ValidationError:
       properties:
         loc:
@@ -250,6 +208,48 @@ components:
       - msg
       - type
       title: ValidationError
+    CoachingDrillPayload:
+      properties:
+        enrollment_id:
+          type: string
+          title: Enrollment Id
+          default: ''
+        coach_token:
+          type: string
+          title: Coach Token
+          default: ''
+        drill_id:
+          type: string
+          title: Drill Id
+          default: ''
+        text:
+          type: string
+          title: Text
+          default: ''
+        delay_seconds:
+          type: number
+          title: Delay Seconds
+          default: 0.0
+      type: object
+      title: CoachingDrillPayload
+    CoachingEnrollPayload:
+      properties:
+        wallet_address:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Wallet Address
+        tx_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tx Hash
+        pack_id:
+          type: string
+          title: Pack Id
+          default: ''
+      type: object
+      title: CoachingEnrollPayload
     HTTPValidationError:
       properties:
         detail:

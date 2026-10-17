@@ -63,6 +63,15 @@ paths:
       - Script Check
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ScriptCheckPayload:
       properties:
         wallet_address:
@@ -91,15 +100,6 @@ components:
           default: ''
       type: object
       title: ScriptCheckPayload
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ValidationError:
       properties:
         loc:

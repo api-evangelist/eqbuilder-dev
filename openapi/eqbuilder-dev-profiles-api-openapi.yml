@@ -95,55 +95,6 @@ paths:
       - Profiles
 components:
   schemas:
-    ReferenceProfileEntry:
-      properties:
-        profile_name:
-          type: string
-          title: Profile Name
-        description:
-          type: string
-          title: Description
-          default: ''
-        text_sample:
-          type: string
-          title: Text Sample
-          default: ''
-        metrics_target:
-          $ref: '#/components/schemas/ReferenceProfileMetrics'
-        behavioral_delay_bounds:
-          $ref: '#/components/schemas/ReferenceProfileDelayBounds'
-      type: object
-      required:
-      - profile_name
-      - metrics_target
-      - behavioral_delay_bounds
-      title: ReferenceProfileEntry
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     ReferenceProfileDelayBounds:
       properties:
         ideal_delay_seconds:
@@ -174,15 +125,32 @@ components:
       - directness
       - hesitation_tolerance
       title: ReferenceProfileMetrics
-    HTTPValidationError:
+    ValidationError:
       properties:
-        detail:
+        loc:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Detail
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
-      title: HTTPValidationError
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     BulkProfileUpload:
       properties:
         profiles:
@@ -194,3 +162,35 @@ components:
       required:
       - profiles
       title: BulkProfileUpload
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ReferenceProfileEntry:
+      properties:
+        profile_name:
+          type: string
+          title: Profile Name
+        description:
+          type: string
+          title: Description
+          default: ''
+        text_sample:
+          type: string
+          title: Text Sample
+          default: ''
+        metrics_target:
+          $ref: '#/components/schemas/ReferenceProfileMetrics'
+        behavioral_delay_bounds:
+          $ref: '#/components/schemas/ReferenceProfileDelayBounds'
+      type: object
+      required:
+      - profile_name
+      - metrics_target
+      - behavioral_delay_bounds
+      title: ReferenceProfileEntry

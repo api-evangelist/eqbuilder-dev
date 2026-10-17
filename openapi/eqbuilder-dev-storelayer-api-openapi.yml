@@ -462,6 +462,15 @@ components:
       required:
       - job
       title: StorelayerMatchInput
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     StorelayerFreeInstallStart:
       properties:
         origin:
@@ -482,15 +491,6 @@ components:
       required:
       - origin
       title: StorelayerFreeInstallStart
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
