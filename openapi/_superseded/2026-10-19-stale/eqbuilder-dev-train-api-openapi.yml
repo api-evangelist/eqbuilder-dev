@@ -1,0 +1,20 @@
+openapi: 3.2.0
+info:
+  title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
+  description: Human-likeness scoring and AI text benchmark API.
+  version: 1.0.0
+tags:
+- name: Train
+paths:
+  /api/train:
+    post:
+      summary: Process Training
+      operationId: process_training_api_train_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Train

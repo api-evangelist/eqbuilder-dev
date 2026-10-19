@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
-  description: Human-likeness scoring and AI text benchmark API.
+  description: 'Human-likeness scoring and AI text benchmark API. Score AI-generated text against real human personality profiles (EQ, formality, directness, hesitation, response-timing cadence) to measure how human your AI writing sounds before you ship it. Built for autonomous agents and AI text humanizer pipelines: free stateless scoring at /api/score, paid validated benchmarks via machine-to-machine On-chain settlement with x402 support — the default path is gasless USDC on Base (unpaid calls to /api/simulate return HTTP 402 with machine-readable payment requirements; sign the Base requirement and retry once with PAYMENT-SIGNATURE). Legacy SOL and X-PAYMENT clients remain compatible. Interactive API docs are available at /api/docs. Permanent tool setup (wire it in once and explicitly authorize a dedicated USDC-on-Base burner wallet so the SDK can sign paid calls without a human): see the ''Permanent tool setup'' section of /llms.txt and the crawlable guide at /guides/permanent-agent-tool-setup.html. Live network stats (real ledger aggregates) at /api/stats; runnable Python/JS quickstart examples ship in the repo under examples/.'
   version: 1.0.0
 tags:
 - name: Bundle
@@ -26,9 +26,19 @@ paths:
         ## Default x402 v2 payment flow
 
 
-        1. **Quote** — POST /api/bundle with no payment header. Read the full
+        1. **Quote** — POST `{"plan":"bundle"}` to /api/bundle with no payment
 
-        HTTP **402** body and select the first `accepts` entry: Base USDC
+        header. The HTTP **402** is the expected live quote: it does not charge
+
+        or record a purchase, and no `wallet_address` is needed. Most agents
+
+        should use the EQBuilder SDK instead; its `score` method handles this
+
+        x402 exchange automatically without buying a bundle. Human card buyers
+
+        can use GET /api/card/packs and POST /api/card/checkout.
+
+        Fleet buyers continue by selecting the first `accepts` entry: Base USDC
 
         (`network: eip155:8453`).
 
@@ -155,35 +165,6 @@ paths:
       - Bundle
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    BundlePayload:
-      properties:
-        tx_hash:
-          type: string
-          title: Tx Hash
-          default: ''
-        wallet_address:
-          type: string
-          title: Wallet Address
-          default: ''
-        referral_code:
-          type: string
-          title: Referral Code
-          default: ''
-        plan:
-          type: string
-          title: Plan
-          default: bundle
-      type: object
-      title: BundlePayload
     ValidationError:
       properties:
         loc:
@@ -210,3 +191,32 @@ components:
       - msg
       - type
       title: ValidationError
+    BundlePayload:
+      properties:
+        tx_hash:
+          type: string
+          title: Tx Hash
+          default: ''
+        wallet_address:
+          type: string
+          title: Wallet Address
+          default: ''
+        referral_code:
+          type: string
+          title: Referral Code
+          default: ''
+        plan:
+          type: string
+          title: Plan
+          default: bundle
+      type: object
+      title: BundlePayload
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError

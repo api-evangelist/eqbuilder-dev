@@ -1,0 +1,21 @@
+openapi: 3.2.0
+info:
+  title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
+  description: Human-likeness scoring and AI text benchmark API.
+  version: 1.0.0
+tags:
+- name: Pricing
+paths:
+  /api/pricing:
+    get:
+      summary: Get Pricing
+      description: Published, transparent pricing for all billable endpoints (live values).
+      operationId: get_pricing_api_pricing_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Pricing

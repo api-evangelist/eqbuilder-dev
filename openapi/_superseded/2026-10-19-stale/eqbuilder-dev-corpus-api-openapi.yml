@@ -1,0 +1,20 @@
+openapi: 3.2.0
+info:
+  title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
+  description: Human-likeness scoring and AI text benchmark API.
+  version: 1.0.0
+tags:
+- name: Corpus
+paths:
+  /api/corpus/evidence:
+    get:
+      summary: Public Corpus Evidence
+      operationId: public_corpus_evidence_api_corpus_evidence_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Corpus

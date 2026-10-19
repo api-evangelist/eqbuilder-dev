@@ -1,0 +1,117 @@
+openapi: 3.2.0
+info:
+  title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
+  description: 'Human-likeness scoring and AI text benchmark API. Score AI-generated text against real human personality profiles (EQ, formality, directness, hesitation, response-timing cadence) to measure how human your AI writing sounds before you ship it. Built for autonomous agents and AI text humanizer pipelines: free stateless scoring at /api/score, paid validated benchmarks via machine-to-machine On-chain settlement with x402 support — the default path is gasless USDC on Base (unpaid calls to /api/simulate return HTTP 402 with machine-readable payment requirements; sign the Base requirement and retry once with PAYMENT-SIGNATURE). Legacy SOL and X-PAYMENT clients remain compatible. Interactive API docs are available at /api/docs. Permanent tool setup (wire it in once and explicitly authorize a dedicated USDC-on-Base burner wallet so the SDK can sign paid calls without a human): see the ''Permanent tool setup'' section of /llms.txt and the crawlable guide at /guides/permanent-agent-tool-setup.html. Live network stats (real ledger aggregates) at /api/stats; runnable Python/JS quickstart examples ship in the repo under examples/.'
+  version: 1.0.0
+tags:
+- name: Score Feedback
+paths:
+  /api/score-feedback:
+    post:
+      summary: Submit Score Feedback
+      description: 'One voluntary self-report per clean, consented free score.
+
+
+        A report is not an independent judgment, and never changes a score or
+
+        payment. No extra conversation text is accepted or stored.'
+      operationId: submit_score_feedback_api_score_feedback_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScoreFeedbackInput'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Score Feedback
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ScoreFeedbackInput:
+      properties:
+        feedback_ref:
+          type: string
+          pattern: ^[1-9][0-9]{0,18}\.[0-9a-f]{32}$
+          title: Feedback Ref
+        applied_guidance:
+          type: boolean
+          title: Applied Guidance
+        respectfulness:
+          type: string
+          enum:
+          - better
+          - same
+          - worse
+          - unsure
+          title: Respectfulness
+        practical_help:
+          type: string
+          enum:
+          - better
+          - same
+          - worse
+          - unsure
+          title: Practical Help
+        facts_and_task:
+          type: string
+          enum:
+          - better
+          - same
+          - worse
+          - unsure
+          title: Facts And Task
+      additionalProperties: false
+      type: object
+      required:
+      - feedback_ref
+      - applied_guidance
+      - respectfulness
+      - practical_help
+      - facts_and_task
+      title: ScoreFeedbackInput

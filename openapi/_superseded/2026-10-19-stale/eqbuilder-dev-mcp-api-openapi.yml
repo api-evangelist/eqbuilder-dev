@@ -1,0 +1,33 @@
+openapi: 3.2.0
+info:
+  title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
+  description: Human-likeness scoring and AI text benchmark API.
+  version: 1.0.0
+tags:
+- name: MCP
+paths:
+  /api/mcp:
+    get:
+      summary: Mcp Endpoint Get
+      description: GET is only for SSE-stream establishment under Streamable HTTP; we don't offer one.
+      operationId: mcp_endpoint_get_api_mcp_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - MCP
+    post:
+      summary: Mcp Endpoint
+      description: Stateless MCP Streamable-HTTP endpoint (JSON-RPC 2.0, JSON response mode).
+      operationId: mcp_endpoint_api_mcp_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - MCP

@@ -1,0 +1,38 @@
+openapi: 3.2.0
+info:
+  title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
+  description: Human-likeness scoring and AI text benchmark API.
+  version: 1.0.0
+tags:
+- name: Visits
+paths:
+  /api/visits/summary:
+    get:
+      summary: Visits Summary
+      description: 'Daily bot-visit counts by kind (including Storelayer page, menu, feed,
+
+        MCP tool/resource, general discovery, and price probes) plus distinct-caller estimates — so the
+
+        operator can answer "have any bots been on today?" without deployment
+
+        logs. Aggregates only; callers are salted hashes, never raw IPs.
+
+
+        Scanner classification: hits from known datacenter IP ranges (GCP 34./35.,
+
+        common AWS), method-spray (OPTIONS/DELETE/HEAD), or scanner User-Agents are
+
+        stored with a '':scanner'' kind suffix and an ''s:'' caller-hash prefix. The
+
+        response separates scanner vs real totals so operators can see genuine
+
+        prospects rather than crawler noise.'
+      operationId: visits_summary_api_visits_summary_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Visits

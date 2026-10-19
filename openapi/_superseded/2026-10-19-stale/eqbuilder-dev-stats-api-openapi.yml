@@ -1,0 +1,23 @@
+openapi: 3.2.0
+info:
+  title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
+  description: Human-likeness scoring and AI text benchmark API.
+  version: 1.0.0
+tags:
+- name: Stats
+paths:
+  /api/stats:
+    get:
+      summary: Public Network Stats
+      description: 'Public live network statistics: honest, clearly-labeled aggregates from
+
+        the platform database. Cached briefly (single-flight) to stay cheap.'
+      operationId: public_network_stats_api_stats_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Stats

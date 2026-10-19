@@ -2172,6 +2172,90 @@ apis:
     url: components/eqbuilder-dev-components.yml
   - type: ChangeLog
     url: changelog/eqbuilder-dev-changelog.yml
+- aid: eqbuilder-dev:eqbuilder-dev-aei-api
+  name: Marz Greta-Lock Network Aei API
+  description: The Aei API from Marz Greta-Lock Network — 21 operation(s) for aei.
+  humanURL: https://eqbuilder.dev/guides/permanent-agent-tool-setup.html
+  baseURL: https://eqbuilder.dev/api/mcp
+  tags:
+  - Aei
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-aei-api-openapi.yml
+- aid: eqbuilder-dev:eqbuilder-dev-aei-correction-evidence-api
+  name: Marz Greta-Lock Network AEI correction evidence API
+  description: >-
+    The AEI correction evidence API from Marz Greta-Lock Network — 2 operation(s) for aei correction evidence.
+  humanURL: https://eqbuilder.dev/guides/permanent-agent-tool-setup.html
+  baseURL: https://eqbuilder.dev/api/mcp
+  tags:
+  - AEI correction evidence
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-aei-correction-evidence-api-openapi.yml
+- aid: eqbuilder-dev:eqbuilder-dev-aei-outreach-api
+  name: Marz Greta-Lock Network AEI outreach API
+  description: The AEI outreach API from Marz Greta-Lock Network — 3 operation(s) for aei outreach.
+  humanURL: https://eqbuilder.dev/guides/permanent-agent-tool-setup.html
+  baseURL: https://eqbuilder.dev/api/mcp
+  tags:
+  - AEI outreach
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-aei-outreach-api-openapi.yml
+- aid: eqbuilder-dev:eqbuilder-dev-community-review-api
+  name: Marz Greta-Lock Network Community Review API
+  description: >-
+    The Community Review API from Marz Greta-Lock Network — 4 operation(s) for community review.
+  humanURL: https://eqbuilder.dev/guides/permanent-agent-tool-setup.html
+  baseURL: https://eqbuilder.dev/api/mcp
+  tags:
+  - Community Review
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-community-review-api-openapi.yml
+- aid: eqbuilder-dev:eqbuilder-dev-developer-handoff-api
+  name: Marz Greta-Lock Network Developer Handoff API
+  description: >-
+    The Developer Handoff API from Marz Greta-Lock Network — 1 operation(s) for developer handoff.
+  humanURL: https://eqbuilder.dev/guides/permanent-agent-tool-setup.html
+  baseURL: https://eqbuilder.dev/api/mcp
+  tags:
+  - Developer Handoff
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-developer-handoff-api-openapi.yml
+- aid: eqbuilder-dev:eqbuilder-dev-guidance-review-api
+  name: Marz Greta-Lock Network Guidance Review API
+  description: >-
+    The Guidance Review API from Marz Greta-Lock Network — 1 operation(s) for guidance review.
+  humanURL: https://eqbuilder.dev/guides/permanent-agent-tool-setup.html
+  baseURL: https://eqbuilder.dev/api/mcp
+  tags:
+  - Guidance Review
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-guidance-review-api-openapi.yml
+- aid: eqbuilder-dev:eqbuilder-dev-score-feedback-api
+  name: Marz Greta-Lock Network Score Feedback API
+  description: The Score Feedback API from Marz Greta-Lock Network — 1 operation(s) for score feedback.
+  humanURL: https://eqbuilder.dev/guides/permanent-agent-tool-setup.html
+  baseURL: https://eqbuilder.dev/api/mcp
+  tags:
+  - Score Feedback
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-score-feedback-api-openapi.yml
+- aid: eqbuilder-dev:eqbuilder-dev-support-api
+  name: Marz Greta-Lock Network Support API
+  description: The Support API from Marz Greta-Lock Network — 1 operation(s) for support.
+  humanURL: https://eqbuilder.dev/guides/permanent-agent-tool-setup.html
+  baseURL: https://eqbuilder.dev/api/mcp
+  tags:
+  - Support
+  properties:
+  - type: OpenAPI
+    url: openapi/eqbuilder-dev-support-api-openapi.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

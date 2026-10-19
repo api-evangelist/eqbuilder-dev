@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
-  description: Human-likeness scoring and AI text benchmark API.
+  description: 'Human-likeness scoring and AI text benchmark API. Score AI-generated text against real human personality profiles (EQ, formality, directness, hesitation, response-timing cadence) to measure how human your AI writing sounds before you ship it. Built for autonomous agents and AI text humanizer pipelines: free stateless scoring at /api/score, paid validated benchmarks via machine-to-machine On-chain settlement with x402 support — the default path is gasless USDC on Base (unpaid calls to /api/simulate return HTTP 402 with machine-readable payment requirements; sign the Base requirement and retry once with PAYMENT-SIGNATURE). Legacy SOL and X-PAYMENT clients remain compatible. Interactive API docs are available at /api/docs. Permanent tool setup (wire it in once and explicitly authorize a dedicated USDC-on-Base burner wallet so the SDK can sign paid calls without a human): see the ''Permanent tool setup'' section of /llms.txt and the crawlable guide at /guides/permanent-agent-tool-setup.html. Live network stats (real ledger aggregates) at /api/stats; runnable Python/JS quickstart examples ship in the repo under examples/.'
   version: 1.0.0
 tags:
 - name: Coaching
@@ -208,6 +208,46 @@ components:
       - msg
       - type
       title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    CoachingCardClaimPayload:
+      properties:
+        checkout_id:
+          type: string
+          title: Checkout Id
+        claim_secret:
+          type: string
+          title: Claim Secret
+      type: object
+      required:
+      - checkout_id
+      - claim_secret
+      title: CoachingCardClaimPayload
+    CoachingEnrollPayload:
+      properties:
+        wallet_address:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Wallet Address
+        tx_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tx Hash
+        pack_id:
+          type: string
+          title: Pack Id
+          default: ''
+      type: object
+      title: CoachingEnrollPayload
     CoachingDrillPayload:
       properties:
         enrollment_id:
@@ -232,46 +272,6 @@ components:
           default: 0.0
       type: object
       title: CoachingDrillPayload
-    CoachingEnrollPayload:
-      properties:
-        wallet_address:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Wallet Address
-        tx_hash:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Tx Hash
-        pack_id:
-          type: string
-          title: Pack Id
-          default: ''
-      type: object
-      title: CoachingEnrollPayload
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    CoachingCardClaimPayload:
-      properties:
-        checkout_id:
-          type: string
-          title: Checkout Id
-        claim_secret:
-          type: string
-          title: Claim Secret
-      type: object
-      required:
-      - checkout_id
-      - claim_secret
-      title: CoachingCardClaimPayload
     CoachingCardCheckoutPayload:
       properties:
         wallet_address:

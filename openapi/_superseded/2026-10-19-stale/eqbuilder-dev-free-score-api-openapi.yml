@@ -1,0 +1,108 @@
+openapi: 3.2.0
+info:
+  title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
+  description: Human-likeness scoring and AI text benchmark API.
+  version: 1.0.0
+tags:
+- name: Free Score
+paths:
+  /api/free-score/contact:
+    post:
+      summary: Submit Free Score Contact
+      description: 'Record an optional contact (email, http(s) URL, or @handle) for the
+
+        caller''s free-trial row. No auth required — but the caller must have used
+
+        at least one free score already so we are not creating orphan rows.
+
+
+        Idempotent: calling again updates to the latest value.'
+      operationId: submit_free_score_contact_api_free_score_contact_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FreeScoreContactInput'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Free Score
+components:
+  schemas:
+    CampaignSource:
+      type: string
+      enum:
+      - livekit-slack
+      - langchain-forum
+      - reddit-community
+      - reddit-ad
+      - github-outreach
+      - agent-directory
+      title: CampaignSource
+      description: 'Server-approved outreach markers.
+
+
+        Keeping this as a small enum prevents source attribution from becoming a
+
+        free-form visitor-tracking store. Add a new value only when a campaign link
+
+        is intentionally approved.'
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    FreeScoreContactInput:
+      properties:
+        contact:
+          type: string
+          title: Contact
+        source:
+          anyOf:
+          - $ref: '#/components/schemas/CampaignSource'
+          - type: 'null'
+      type: object
+      required:
+      - contact
+      title: FreeScoreContactInput
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

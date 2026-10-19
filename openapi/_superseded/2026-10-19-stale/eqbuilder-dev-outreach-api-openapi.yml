@@ -1,0 +1,94 @@
+openapi: 3.2.0
+info:
+  title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
+  description: Human-likeness scoring and AI text benchmark API.
+  version: 1.0.0
+tags:
+- name: Outreach
+paths:
+  /api/outreach/status:
+    get:
+      summary: Get Outreach Status
+      description: Map of lead_id -> done for the Outreach Kit checkboxes (operator-only).
+      operationId: get_outreach_status_api_outreach_status_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Outreach
+    post:
+      summary: Set Outreach Status
+      operationId: set_outreach_status_api_outreach_status_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OutreachStatusUpdate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Outreach
+components:
+  schemas:
+    OutreachStatusUpdate:
+      properties:
+        lead_id:
+          type: string
+          title: Lead Id
+        done:
+          type: boolean
+          title: Done
+      type: object
+      required:
+      - lead_id
+      - done
+      title: OutreachStatusUpdate
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

@@ -1,0 +1,25 @@
+openapi: 3.2.0
+info:
+  title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
+  description: Human-likeness scoring and AI text benchmark API.
+  version: 1.0.0
+tags:
+- name: Free Trial
+paths:
+  /api/free-trial/status:
+    get:
+      summary: Free Trial Status
+      description: 'Read-only free-trial usage for the caller (same XFF-derived key as
+
+        /api/score). It never consumes a round; the privacy-safe status event is
+
+        deduplicated separately from paid funnel instrumentation.'
+      operationId: free_trial_status_api_free_trial_status_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Free Trial

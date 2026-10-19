@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
-  description: Human-likeness scoring and AI text benchmark API.
+  description: 'Human-likeness scoring and AI text benchmark API. Score AI-generated text against real human personality profiles (EQ, formality, directness, hesitation, response-timing cadence) to measure how human your AI writing sounds before you ship it. Built for autonomous agents and AI text humanizer pipelines: free stateless scoring at /api/score, paid validated benchmarks via machine-to-machine On-chain settlement with x402 support — the default path is gasless USDC on Base (unpaid calls to /api/simulate return HTTP 402 with machine-readable payment requirements; sign the Base requirement and retry once with PAYMENT-SIGNATURE). Legacy SOL and X-PAYMENT clients remain compatible. Interactive API docs are available at /api/docs. Permanent tool setup (wire it in once and explicitly authorize a dedicated USDC-on-Base burner wallet so the SDK can sign paid calls without a human): see the ''Permanent tool setup'' section of /llms.txt and the crawlable guide at /guides/permanent-agent-tool-setup.html. Live network stats (real ledger aggregates) at /api/stats; runnable Python/JS quickstart examples ship in the repo under examples/.'
   version: 1.0.0
 tags:
 - name: Embed
@@ -61,42 +61,158 @@ paths:
       - Embed
 components:
   schemas:
-    EmbeddedCommunicationPreferences:
+    EmbeddedConversationTurn:
       properties:
-        tone:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Tone
-        audience:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Audience
-        channel:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Channel
-        formality:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Formality
-        directness:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Directness
-        length:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Length
+        role:
+          type: string
+          enum:
+          - user
+          - assistant
+          title: Role
+        content:
+          type: string
+          title: Content
       additionalProperties: false
       type: object
-      title: EmbeddedCommunicationPreferences
-      description: Optional host-declared communication intent for contextual guidance.
+      required:
+      - role
+      - content
+      title: EmbeddedConversationTurn
+      description: One bounded, text-only turn supplied for a contextual assessment.
+    AEIObservation:
+      properties:
+        context:
+          type: string
+          maxLength: 60
+          minLength: 1
+          title: Context
+          default: community
+        channel:
+          type: string
+          enum:
+          - text
+          - voice
+          - in_person
+          title: Channel
+          default: text
+        pace:
+          type: string
+          enum:
+          - slow
+          - fast
+          - variable
+          title: Pace
+          default: variable
+        access:
+          type: string
+          enum:
+          - none
+          - extra_time
+          - alternate_format
+          title: Access
+          default: none
+        state:
+          type: string
+          enum:
+          - ordinary
+          - frustration
+          - distress
+          title: State
+          default: ordinary
+        distress_signal:
+          type: boolean
+          title: Distress Signal
+          default: false
+        communication_preference:
+          anyOf:
+          - type: string
+            enum:
+            - brief
+            - detailed
+          - type: 'null'
+          title: Communication Preference
+        directness_preference:
+          anyOf:
+          - type: string
+            enum:
+            - direct
+            - gentle
+          - type: 'null'
+          title: Directness Preference
+        turn_taking_preference:
+          anyOf:
+          - type: string
+            enum:
+            - more_space
+            - quick_exchange
+          - type: 'null'
+          title: Turn Taking Preference
+        response_preferences:
+          anyOf:
+          - $ref: '#/components/schemas/AEIResponsePreferences'
+          - type: 'null'
+        voice_timing:
+          anyOf:
+          - type: string
+            enum:
+            - long_pauses
+            - rapid_turns
+            - steady
+          - type: 'null'
+          title: Voice Timing
+        barrier:
+          anyOf:
+          - type: string
+            enum:
+            - unfamiliar_terms
+            - noisy_environment
+            - alternate_format
+            - none
+          - type: 'null'
+          title: Barrier
+        expression:
+          anyOf:
+          - type: string
+            enum:
+            - unknown
+            - turn_away
+            - engaged
+          - type: 'null'
+          title: Expression
+        movement:
+          anyOf:
+          - type: string
+            enum:
+            - unknown
+            - withdrawn
+            - approaching
+          - type: 'null'
+          title: Movement
+        stated_request:
+          anyOf:
+          - type: string
+            enum:
+            - more_time
+            - different_format
+            - human_help
+          - type: 'null'
+          title: Stated Request
+        prior_signals:
+          items:
+            $ref: '#/components/schemas/AEIPriorSignal'
+          type: array
+          maxItems: 4
+          title: Prior Signals
+        message_excerpt:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Message Excerpt
+      additionalProperties: false
+      type: object
+      title: AEIObservation
+      description: Host-declared, interaction-scoped cues; no identity or raw sensor feed.
     ValidationError:
       properties:
         loc:
@@ -123,24 +239,6 @@ components:
       - msg
       - type
       title: ValidationError
-    EmbeddedConversationTurn:
-      properties:
-        role:
-          type: string
-          enum:
-          - user
-          - assistant
-          title: Role
-        content:
-          type: string
-          title: Content
-      additionalProperties: false
-      type: object
-      required:
-      - role
-      - content
-      title: EmbeddedConversationTurn
-      description: One bounded, text-only turn supplied for a contextual assessment.
     HTTPValidationError:
       properties:
         detail:
@@ -150,6 +248,42 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    AEIResponsePreferences:
+      properties:
+        consent:
+          type: boolean
+          const: true
+          title: Consent
+        communication_preference:
+          anyOf:
+          - type: string
+            enum:
+            - brief
+            - detailed
+          - type: 'null'
+          title: Communication Preference
+        directness_preference:
+          anyOf:
+          - type: string
+            enum:
+            - direct
+            - gentle
+          - type: 'null'
+          title: Directness Preference
+        turn_taking_preference:
+          anyOf:
+          - type: string
+            enum:
+            - more_space
+            - quick_exchange
+          - type: 'null'
+          title: Turn Taking Preference
+      additionalProperties: false
+      type: object
+      required:
+      - consent
+      title: AEIResponsePreferences
+      description: Current, consented snapshot supplied by the host, never a server profile.
     EmbeddedContext:
       properties:
         situation:
@@ -201,6 +335,10 @@ components:
           anyOf:
           - $ref: '#/components/schemas/EmbeddedContext'
           - type: 'null'
+        aei_observation:
+          anyOf:
+          - $ref: '#/components/schemas/AEIObservation'
+          - type: 'null'
         request_id:
           anyOf:
           - type: string
@@ -219,3 +357,64 @@ components:
         host backend authenticates the user and forwards the token server-to-server
 
         in the existing X-BUNDLE-TOKEN header.'
+    EmbeddedCommunicationPreferences:
+      properties:
+        tone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tone
+        audience:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Audience
+        channel:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Channel
+        formality:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Formality
+        directness:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Directness
+        length:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Length
+      additionalProperties: false
+      type: object
+      title: EmbeddedCommunicationPreferences
+      description: Optional host-declared communication intent for contextual guidance.
+    AEIPriorSignal:
+      properties:
+        pace:
+          type: string
+          enum:
+          - slow
+          - fast
+          - variable
+          title: Pace
+          default: variable
+        state:
+          type: string
+          enum:
+          - ordinary
+          - frustration
+          - distress
+          title: State
+          default: ordinary
+        requested_human:
+          type: boolean
+          title: Requested Human
+          default: false
+      additionalProperties: false
+      type: object
+      title: AEIPriorSignal

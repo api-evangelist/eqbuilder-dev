@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
-  description: Human-likeness scoring and AI text benchmark API.
+  description: 'Human-likeness scoring and AI text benchmark API. Score AI-generated text against real human personality profiles (EQ, formality, directness, hesitation, response-timing cadence) to measure how human your AI writing sounds before you ship it. Built for autonomous agents and AI text humanizer pipelines: free stateless scoring at /api/score, paid validated benchmarks via machine-to-machine On-chain settlement with x402 support — the default path is gasless USDC on Base (unpaid calls to /api/simulate return HTTP 402 with machine-readable payment requirements; sign the Base requirement and retry once with PAYMENT-SIGNATURE). Legacy SOL and X-PAYMENT clients remain compatible. Interactive API docs are available at /api/docs. Permanent tool setup (wire it in once and explicitly authorize a dedicated USDC-on-Base burner wallet so the SDK can sign paid calls without a human): see the ''Permanent tool setup'' section of /llms.txt and the crawlable guide at /guides/permanent-agent-tool-setup.html. Live network stats (real ledger aggregates) at /api/stats; runnable Python/JS quickstart examples ship in the repo under examples/.'
   version: 1.0.0
 tags:
 - name: Roleplay
@@ -154,6 +154,47 @@ paths:
       - Roleplay
 components:
   schemas:
+    RoleplayJoinPayload:
+      properties:
+        session_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Session Id
+        wallet_address:
+          type: string
+          title: Wallet Address
+          default: ''
+        profile:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Profile
+      type: object
+      title: RoleplayJoinPayload
+    RoleplayOpenPayload:
+      properties:
+        wallet_address:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Wallet Address
+        tx_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tx Hash
+        profile:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Profile
+        open_to_any_partner:
+          type: boolean
+          title: Open To Any Partner
+          default: false
+      type: object
+      title: RoleplayOpenPayload
     ValidationError:
       properties:
         loc:
@@ -180,59 +221,6 @@ components:
       - msg
       - type
       title: ValidationError
-    RoleplayOpenPayload:
-      properties:
-        wallet_address:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Wallet Address
-        tx_hash:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Tx Hash
-        profile:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Profile
-        open_to_any_partner:
-          type: boolean
-          title: Open To Any Partner
-          default: false
-      type: object
-      title: RoleplayOpenPayload
-    RoleplayStatusPayload:
-      properties:
-        session_id:
-          type: string
-          title: Session Id
-          default: ''
-        session_secret:
-          type: string
-          title: Session Secret
-          default: ''
-      type: object
-      title: RoleplayStatusPayload
-    RoleplayJoinPayload:
-      properties:
-        session_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Session Id
-        wallet_address:
-          type: string
-          title: Wallet Address
-          default: ''
-        profile:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Profile
-      type: object
-      title: RoleplayJoinPayload
     HTTPValidationError:
       properties:
         detail:
@@ -277,3 +265,15 @@ components:
           title: Read Why
       type: object
       title: RoleplayTurnPayload
+    RoleplayStatusPayload:
+      properties:
+        session_id:
+          type: string
+          title: Session Id
+          default: ''
+        session_secret:
+          type: string
+          title: Session Secret
+          default: ''
+      type: object
+      title: RoleplayStatusPayload

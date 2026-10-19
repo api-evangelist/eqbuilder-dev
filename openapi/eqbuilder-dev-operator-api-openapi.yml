@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
-  description: Human-likeness scoring and AI text benchmark API.
+  description: 'Human-likeness scoring and AI text benchmark API. Score AI-generated text against real human personality profiles (EQ, formality, directness, hesitation, response-timing cadence) to measure how human your AI writing sounds before you ship it. Built for autonomous agents and AI text humanizer pipelines: free stateless scoring at /api/score, paid validated benchmarks via machine-to-machine On-chain settlement with x402 support — the default path is gasless USDC on Base (unpaid calls to /api/simulate return HTTP 402 with machine-readable payment requirements; sign the Base requirement and retry once with PAYMENT-SIGNATURE). Legacy SOL and X-PAYMENT clients remain compatible. Interactive API docs are available at /api/docs. Permanent tool setup (wire it in once and explicitly authorize a dedicated USDC-on-Base burner wallet so the SDK can sign paid calls without a human): see the ''Permanent tool setup'' section of /llms.txt and the crawlable guide at /guides/permanent-agent-tool-setup.html. Live network stats (real ledger aggregates) at /api/stats; runnable Python/JS quickstart examples ship in the repo under examples/.'
   version: 1.0.0
 tags:
 - name: Operator
@@ -38,6 +38,114 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PublicResultConversionResponse'
+      tags:
+      - Operator
+  /api/operator/aei-pilot-evidence:
+    get:
+      summary: Operator Evidence
+      operationId: operator_evidence_api_operator_aei_pilot_evidence_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Operator
+  /api/operator/aei/reinafin:
+    get:
+      summary: Reinafin Access Usage
+      operationId: reinafin_access_usage_api_operator_aei_reinafin_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Operator
+    post:
+      summary: Manage Reinafin Access
+      operationId: manage_reinafin_access_api_operator_aei_reinafin_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AEISponsoredAction'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Operator
+  /api/operator/aei-evidence:
+    get:
+      summary: Operator Aei Evidence
+      operationId: operator_aei_evidence_api_operator_aei_evidence_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Operator
+  /api/operator/learning-evidence:
+    get:
+      summary: Operator Learning Evidence
+      operationId: operator_learning_evidence_api_operator_learning_evidence_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Operator
+  /api/operator/guidance-review/volunteers:
+    get:
+      summary: Operator Guidance Review Volunteers
+      operationId: operator_guidance_review_volunteers_api_operator_guidance_review_volunteers_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Operator
+  /api/operator/support/inquiries:
+    get:
+      summary: Operator Support Inquiries
+      operationId: operator_support_inquiries_api_operator_support_inquiries_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Operator
+  /api/operator/support/inquiries/latest:
+    get:
+      summary: Operator Support Inquiry Latest
+      description: Lightweight alert cursor; never returns inquiry contact data.
+      operationId: operator_support_inquiry_latest_api_operator_support_inquiries_latest_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
       tags:
       - Operator
   /api/operator/free-trial/whoami:
@@ -203,24 +311,6 @@ paths:
       - Operator
 components:
   schemas:
-    OperatorLoginInput:
-      properties:
-        key:
-          type: string
-          title: Key
-      type: object
-      required:
-      - key
-      title: OperatorLoginInput
-    FreeTrialResetCallerInput:
-      properties:
-        caller_key:
-          type: string
-          title: Caller Key
-      type: object
-      required:
-      - caller_key
-      title: FreeTrialResetCallerInput
     ValidationError:
       properties:
         loc:
@@ -247,6 +337,52 @@ components:
       - msg
       - type
       title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PublicResultProfileConversionResponse:
+      properties:
+        profile:
+          type: string
+          title: Profile
+        result_views:
+          type: integer
+          title: Result Views
+        new_scores:
+          type: integer
+          title: New Scores
+        second_sessions:
+          type: integer
+          title: Second Sessions
+        verified_paid_within_7_days:
+          type: integer
+          title: Verified Paid Within 7 Days
+        viewer_to_score_conversion_pct:
+          type: number
+          title: Viewer To Score Conversion Pct
+        viewer_to_verified_paid_7_day_conversion_pct:
+          type: number
+          title: Viewer To Verified Paid 7 Day Conversion Pct
+        suppressed:
+          type: boolean
+          title: Suppressed
+      type: object
+      required:
+      - profile
+      - result_views
+      - new_scores
+      - second_sessions
+      - verified_paid_within_7_days
+      - viewer_to_score_conversion_pct
+      - viewer_to_verified_paid_7_day_conversion_pct
+      - suppressed
+      title: PublicResultProfileConversionResponse
     PublicResultConversionResponse:
       properties:
         viewers:
@@ -294,6 +430,24 @@ components:
       - cohort_suppression_threshold
       - privacy
       title: PublicResultConversionResponse
+    OperatorLoginInput:
+      properties:
+        key:
+          type: string
+          title: Key
+      type: object
+      required:
+      - key
+      title: OperatorLoginInput
+    FreeTrialResetCallerInput:
+      properties:
+        caller_key:
+          type: string
+          title: Caller Key
+      type: object
+      required:
+      - caller_key
+      title: FreeTrialResetCallerInput
     FreeTrialPurgeInput:
       properties:
         keys:
@@ -304,49 +458,17 @@ components:
           default: []
       type: object
       title: FreeTrialPurgeInput
-    PublicResultProfileConversionResponse:
+    AEISponsoredAction:
       properties:
-        profile:
+        action:
           type: string
-          title: Profile
-        result_views:
-          type: integer
-          title: Result Views
-        new_scores:
-          type: integer
-          title: New Scores
-        second_sessions:
-          type: integer
-          title: Second Sessions
-        verified_paid_within_7_days:
-          type: integer
-          title: Verified Paid Within 7 Days
-        viewer_to_score_conversion_pct:
-          type: number
-          title: Viewer To Score Conversion Pct
-        viewer_to_verified_paid_7_day_conversion_pct:
-          type: number
-          title: Viewer To Verified Paid 7 Day Conversion Pct
-        suppressed:
-          type: boolean
-          title: Suppressed
+          enum:
+          - provision
+          - rotate
+          - revoke
+          title: Action
+      additionalProperties: false
       type: object
       required:
-      - profile
-      - result_views
-      - new_scores
-      - second_sessions
-      - verified_paid_within_7_days
-      - viewer_to_score_conversion_pct
-      - viewer_to_verified_paid_7_day_conversion_pct
-      - suppressed
-      title: PublicResultProfileConversionResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
+      - action
+      title: AEISponsoredAction

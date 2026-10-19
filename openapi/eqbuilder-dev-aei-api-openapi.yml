@@ -1,0 +1,1110 @@
+openapi: 3.2.0
+info:
+  title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
+  description: 'Human-likeness scoring and AI text benchmark API. Score AI-generated text against real human personality profiles (EQ, formality, directness, hesitation, response-timing cadence) to measure how human your AI writing sounds before you ship it. Built for autonomous agents and AI text humanizer pipelines: free stateless scoring at /api/score, paid validated benchmarks via machine-to-machine On-chain settlement with x402 support — the default path is gasless USDC on Base (unpaid calls to /api/simulate return HTTP 402 with machine-readable payment requirements; sign the Base requirement and retry once with PAYMENT-SIGNATURE). Legacy SOL and X-PAYMENT clients remain compatible. Interactive API docs are available at /api/docs. Permanent tool setup (wire it in once and explicitly authorize a dedicated USDC-on-Base burner wallet so the SDK can sign paid calls without a human): see the ''Permanent tool setup'' section of /llms.txt and the crawlable guide at /guides/permanent-agent-tool-setup.html. Live network stats (real ledger aggregates) at /api/stats; runnable Python/JS quickstart examples ship in the repo under examples/.'
+  version: 1.0.0
+tags:
+- name: Aei
+paths:
+  /api/aei/pilot/enroll:
+    post:
+      summary: Enroll
+      operationId: enroll_api_aei_pilot_enroll_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnrollInput'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Aei
+  /api/aei/pilot/me:
+    get:
+      summary: Me
+      operationId: me_api_aei_pilot_me_get
+      parameters:
+      - name: X-AEI-PILOT-TOKEN
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Aei-Pilot-Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Aei
+    delete:
+      summary: Delete Me
+      operationId: delete_me_api_aei_pilot_me_delete
+      parameters:
+      - name: X-AEI-PILOT-TOKEN
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Aei-Pilot-Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Aei
+  /api/aei/pilot/preferences:
+    post:
+      summary: Preferences
+      operationId: preferences_api_aei_pilot_preferences_post
+      parameters:
+      - name: X-AEI-PILOT-TOKEN
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Aei-Pilot-Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreferencesInput'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Aei
+  /api/aei/pilot/model-consent:
+    post:
+      summary: Model Consent
+      operationId: model_consent_api_aei_pilot_model_consent_post
+      parameters:
+      - name: X-AEI-PILOT-TOKEN
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Aei-Pilot-Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelConsentInput'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Aei
+  /api/aei/pilot/pause:
+    post:
+      summary: Pause
+      operationId: pause_api_aei_pilot_pause_post
+      parameters:
+      - name: X-AEI-PILOT-TOKEN
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Aei-Pilot-Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Aei
+  /api/aei/pilot/resume:
+    post:
+      summary: Resume
+      operationId: resume_api_aei_pilot_resume_post
+      parameters:
+      - name: X-AEI-PILOT-TOKEN
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Aei-Pilot-Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Aei
+  /api/aei/pilot/invitation/decline:
+    post:
+      summary: Decline
+      operationId: decline_api_aei_pilot_invitation_decline_post
+      parameters:
+      - name: X-AEI-PILOT-TOKEN
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Aei-Pilot-Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Aei
+  /api/aei/pilot/invitation/start:
+    post:
+      summary: Start
+      operationId: start_api_aei_pilot_invitation_start_post
+      parameters:
+      - name: X-AEI-PILOT-TOKEN
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Aei-Pilot-Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Aei
+  /api/aei/pilot/conversation/stop:
+    post:
+      summary: Stop
+      operationId: stop_api_aei_pilot_conversation_stop_post
+      parameters:
+      - name: X-AEI-PILOT-TOKEN
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Aei-Pilot-Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Aei
+  /api/aei/pilot/reply:
+    post:
+      summary: Reply
+      operationId: reply_api_aei_pilot_reply_post
+      parameters:
+      - name: X-AEI-PILOT-TOKEN
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Aei-Pilot-Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReplyInput'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Aei
+  /api/aei/pilot/feedback:
+    post:
+      summary: Feedback
+      operationId: feedback_api_aei_pilot_feedback_post
+      parameters:
+      - name: X-AEI-PILOT-TOKEN
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Aei-Pilot-Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackInput'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Aei
+  /api/aei/wording-review/sessions:
+    post:
+      summary: Enroll
+      operationId: enroll_api_aei_wording_review_sessions_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Consent'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Aei
+  /api/aei/wording-review/session:
+    get:
+      summary: Read
+      operationId: read_api_aei_wording_review_session_get
+      parameters:
+      - name: X-AEI-WORDING-TOKEN
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Aei-Wording-Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Aei
+    delete:
+      summary: Withdraw
+      operationId: withdraw_api_aei_wording_review_session_delete
+      parameters:
+      - name: X-AEI-WORDING-TOKEN
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Aei-Wording-Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Aei
+  /api/aei/wording-review/ratings:
+    post:
+      summary: Rate
+      operationId: rate_api_aei_wording_review_ratings_post
+      parameters:
+      - name: X-AEI-WORDING-TOKEN
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Aei-Wording-Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Aei
+  /api/aei/company/terms:
+    get:
+      summary: Aei Company Terms
+      operationId: aei_company_terms_api_aei_company_terms_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Aei
+  /api/aei/company/checkout:
+    post:
+      summary: Aei Company Checkout
+      operationId: aei_company_checkout_api_aei_company_checkout_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AEICompanyCheckout'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Aei
+  /api/aei/company/claim:
+    post:
+      summary: Aei Company Claim
+      operationId: aei_company_claim_api_aei_company_claim_post
+      parameters:
+      - name: X-AEI-COMPANY-TOKEN
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Aei-Company-Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AEICompanyClaim'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Aei
+  /api/aei/company/usage:
+    get:
+      summary: Aei Company Usage
+      operationId: aei_company_usage_api_aei_company_usage_get
+      parameters:
+      - name: X-AEI-COMPANY-TOKEN
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Aei-Company-Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Aei
+  /api/aei/guide:
+    post:
+      summary: Aei Guide
+      description: Server-to-server EQ guidance; no payment, text retention, or host action.
+      operationId: aei_guide_api_aei_guide_post
+      parameters:
+      - name: X-BUNDLE-TOKEN
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Bundle-Token
+      - name: X-AEI-COMPANY-TOKEN
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Aei-Company-Token
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Idempotency-Key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AEIObservation'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Aei
+  /api/aei/company/outcome:
+    post:
+      summary: Aei Company Outcome
+      operationId: aei_company_outcome_api_aei_company_outcome_post
+      parameters:
+      - name: X-AEI-COMPANY-TOKEN
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Aei-Company-Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AEIOutcomeReport'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Aei
+  /api/aei/outcome:
+    post:
+      summary: Aei Outcome
+      operationId: aei_outcome_api_aei_outcome_post
+      parameters:
+      - name: X-BUNDLE-TOKEN
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Bundle-Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AEIOutcomeReport'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Aei
+components:
+  schemas:
+    AEIObservation:
+      properties:
+        context:
+          type: string
+          maxLength: 60
+          minLength: 1
+          title: Context
+          default: community
+        channel:
+          type: string
+          enum:
+          - text
+          - voice
+          - in_person
+          title: Channel
+          default: text
+        pace:
+          type: string
+          enum:
+          - slow
+          - fast
+          - variable
+          title: Pace
+          default: variable
+        access:
+          type: string
+          enum:
+          - none
+          - extra_time
+          - alternate_format
+          title: Access
+          default: none
+        state:
+          type: string
+          enum:
+          - ordinary
+          - frustration
+          - distress
+          title: State
+          default: ordinary
+        distress_signal:
+          type: boolean
+          title: Distress Signal
+          default: false
+        communication_preference:
+          anyOf:
+          - type: string
+            enum:
+            - brief
+            - detailed
+          - type: 'null'
+          title: Communication Preference
+        directness_preference:
+          anyOf:
+          - type: string
+            enum:
+            - direct
+            - gentle
+          - type: 'null'
+          title: Directness Preference
+        turn_taking_preference:
+          anyOf:
+          - type: string
+            enum:
+            - more_space
+            - quick_exchange
+          - type: 'null'
+          title: Turn Taking Preference
+        response_preferences:
+          anyOf:
+          - $ref: '#/components/schemas/AEIResponsePreferences'
+          - type: 'null'
+        voice_timing:
+          anyOf:
+          - type: string
+            enum:
+            - long_pauses
+            - rapid_turns
+            - steady
+          - type: 'null'
+          title: Voice Timing
+        barrier:
+          anyOf:
+          - type: string
+            enum:
+            - unfamiliar_terms
+            - noisy_environment
+            - alternate_format
+            - none
+          - type: 'null'
+          title: Barrier
+        expression:
+          anyOf:
+          - type: string
+            enum:
+            - unknown
+            - turn_away
+            - engaged
+          - type: 'null'
+          title: Expression
+        movement:
+          anyOf:
+          - type: string
+            enum:
+            - unknown
+            - withdrawn
+            - approaching
+          - type: 'null'
+          title: Movement
+        stated_request:
+          anyOf:
+          - type: string
+            enum:
+            - more_time
+            - different_format
+            - human_help
+          - type: 'null'
+          title: Stated Request
+        prior_signals:
+          items:
+            $ref: '#/components/schemas/AEIPriorSignal'
+          type: array
+          maxItems: 4
+          title: Prior Signals
+        message_excerpt:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Message Excerpt
+      additionalProperties: false
+      type: object
+      title: AEIObservation
+      description: Host-declared, interaction-scoped cues; no identity or raw sensor feed.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    PreferencesInput:
+      properties:
+        onsite_contact:
+          type: boolean
+          title: Onsite Contact
+        cadence_days:
+          type: integer
+          title: Cadence Days
+      additionalProperties: false
+      type: object
+      required:
+      - onsite_contact
+      - cadence_days
+      title: PreferencesInput
+    FeedbackInput:
+      properties:
+        helpfulness:
+          type: string
+          title: Helpfulness
+        felt_respected:
+          type: boolean
+          title: Felt Respected
+      additionalProperties: false
+      type: object
+      required:
+      - helpfulness
+      - felt_respected
+      title: FeedbackInput
+    EnrollInput:
+      properties:
+        consent:
+          type: boolean
+          title: Consent
+        privacy_ack:
+          type: boolean
+          title: Privacy Ack
+        model_consent:
+          type: boolean
+          title: Model Consent
+        onsite_contact:
+          type: boolean
+          title: Onsite Contact
+        cadence_days:
+          type: integer
+          title: Cadence Days
+      additionalProperties: false
+      type: object
+      required:
+      - consent
+      - privacy_ack
+      - model_consent
+      - onsite_contact
+      - cadence_days
+      title: EnrollInput
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    AEICompanyCheckout:
+      properties:
+        overage_opt_in:
+          type: boolean
+          title: Overage Opt In
+          default: false
+        monthly_spend_ceiling_cents:
+          type: integer
+          maximum: 100000.0
+          minimum: 0.0
+          title: Monthly Spend Ceiling Cents
+          default: 0
+      additionalProperties: false
+      type: object
+      title: AEICompanyCheckout
+    ModelConsentInput:
+      properties:
+        model_consent:
+          type: boolean
+          title: Model Consent
+      additionalProperties: false
+      type: object
+      required:
+      - model_consent
+      title: ModelConsentInput
+    AEICompanyClaim:
+      properties:
+        checkout_id:
+          type: string
+          maxLength: 120
+          minLength: 4
+          title: Checkout Id
+        claim_secret:
+          type: string
+          maxLength: 200
+          minLength: 20
+          title: Claim Secret
+      additionalProperties: false
+      type: object
+      required:
+      - checkout_id
+      - claim_secret
+      title: AEICompanyClaim
+    Review:
+      properties:
+        case_id:
+          type: string
+          title: Case Id
+        A:
+          $ref: '#/components/schemas/Ratings'
+        B:
+          $ref: '#/components/schemas/Ratings'
+      additionalProperties: false
+      type: object
+      required:
+      - case_id
+      - A
+      - B
+      title: Review
+    AEIResponsePreferences:
+      properties:
+        consent:
+          type: boolean
+          const: true
+          title: Consent
+        communication_preference:
+          anyOf:
+          - type: string
+            enum:
+            - brief
+            - detailed
+          - type: 'null'
+          title: Communication Preference
+        directness_preference:
+          anyOf:
+          - type: string
+            enum:
+            - direct
+            - gentle
+          - type: 'null'
+          title: Directness Preference
+        turn_taking_preference:
+          anyOf:
+          - type: string
+            enum:
+            - more_space
+            - quick_exchange
+          - type: 'null'
+          title: Turn Taking Preference
+      additionalProperties: false
+      type: object
+      required:
+      - consent
+      title: AEIResponsePreferences
+      description: Current, consented snapshot supplied by the host, never a server profile.
+    AEIOutcomeReport:
+      properties:
+        guidance_receipt:
+          type: string
+          maxLength: 1024
+          minLength: 40
+          title: Guidance Receipt
+        consent:
+          type: boolean
+          const: true
+          title: Consent
+        applied_action:
+          type: string
+          enum:
+          - listen
+          - clarify
+          - offer_choice
+          - proceed
+          - pause_and_handoff
+          title: Applied Action
+        outcome:
+          type: string
+          enum:
+          - helped
+          - not_helped
+          - unclear
+          - handoff
+          title: Outcome
+      additionalProperties: false
+      type: object
+      required:
+      - guidance_receipt
+      - consent
+      - applied_action
+      - outcome
+      title: AEIOutcomeReport
+      description: Only closed-vocabulary, host-attested outcomes; no transcript or person IDs.
+    Consent:
+      properties:
+        consent:
+          type: boolean
+          title: Consent
+      additionalProperties: false
+      type: object
+      required:
+      - consent
+      title: Consent
+    ReplyInput:
+      properties:
+        message:
+          type: string
+          title: Message
+        request_id:
+          type: string
+          title: Request Id
+      additionalProperties: false
+      type: object
+      required:
+      - message
+      - request_id
+      title: ReplyInput
+    Ratings:
+      properties:
+        helpfulness:
+          type: integer
+          maximum: 5.0
+          minimum: 1.0
+          title: Helpfulness
+        recognition:
+          type: integer
+          maximum: 5.0
+          minimum: 1.0
+          title: Recognition
+        autonomy:
+          type: integer
+          maximum: 5.0
+          minimum: 1.0
+          title: Autonomy
+        restraint:
+          type: integer
+          maximum: 5.0
+          minimum: 1.0
+          title: Restraint
+      additionalProperties: false
+      type: object
+      required:
+      - helpfulness
+      - recognition
+      - autonomy
+      - restraint
+      title: Ratings
+    AEIPriorSignal:
+      properties:
+        pace:
+          type: string
+          enum:
+          - slow
+          - fast
+          - variable
+          title: Pace
+          default: variable
+        state:
+          type: string
+          enum:
+          - ordinary
+          - frustration
+          - distress
+          title: State
+          default: ordinary
+        requested_human:
+          type: boolean
+          title: Requested Human
+          default: false
+      additionalProperties: false
+      type: object
+      title: AEIPriorSignal

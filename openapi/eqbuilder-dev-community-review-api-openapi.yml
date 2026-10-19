@@ -1,0 +1,214 @@
+openapi: 3.2.0
+info:
+  title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
+  description: 'Human-likeness scoring and AI text benchmark API. Score AI-generated text against real human personality profiles (EQ, formality, directness, hesitation, response-timing cadence) to measure how human your AI writing sounds before you ship it. Built for autonomous agents and AI text humanizer pipelines: free stateless scoring at /api/score, paid validated benchmarks via machine-to-machine On-chain settlement with x402 support — the default path is gasless USDC on Base (unpaid calls to /api/simulate return HTTP 402 with machine-readable payment requirements; sign the Base requirement and retry once with PAYMENT-SIGNATURE). Legacy SOL and X-PAYMENT clients remain compatible. Interactive API docs are available at /api/docs. Permanent tool setup (wire it in once and explicitly authorize a dedicated USDC-on-Base burner wallet so the SDK can sign paid calls without a human): see the ''Permanent tool setup'' section of /llms.txt and the crawlable guide at /guides/permanent-agent-tool-setup.html. Live network stats (real ledger aggregates) at /api/stats; runnable Python/JS quickstart examples ship in the repo under examples/.'
+  version: 1.0.0
+tags:
+- name: Community Review
+paths:
+  /api/community-review/sessions:
+    post:
+      summary: Create Community Review Session
+      operationId: create_community_review_session_api_community_review_sessions_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommunityReviewConsentInput'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Create Community Review Session Api Community Review Sessions Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Community Review
+  /api/community-review/sessions/{session_id}:
+    get:
+      summary: Get Community Review Session
+      operationId: get_community_review_session_api_community_review_sessions__session_id__get
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Session Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Get Community Review Session Api Community Review Sessions  Session Id  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Community Review
+  /api/community-review/sessions/{session_id}/responses:
+    post:
+      summary: Submit Community Review Response
+      operationId: submit_community_review_response_api_community_review_sessions__session_id__responses_post
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Session Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommunityReviewResponseInput'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Submit Community Review Response Api Community Review Sessions  Session Id  Responses Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Community Review
+  /api/community-review/summary:
+    get:
+      summary: Community Review Summary
+      operationId: community_review_summary_api_community_review_summary_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Community Review Summary Api Community Review Summary Get
+      tags:
+      - Community Review
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    CommunityReviewResponseInput:
+      properties:
+        case_id:
+          type: string
+          maxLength: 16
+          minLength: 1
+          pattern: ^cr-[0-9]{3}$
+          title: Case Id
+        decision:
+          type: string
+          enum:
+          - allow
+          - revise
+          title: Decision
+        task_preserved:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Task Preserved
+        facts_preserved:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Facts Preserved
+        rationale:
+          type: string
+          enum:
+          - empathetic_clear
+          - honest_uncertain
+          - respects_choice
+          - calm_boundary
+          - manipulative_or_retaliatory
+          - ignores_user
+          - unsupported_claim
+          - other
+          title: Rationale
+        comment:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Comment
+      type: object
+      required:
+      - case_id
+      - decision
+      - rationale
+      title: CommunityReviewResponseInput
+    CommunityReviewConsentInput:
+      properties:
+        consent:
+          type: boolean
+          title: Consent
+          description: Must be true to join this volunteer pilot
+        source:
+          anyOf:
+          - type: string
+            maxLength: 32
+            pattern: ^[a-z0-9-]{1,32}$
+          - type: 'null'
+          title: Source
+      type: object
+      required:
+      - consent
+      title: CommunityReviewConsentInput
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError

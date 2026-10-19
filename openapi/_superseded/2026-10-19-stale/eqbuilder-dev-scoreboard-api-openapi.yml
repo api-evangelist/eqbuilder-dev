@@ -1,0 +1,25 @@
+openapi: 3.2.0
+info:
+  title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
+  description: Human-likeness scoring and AI text benchmark API.
+  version: 1.0.0
+tags:
+- name: Scoreboard
+paths:
+  /api/scoreboard:
+    get:
+      summary: Get Scoreboard
+      description: 'Public scoreboard: flagship AI assistants scored for human-likeness by the
+
+        real EqBuilder scoring engine. JSON by default; browsers/unfurlers
+
+        (Accept: text/html) get a shareable HTML page with OG meta tags.'
+      operationId: get_scoreboard_api_scoreboard_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Scoreboard

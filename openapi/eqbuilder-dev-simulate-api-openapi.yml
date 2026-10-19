@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: EQ Scoring Platform — Human-Likeness & AI Text Benchmark…
-  description: Human-likeness scoring and AI text benchmark API.
+  description: 'Human-likeness scoring and AI text benchmark API. Score AI-generated text against real human personality profiles (EQ, formality, directness, hesitation, response-timing cadence) to measure how human your AI writing sounds before you ship it. Built for autonomous agents and AI text humanizer pipelines: free stateless scoring at /api/score, paid validated benchmarks via machine-to-machine On-chain settlement with x402 support — the default path is gasless USDC on Base (unpaid calls to /api/simulate return HTTP 402 with machine-readable payment requirements; sign the Base requirement and retry once with PAYMENT-SIGNATURE). Legacy SOL and X-PAYMENT clients remain compatible. Interactive API docs are available at /api/docs. Permanent tool setup (wire it in once and explicitly authorize a dedicated USDC-on-Base burner wallet so the SDK can sign paid calls without a human): see the ''Permanent tool setup'' section of /llms.txt and the crawlable guide at /guides/permanent-agent-tool-setup.html. Live network stats (real ledger aggregates) at /api/stats; runnable Python/JS quickstart examples ship in the repo under examples/.'
   version: 1.0.0
 tags:
 - name: Simulate
@@ -109,66 +109,24 @@ paths:
       - Simulate
 components:
   schemas:
-    EmbeddedCommunicationPreferences:
+    EmbeddedConversationTurn:
       properties:
-        tone:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Tone
-        audience:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Audience
-        channel:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Channel
-        formality:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Formality
-        directness:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Directness
-        length:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Length
+        role:
+          type: string
+          enum:
+          - user
+          - assistant
+          title: Role
+        content:
+          type: string
+          title: Content
       additionalProperties: false
       type: object
-      title: EmbeddedCommunicationPreferences
-      description: Optional host-declared communication intent for contextual guidance.
-    SimulationResultResponse:
-      properties:
-        status:
-          type: string
-          title: Status
-        tier:
-          type: string
-          title: Tier
-        certificate_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Certificate Url
-        public_result_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Public Result Url
-      additionalProperties: true
-      type: object
       required:
-      - status
-      - tier
-      title: SimulationResultResponse
+      - role
+      - content
+      title: EmbeddedConversationTurn
+      description: One bounded, text-only turn supplied for a contextual assessment.
     ValidationError:
       properties:
         loc:
@@ -195,24 +153,6 @@ components:
       - msg
       - type
       title: ValidationError
-    EmbeddedConversationTurn:
-      properties:
-        role:
-          type: string
-          enum:
-          - user
-          - assistant
-          title: Role
-        content:
-          type: string
-          title: Content
-      additionalProperties: false
-      type: object
-      required:
-      - role
-      - content
-      title: EmbeddedConversationTurn
-      description: One bounded, text-only turn supplied for a contextual assessment.
     HTTPValidationError:
       properties:
         detail:
@@ -222,36 +162,30 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    EmbeddedContext:
+    SimulationResultResponse:
       properties:
-        situation:
+        status:
           type: string
-          title: Situation
-        desired_outcome:
+          title: Status
+        tier:
+          type: string
+          title: Tier
+        certificate_url:
           anyOf:
           - type: string
           - type: 'null'
-          title: Desired Outcome
-        constraints:
+          title: Certificate Url
+        public_result_url:
           anyOf:
           - type: string
           - type: 'null'
-          title: Constraints
-        conversation:
-          items:
-            $ref: '#/components/schemas/EmbeddedConversationTurn'
-          type: array
-          title: Conversation
-        communication_preferences:
-          anyOf:
-          - $ref: '#/components/schemas/EmbeddedCommunicationPreferences'
-          - type: 'null'
-      additionalProperties: false
+          title: Public Result Url
+      additionalProperties: true
       type: object
       required:
-      - situation
-      title: EmbeddedContext
-      description: Bounded ephemeral identity for an explicit contextual check.
+      - status
+      - tier
+      title: SimulationResultResponse
     SimulationPayload:
       properties:
         tx_hash:
@@ -306,3 +240,69 @@ components:
       - proposed_text
       - response_delay_seconds
       title: SimulationPayload
+    EmbeddedContext:
+      properties:
+        situation:
+          type: string
+          title: Situation
+        desired_outcome:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Desired Outcome
+        constraints:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Constraints
+        conversation:
+          items:
+            $ref: '#/components/schemas/EmbeddedConversationTurn'
+          type: array
+          title: Conversation
+        communication_preferences:
+          anyOf:
+          - $ref: '#/components/schemas/EmbeddedCommunicationPreferences'
+          - type: 'null'
+      additionalProperties: false
+      type: object
+      required:
+      - situation
+      title: EmbeddedContext
+      description: Bounded ephemeral identity for an explicit contextual check.
+    EmbeddedCommunicationPreferences:
+      properties:
+        tone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tone
+        audience:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Audience
+        channel:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Channel
+        formality:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Formality
+        directness:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Directness
+        length:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Length
+      additionalProperties: false
+      type: object
+      title: EmbeddedCommunicationPreferences
+      description: Optional host-declared communication intent for contextual guidance.
