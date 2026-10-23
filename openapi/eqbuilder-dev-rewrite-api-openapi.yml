@@ -123,3 +123,9 @@ components:
           default: 0.0
       type: object
       title: RewritePayload
+x-provenance:
+  method: harvested
+  publisher: Marz Greta-Lock Network
+  source: https://eqbuilder.dev/openapi.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
